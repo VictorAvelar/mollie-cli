@@ -34,20 +34,16 @@ var (
 )
 
 func init() {
-
-	initConfig()
-	initClient()
-
 	MollieCmd.PersistentFlags().StringVarP(&cfgFile, "config", "c", "", "specifies a custom config file to be used")
 	MollieCmd.PersistentFlags().StringVarP(&Token, "token", "t", os.Getenv(mollie.APITokenEnv), "the API token to use (defaults to MOLLIE_API_TOKEN env value)")
 	MollieCmd.PersistentFlags().BoolVarP(&Verbose, "verbose", "v", false, "print verbose logging messages (defaults to false)")
 	MollieCmd.PersistentFlags().BoolVar(&printJSON, "print-json", false, "toggle the output type to json")
 
-	viper.BindPFlag("mollie.token", MollieCmd.Flags().Lookup("token"))
-
 	addCommands()
-
-	cobra.OnInitialize(initConfig)
+	cobra.OnInitialize(func() {
+		initConfig()
+		initClient()
+	})
 }
 
 func initConfig() {
@@ -60,6 +56,7 @@ func initConfig() {
 		}
 
 		viper.SetConfigName(".mollie")
+		viper.SetConfigType("yaml")
 		viper.AddConfigPath(home)
 		viper.AddConfigPath(home + "/.config")
 		viper.AddConfigPath(".")
@@ -72,6 +69,10 @@ func initConfig() {
 	}
 
 	viper.AutomaticEnv()
+
+	if len(viper.GetString("mollie.token")) > 0 {
+		Token = viper.GetString("mollie.token")
+	}
 
 	if Verbose {
 		logrus.Infof("Using configuration file: %s\n", viper.ConfigFileUsed())
