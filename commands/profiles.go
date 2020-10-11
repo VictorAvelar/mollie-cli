@@ -1,10 +1,11 @@
 package commands
 
 import (
-	"github.com/VictorAvelar/mollie-api-go/mollie"
-	"github.com/VictorAvelar/mollie-cli/internal/command"
 	"github.com/sirupsen/logrus"
 	"github.com/spf13/cobra"
+
+	"github.com/VictorAvelar/mollie-cli/commands/displayers"
+	"github.com/VictorAvelar/mollie-cli/internal/command"
 )
 
 const (
@@ -22,30 +23,6 @@ var (
 		"Since",
 	}
 )
-
-// MollieProfile wrapper for displaying
-type MollieProfile struct {
-	*mollie.Profile
-}
-
-// KV is a displayable group of key value
-func (mp *MollieProfile) KV() []map[string]interface{} {
-	out := []map[string]interface{}{}
-
-	x := map[string]interface{}{
-		"ID":      mp.Profile.ID,
-		"Name":    mp.Profile.Name,
-		"Website": mp.Profile.Website,
-		"Phone":   mp.Profile.Phone,
-		"Status":  mp.Profile.Status,
-		"Mode":    mp.Profile.Mode,
-		"Since":   mp.CreatedAt.Format("01-02-2006"),
-	}
-
-	out = append(out, x)
-
-	return out
-}
 
 // Profile creates the profile commands tree.
 func Profile() *command.Command {
@@ -88,7 +65,7 @@ func RunCurrentProfile(cmd *cobra.Command, args []string) {
 		logrus.Fatal(err)
 	}
 
-	mp := &MollieProfile{p}
+	mp := displayers.MollieProfile{Profile: p}
 
 	command.Display(profileCols, mp.KV())
 }
@@ -107,7 +84,7 @@ func RunGetProfile(cmd *cobra.Command, args []string) {
 		logrus.Fatal(err)
 	}
 
-	mp := &MollieProfile{p}
+	mp := displayers.MollieProfile{Profile: p}
 
 	command.Display(profileCols, mp.KV())
 }
