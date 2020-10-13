@@ -7,6 +7,7 @@ import (
 	"text/tabwriter"
 
 	"github.com/VictorAvelar/mollie-cli/internal/runners"
+	"github.com/sirupsen/logrus"
 	"github.com/spf13/cobra"
 )
 
@@ -91,7 +92,10 @@ func Display(c []string, vals []map[string]interface{}) error {
 func AddStringFlag(cmd *Command, name, short, fb, usage string, req bool) {
 	cmd.Flags().StringP(name, short, fb, usage)
 	if req {
-		cmd.MarkFlagRequired(name)
+		err := cmd.MarkFlagRequired(name)
+		if err != nil {
+			logrus.Error(err)
+		}
 	}
 }
 
@@ -99,7 +103,10 @@ func AddStringFlag(cmd *Command, name, short, fb, usage string, req bool) {
 func AddBoolFlag(cmd *Command, name, short, usage string, fb, req bool) {
 	cmd.Flags().BoolP(name, short, fb, usage)
 	if req {
-		cmd.MarkFlagRequired(name)
+		err := cmd.MarkFlagRequired(name)
+		if err != nil {
+			logrus.Error(err)
+		}
 	}
 }
 
@@ -107,7 +114,10 @@ func AddBoolFlag(cmd *Command, name, short, usage string, fb, req bool) {
 func AddIntFlag(cmd *Command, name, short, usage string, fb int, req bool) {
 	cmd.Flags().IntP(name, short, fb, usage)
 	if req {
-		cmd.MarkFlagRequired(name)
+		err := cmd.MarkFlagRequired(name)
+		if err != nil {
+			logrus.Error(err)
+		}
 	}
 }
 
@@ -115,6 +125,9 @@ func AddIntFlag(cmd *Command, name, short, usage string, fb int, req bool) {
 func AddInt64Flag(cmd *Command, name, short, usage string, fb int64, req bool) {
 	cmd.Flags().Int64P(name, short, fb, usage)
 	if req {
-		cmd.MarkFlagRequired(name)
+		err := cmd.MarkFlagRequired(name)
+		if err != nil {
+			logrus.Error(err)
+		}
 	}
 }
