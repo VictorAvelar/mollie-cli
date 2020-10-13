@@ -6,13 +6,7 @@ import (
 )
 
 func main() {
-	var logger *logrus.Logger
-	{
-		logrus.SetReportCaller(true)
-		logger = logrus.New()
-	}
-
 	if err := commands.Execute(); err != nil {
-		logger.Fatal(err)
+		logrus.Fatal(err)
 	}
 }
