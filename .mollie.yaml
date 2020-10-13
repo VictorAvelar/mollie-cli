@@ -1,4 +1,6 @@
----
 mollie:
-  token: test_6Kf5rPHqnneu2n9cwaw3MwuF7yb4Sf
+  token: MOLLIE_API_TOKEN
   mode: test
+  print-json: false
+  config: ""
+  verbose: false
