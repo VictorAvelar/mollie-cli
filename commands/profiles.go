@@ -71,7 +71,10 @@ func RunCurrentProfile(cmd *cobra.Command, args []string) {
 
 	mp := displayers.MollieProfile{Profile: p}
 
-	command.Display(profileCols, mp.KV())
+	err = command.Display(profileCols, mp.KV())
+	if err != nil {
+		logrus.Error(err)
+	}
 }
 
 // RunGetProfile will retrieve the required profile details by id.
@@ -92,5 +95,8 @@ func RunGetProfile(cmd *cobra.Command, args []string) {
 
 	mp := displayers.MollieProfile{Profile: p}
 
-	command.Display(profileCols, mp.KV())
+	err = command.Display(profileCols, mp.KV())
+	if err != nil {
+		logrus.Error(err)
+	}
 }
