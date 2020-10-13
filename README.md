@@ -29,11 +29,11 @@ It is based on the [mollie-api-go](https://github.com/VictorAvelar/mollie-api-go
 - [ ] Connect
 - [ ] Permissions
 - [ ] Organizations
-- [ ] Profiles
+- [x] Profiles
 - [ ] Onboarding
 - [ ] Settlements
 - [ ] Invoices
 - [ ] Miscellaneous
 
 ## Utilities
-- [ ] Browse - Opens Mollie related resources on a web browser.
+- [x] Browse - Opens Mollie related resources on a web browser.
