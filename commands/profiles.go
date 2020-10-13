@@ -65,6 +65,10 @@ func RunCurrentProfile(cmd *cobra.Command, args []string) {
 		logrus.Fatal(err)
 	}
 
+	if Verbose {
+		logrus.Infof("Received links:\nProfile: %s\nDocs: %s\nCheckout preview: %s\nDashboard: %s\n", p.Links.Self.Href, p.Links.Documentation.Href, p.Links.CheckoutPreviewURL.Href, p.Links.Dashboard.Href)
+	}
+
 	mp := displayers.MollieProfile{Profile: p}
 
 	command.Display(profileCols, mp.KV())
@@ -77,11 +81,18 @@ func RunGetProfile(cmd *cobra.Command, args []string) {
 		logrus.Fatal(err)
 	}
 
-	logrus.Infof("using profile id: %s", id)
 
 	p, err := API.Profiles.Get(id)
 	if err != nil {
 		logrus.Fatal(err)
+	}
+	if Verbose {
+		logrus.Infof("using profile id: %s", id)
+		logrus.Infof(`Received links:
+Profile: %s\n
+Docs: %s\n
+Checkout preview: %s\n"
+Dashboard: %s\n`, p.Links.Self, p.Links.Documentation, p.Links.CheckoutPreviewURL, p.Links.Dashboard)
 	}
 
 	mp := displayers.MollieProfile{Profile: p}
