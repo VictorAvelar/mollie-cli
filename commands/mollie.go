@@ -1,14 +1,13 @@
 package commands
 
 import (
-	"os"
-
 	"github.com/VictorAvelar/mollie-api-go/mollie"
-	"github.com/VictorAvelar/mollie-cli/internal/command"
 	"github.com/mitchellh/go-homedir"
 	"github.com/sirupsen/logrus"
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
+
+	"github.com/VictorAvelar/mollie-cli/internal/command"
 )
 
 var (
@@ -22,7 +21,7 @@ var (
 	// Token is the main API token
 	Token string
 	// Mode is the API target (sandbox/live)
-	Mode mollie.Mode
+	Mode string
 	// Verbose toggles verbose output on and off
 	Verbose bool
 
@@ -35,9 +34,15 @@ var (
 
 func init() {
 	MollieCmd.PersistentFlags().StringVarP(&cfgFile, "config", "c", "", "specifies a custom config file to be used")
-	MollieCmd.PersistentFlags().StringVarP(&Token, "token", "t", os.Getenv(mollie.APITokenEnv), "the API token to use (defaults to MOLLIE_API_TOKEN env value)")
+	viper.BindPFlag("mollie.config", MollieCmd.PersistentFlags().Lookup("config"))
+	MollieCmd.PersistentFlags().StringVarP(&Token, "token", "t", mollie.APITokenEnv, "the type of token to use for auth (defaults to MOLLIE_API_TOKEN)")
+	viper.BindPFlag("mollie.token", MollieCmd.PersistentFlags().Lookup("token"))
 	MollieCmd.PersistentFlags().BoolVarP(&Verbose, "verbose", "v", false, "print verbose logging messages (defaults to false)")
+	viper.BindPFlag("mollie.verbose", MollieCmd.PersistentFlags().Lookup("verbose"))
 	MollieCmd.PersistentFlags().BoolVar(&printJSON, "print-json", false, "toggle the output type to json")
+	viper.BindPFlag("mollie.print-json", MollieCmd.PersistentFlags().Lookup("print-json"))
+	MollieCmd.PersistentFlags().StringVarP(&Mode, "mode", "m", string(mollie.TestMode), "indicates the api target from test/live")
+	viper.BindPFlag("mode", MollieCmd.PersistentFlags().Lookup("mode"))
 
 	addCommands()
 	cobra.OnInitialize(func() {
@@ -55,6 +60,8 @@ func initConfig() {
 			logrus.Fatal(err)
 		}
 
+		viper.SetEnvPrefix("MOLLIE")
+		viper.AutomaticEnv()
 		viper.SetConfigName(".mollie")
 		viper.SetConfigType("yaml")
 		viper.AddConfigPath(home)
@@ -62,27 +69,28 @@ func initConfig() {
 		viper.AddConfigPath(".")
 	}
 
-	viper.AutomaticEnv()
-
 	if err := viper.ReadInConfig(); err != nil {
 		logrus.Fatal(err)
-	}
-
-	viper.AutomaticEnv()
-
-	if len(viper.GetString("mollie.token")) > 0 {
-		Token = viper.GetString("mollie.token")
 	}
 
 	if Verbose {
 		logrus.Infof("Using configuration file: %s\n", viper.ConfigFileUsed())
 		logrus.Infof("Using api token: %s", viper.GetString("mollie.token"))
-		logrus.Infof("Using api mode: %s", viper.GetString("mode"))
+		logrus.Infof("Using api mode: %s", viper.GetString("mollie.mode"))
 	}
 }
 
 func initClient() {
-	config := mollie.NewConfig(true, Token)
+	var tst bool
+	if Mode == string(mollie.LiveMode) {
+		tst = !tst
+	}
+
+	if Verbose {
+		logrus.Infof("connecting in %s mode", Mode)
+	}
+
+	config := mollie.NewConfig(tst, Token)
 	m, err := mollie.NewClient(nil, config)
 	if err != nil {
 		logrus.Fatal(err)
