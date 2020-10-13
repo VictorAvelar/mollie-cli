@@ -34,15 +34,15 @@ var (
 
 func init() {
 	MollieCmd.PersistentFlags().StringVarP(&cfgFile, "config", "c", "", "specifies a custom config file to be used")
-	viper.BindPFlag("mollie.config", MollieCmd.PersistentFlags().Lookup("config"))
+	_ = viper.BindPFlag("mollie.config", MollieCmd.PersistentFlags().Lookup("config"))
 	MollieCmd.PersistentFlags().StringVarP(&Token, "token", "t", mollie.APITokenEnv, "the type of token to use for auth (defaults to MOLLIE_API_TOKEN)")
-	viper.BindPFlag("mollie.token", MollieCmd.PersistentFlags().Lookup("token"))
+	_ = viper.BindPFlag("mollie.token", MollieCmd.PersistentFlags().Lookup("token"))
 	MollieCmd.PersistentFlags().BoolVarP(&Verbose, "verbose", "v", false, "print verbose logging messages (defaults to false)")
-	viper.BindPFlag("mollie.verbose", MollieCmd.PersistentFlags().Lookup("verbose"))
+	_ = viper.BindPFlag("mollie.verbose", MollieCmd.PersistentFlags().Lookup("verbose"))
 	MollieCmd.PersistentFlags().BoolVar(&printJSON, "print-json", false, "toggle the output type to json")
-	viper.BindPFlag("mollie.print-json", MollieCmd.PersistentFlags().Lookup("print-json"))
+	_ = viper.BindPFlag("mollie.print-json", MollieCmd.PersistentFlags().Lookup("print-json"))
 	MollieCmd.PersistentFlags().StringVarP(&Mode, "mode", "m", string(mollie.TestMode), "indicates the api target from test/live")
-	viper.BindPFlag("mode", MollieCmd.PersistentFlags().Lookup("mode"))
+	_ = viper.BindPFlag("mode", MollieCmd.PersistentFlags().Lookup("mode"))
 
 	addCommands()
 	cobra.OnInitialize(func() {
