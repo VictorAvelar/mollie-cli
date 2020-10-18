@@ -6,8 +6,6 @@ on:
       - '**.md'
       - '.github/**.md'
       - '.github/**/**.md'
-    branches:
-      - master
   pull_request:
 jobs:
   testing:
