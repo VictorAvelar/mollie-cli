@@ -38,6 +38,12 @@ github.com/BurntSushi/xgb v0.0.0-20160522181843-27f122750802/go.mod h1:IVnqGOEym
 github.com/OneOfOne/xxhash v1.2.2/go.mod h1:HSdplMjZKSmBqAxg5vPj2TmRDmfkzw+cTzAElWljhcU=
 github.com/VictorAvelar/mollie-api-go v1.6.0 h1:L4NWoR/v7H+WRgZ1+7IwMyI4mkCdQHoK49/uL6zPFRU=
 github.com/VictorAvelar/mollie-api-go v1.6.0/go.mod h1:ndE8MbwgUZoq827yh0ppyYncii5jZLa0acL6j5iqZyk=
+github.com/VictorAvelar/mollie-api-go v1.6.2 h1:xJe1RHtBZvYnVML9/3/FM9ADr2UYt76YzOsf6MoKkDM=
+github.com/VictorAvelar/mollie-api-go v1.6.2/go.mod h1:ndE8MbwgUZoq827yh0ppyYncii5jZLa0acL6j5iqZyk=
+github.com/VictorAvelar/mollie-api-go v1.6.3 h1:tz0J6ERt4KokV4WeBh2PmT/G9BpwCXqR7VJLZPU1lVs=
+github.com/VictorAvelar/mollie-api-go v1.6.3/go.mod h1:ndE8MbwgUZoq827yh0ppyYncii5jZLa0acL6j5iqZyk=
+github.com/VictorAvelar/mollie-api-go v1.6.4 h1:pKoj6NH4qfw6NrcS5kGCZe+oQ0m4pNUkwbEwbSnmAEg=
+github.com/VictorAvelar/mollie-api-go v1.6.4/go.mod h1:ndE8MbwgUZoq827yh0ppyYncii5jZLa0acL6j5iqZyk=
 github.com/alecthomas/template v0.0.0-20160405071501-a0175ee3bccc/go.mod h1:LOuyumcjzFXgccqObfd/Ljyb9UuFJ6TxHnclSeseNhc=
 github.com/alecthomas/units v0.0.0-20151022065526-2efee857e7cf/go.mod h1:ybxpYRFXyAe+OPACYpWeL0wqObRcbAqCMya13uyzqw0=
 github.com/armon/circbuf v0.0.0-20150827004946-bbbad097214e/go.mod h1:3U/XgcO3hCbHZ8TKRvWD2dDTCfh9M9ya+I9JpbB7O8o=

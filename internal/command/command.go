@@ -47,10 +47,6 @@ func Builder(parent *Command, cliText, shortDesc, desc string, cr runners.Runner
 		parent.AddCommand(c)
 	}
 
-	if len(cols) > 0 {
-		cc.Flags().StringP("props", "p", strings.Join(cols, ","), "List of properties to display")
-	}
-
 	return c
 }
 
