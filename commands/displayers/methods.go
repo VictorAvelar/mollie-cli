@@ -6,10 +6,12 @@ import (
 	"github.com/VictorAvelar/mollie-api-go/mollie"
 )
 
+// MollieListMethods wrapper for displaying
 type MollieListMethods struct {
 	*mollie.ListMethods
 }
 
+// KV is a displayable group of key value
 func (mlm *MollieListMethods) KV() []map[string]interface{} {
 	var out []map[string]interface{}
 
