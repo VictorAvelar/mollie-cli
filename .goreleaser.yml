@@ -1,0 +1,20 @@
+# This is an example goreleaser.yaml file with some sane defaults.
+project_name: mollie-cli
+builds:
+  - main: ./cmd/mollie/main.go
+    goos:
+      - linux
+      - darwin
+    ignore:
+      - goos: darwin
+        goarch: 386
+    flags:
+      - -v
+archives:
+  - name_template: "mollie-{{ .Version }}-{{ .Os }}-{{ .Arch }}"
+checksum:
+  name_template: "mollie-{{ .Version }}-checksums.sha256"
+snapshot:
+  name_template: "{{ .Tag }}-next"
+changelog:
+  sort: asc
