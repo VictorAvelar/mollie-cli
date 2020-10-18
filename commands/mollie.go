@@ -35,7 +35,7 @@ var (
 func init() {
 	MollieCmd.PersistentFlags().StringVarP(&cfgFile, "config", "c", "", "specifies a custom config file to be used")
 	_ = viper.BindPFlag("mollie.config", MollieCmd.PersistentFlags().Lookup("config"))
-	MollieCmd.PersistentFlags().StringVarP(&Token, "token", "t", mollie.APITokenEnv, "the type of token to use for auth (defaults to MOLLIE_API_TOKEN)")
+	MollieCmd.PersistentFlags().StringVarP(&Token, "token", "t", mollie.APITokenEnv, "the type of token to use for auth")
 	_ = viper.BindPFlag("mollie.token", MollieCmd.PersistentFlags().Lookup("token"))
 	MollieCmd.PersistentFlags().BoolVarP(&Verbose, "verbose", "v", false, "print verbose logging messages (defaults to false)")
 	_ = viper.BindPFlag("mollie.verbose", MollieCmd.PersistentFlags().Lookup("verbose"))
@@ -107,4 +107,24 @@ func Execute() error {
 func addCommands() {
 	MollieCmd.AddCommand(Profile())
 	MollieCmd.AddCommand(Browse())
+	MollieCmd.AddCommand(Methods())
+}
+
+// ParseStringFromFlags returns the string value of a flag by key.
+func ParseStringFromFlags(cmd *cobra.Command, key string) string {
+	val, err := cmd.Flags().GetString(key)
+	if err != nil {
+		logrus.Fatal(err)
+	}
+	return val
+}
+
+// PrintNonemptyFlagValue will log with level info any non empty
+// string value.
+// The key will be used as name indicator.
+// E.g. "using key value: val"
+func PrintNonemptyFlagValue(key, val string) {
+	if val != "" {
+		logrus.Infof("using %s value: %s", key, val)
+	}
 }
