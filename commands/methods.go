@@ -41,8 +41,8 @@ func Methods() *command.Command {
 For live mode, payment methods are returned that have been activated on your 
 account and have been enabled in the Dashboard.
 `,
-	RunListPaymentMethods,
-	methodsCols,
+		RunListPaymentMethods,
+		methodsCols,
 	)
 
 	command.AddStringFlag(lm, LocaleArg, "", "", "get the payment method name in the corresponding language", false)
