@@ -1,6 +1,11 @@
 name: Golang testing
 on:
   push:
+    paths-ignore:
+      - 'docs/**'
+      - '**.md'
+      - '.github/**.md'
+      - '.github/**/**.md'
     branches:
       - master
   pull_request:
