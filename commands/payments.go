@@ -1,15 +1,23 @@
 package commands
 
 import (
-	"fmt"
-
+	"github.com/VictorAvelar/mollie-cli/commands/displayers"
 	"github.com/VictorAvelar/mollie-cli/internal/command"
 	"github.com/sirupsen/logrus"
 	"github.com/spf13/cobra"
 )
 
 var (
-	paymentsCols = []string{}
+	paymentsCols = []string{
+		"ID",
+		"Mode",
+		"Created",
+		"Expires",
+		"Cancelable",
+		"Amount",
+		"Method",
+		"Description",
+	}
 )
 
 // Payments builds the payments command tree.
@@ -43,8 +51,15 @@ ordered from newest to oldest. The results are paginated.`,
 func RunListPayments(cmd *cobra.Command, args []string) {
 	ps, err := API.Payments.List(nil)
 	if err != nil {
-		logrus.Infof("%+v", err)
+		logrus.Fatal(err)
 	}
 
-	fmt.Printf("%+v\n", ps)
+	disp := displayers.MollieListPayments{
+		PaymentList: &ps,
+	}
+
+	err = command.Display(paymentsCols, disp.KV())
+	if err != nil {
+		logrus.Fatal(err)
+	}
 }
