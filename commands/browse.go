@@ -6,7 +6,6 @@ import (
 
 	"github.com/VictorAvelar/mollie-cli/internal/command"
 	"github.com/VictorAvelar/mollie-cli/pkg/utils"
-	"github.com/sirupsen/logrus"
 	"github.com/spf13/cobra"
 )
 
@@ -95,7 +94,7 @@ func openNames() []string {
 func RunOpenAction(cmd *cobra.Command, args []string) {
 	in, err := cmd.Flags().GetBool("info")
 	if err != nil {
-		logrus.Fatal(err)
+		logger.Fatal(err)
 	}
 
 	if in {
@@ -116,7 +115,7 @@ func RunOpenAction(cmd *cobra.Command, args []string) {
 func validateBrowseArgs(cmd *cobra.Command, args []string) error {
 	in, err := cmd.Flags().GetBool("info")
 	if err != nil {
-		logrus.Fatal(err)
+		logger.Fatal(err)
 	}
 
 	if len(args) == 0 && in {
