@@ -43,6 +43,17 @@ ordered from newest to oldest. The results are paginated.`,
 	command.AddStringFlag(lp, FromArg, "", "", "offset the result set to the payment with this ID.", false)
 	command.AddIntFlag(lp, LimitArg, "", "the number of payments to return", 250, false)
 
+	gp := command.Builder(
+		p,
+		"get",
+		"Retrieve a single payment object by its payment token.",
+		``,
+		RunGetPayment,
+		[]string{},
+	)
+
+	command.AddStringFlag(gp, IDArg, "", "", "the payment token/id", true)
+
 	return p
 }
 
@@ -57,6 +68,27 @@ func RunListPayments(cmd *cobra.Command, args []string) {
 	disp := displayers.MollieListPayments{
 		PaymentList: &ps,
 	}
+
+	err = command.Display(paymentsCols, disp.KV())
+	if err != nil {
+		logrus.Fatal(err)
+	}
+}
+
+// RunGetPayment retrieves a single payment object.
+func RunGetPayment(cmd *cobra.Command, args []string) {
+	id := ParseStringFromFlags(cmd, IDArg)
+
+	if Verbose {
+		logrus.Infof("retrieving payment with id (token) %d", id)
+	}
+
+	p, err := API.Payments.Get(id, nil)
+	if err != nil {
+		logrus.Fatal(err)
+	}
+
+	disp := displayers.MolliePayment{Payment: &p}
 
 	err = command.Display(paymentsCols, disp.KV())
 	if err != nil {

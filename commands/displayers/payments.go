@@ -30,3 +30,25 @@ func (lp *MollieListPayments) KV() []map[string]interface{} {
 
 	return out
 }
+
+// MolliePayment wrapper for displaying.
+type MolliePayment struct {
+	*mollie.Payment
+}
+
+// KV is a displayable group of key value
+func (p *MolliePayment) KV() []map[string]interface{} {
+	var out []map[string]interface{}
+	x := map[string]interface{}{
+		"ID":          p.ID,
+		"Mode":        p.Mode,
+		"Created":     p.CreatedAt.String(),
+		"Expires":     p.ExpiresAt.String(),
+		"Cancelable":  p.IsCancellable,
+		"Amount":      p.Amount.Value + p.Amount.Currency,
+		"Method":      p.Method,
+		"Description": p.Description,
+	}
+	out = append(out, x)
+	return out
+}
