@@ -11,6 +11,7 @@ const (
 	IDArg             = "id"
 	LimitArg          = "limit"
 	LocaleArg         = "locale"
+	RedirectURLArg    = "redirect-to"
 	ResourceArg       = "resource"
 	SequenceTypeArg   = "sequence-type"
 	WalletsArg        = "wallets"

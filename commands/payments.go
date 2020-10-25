@@ -77,9 +77,10 @@ ordered from newest to oldest. The results are paginated.`,
 
 	// Add common aliases
 	cpp.Aliases = []string{"new", "start"}
-	command.AddStringFlag(cpp, AmountValueArg, "", "", "A string containing the exact amount you want to charge in the given currency", true)
-	command.AddStringFlag(cpp, AmountCurrencyArg, "", "", "An ISO 4217 currency code", true)
-	command.AddStringFlag(cpp, DescriptionArg, "", "", "The description of the payment you’re creating to be show to your customers when possible", true)
+	command.AddStringFlag(cpp, AmountValueArg, "", "", "a string containing the exact amount you want to charge in the given currency", true)
+	command.AddStringFlag(cpp, AmountCurrencyArg, "", "", "an ISO 4217 currency code", true)
+	command.AddStringFlag(cpp, DescriptionArg, "", "", "the description of the payment you’re creating to be show to your customers when possible", true)
+	command.AddStringFlag(cpp, RedirectURLArg, "", "", "the URL your customer will be redirected to after the payment process", true)
 
 	return p
 }
@@ -154,9 +155,11 @@ func RunCreatePayment(cmd *cobra.Command, args []string) {
 	amount := ParseStringFromFlags(cmd, AmountValueArg)
 	currency := ParseStringFromFlags(cmd, AmountCurrencyArg)
 	desc := ParseStringFromFlags(cmd, DescriptionArg)
+	rURL := ParseStringFromFlags(cmd, RedirectURLArg)
 
 	if Verbose {
 		logrus.Infof("creating payment of %s %s", amount, currency)
+		logrus.Infof("redirect url received %s", rURL)
 		logrus.Infof(`
 this description will be shown to your customer in their 
 payment provider statement or applications:
@@ -169,15 +172,13 @@ payment provider statement or applications:
 			Value:    amount,
 		},
 		Description: desc,
-		RedirectURL: "https://victoravelar.com",
+		RedirectURL: rURL,
 	}
 
 	p, err := API.Payments.Create(p)
 	if err != nil {
 		logrus.Fatal(err)
 	}
-
-	logrus.Infof("%+v", p)
 
 	if Verbose {
 		logrus.Info("payment successfully created")
