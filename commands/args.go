@@ -6,6 +6,7 @@ const (
 	AmountValueArg    = "amount-value"
 	BillingCountryArg = "billing-country"
 	CurrencyArg       = "currency"
+	DescriptionArg    = "description"
 	FromArg           = "from"
 	IDArg             = "id"
 	LimitArg          = "limit"

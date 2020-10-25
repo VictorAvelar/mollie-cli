@@ -1,6 +1,7 @@
 package commands
 
 import (
+	"github.com/VictorAvelar/mollie-api-go/mollie"
 	"github.com/VictorAvelar/mollie-cli/commands/displayers"
 	"github.com/VictorAvelar/mollie-cli/internal/command"
 	"github.com/sirupsen/logrus"
@@ -65,6 +66,21 @@ ordered from newest to oldest. The results are paginated.`,
 
 	command.AddStringFlag(cp, IDArg, "", "", "the payment token/id", true)
 
+	cpp := command.Builder(
+		p,
+		"create",
+		"Payment creation",
+		``,
+		RunCreatePayment,
+		[]string{},
+	)
+
+	// Add common aliases
+	cpp.Aliases = []string{"new", "start"}
+	command.AddStringFlag(cpp, AmountValueArg, "", "", "A string containing the exact amount you want to charge in the given currency", true)
+	command.AddStringFlag(cpp, AmountCurrencyArg, "", "", "An ISO 4217 currency code", true)
+	command.AddStringFlag(cpp, DescriptionArg, "", "", "The description of the payment you’re creating to be show to your customers when possible", true)
+
 	return p
 }
 
@@ -123,6 +139,49 @@ func RunCancelPayment(cmd *cobra.Command, args []string) {
 	if Verbose {
 		logrus.Info("payment successfully cancelled")
 		logrus.Infof("cancellation processed at %s", p.CanceledAt)
+	}
+
+	disp := displayers.MolliePayment{Payment: &p}
+
+	err = command.Display(paymentsCols, disp.KV())
+	if err != nil {
+		logrus.Fatal(err)
+	}
+}
+
+// RunCreatePayment instantiates a new payment using your mollie account.
+func RunCreatePayment(cmd *cobra.Command, args []string) {
+	amount := ParseStringFromFlags(cmd, AmountValueArg)
+	currency := ParseStringFromFlags(cmd, AmountCurrencyArg)
+	desc := ParseStringFromFlags(cmd, DescriptionArg)
+
+	if Verbose {
+		logrus.Infof("creating payment of %s %s", amount, currency)
+		logrus.Infof(`
+this description will be shown to your customer in their 
+payment provider statement or applications:
+%s`, desc)
+	}
+
+	p := mollie.Payment{
+		Amount: &mollie.Amount{
+			Currency: currency,
+			Value:    amount,
+		},
+		Description: desc,
+		RedirectURL: "https://victoravelar.com",
+	}
+
+	p, err := API.Payments.Create(p)
+	if err != nil {
+		logrus.Fatal(err)
+	}
+
+	logrus.Infof("%+v", p)
+
+	if Verbose {
+		logrus.Info("payment successfully created")
+		logrus.Infof("Payment processed at %s", p.CreatedAt)
 	}
 
 	disp := displayers.MolliePayment{Payment: &p}
