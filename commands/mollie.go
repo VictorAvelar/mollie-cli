@@ -1,6 +1,8 @@
 package commands
 
 import (
+	"time"
+
 	"github.com/VictorAvelar/mollie-api-go/mollie"
 	"github.com/mitchellh/go-homedir"
 	"github.com/sirupsen/logrus"
@@ -8,6 +10,10 @@ import (
 	"github.com/spf13/viper"
 
 	"github.com/VictorAvelar/mollie-cli/internal/command"
+)
+
+const (
+	version string = "v0.1.2"
 )
 
 var (
@@ -25,11 +31,14 @@ var (
 	// Verbose toggles verbose output on and off
 	Verbose bool
 
-	cfgFile   string
-	printJSON bool
+	cfgFile          string
+	printJSON, debug bool
 
 	// API client
 	API *mollie.Client
+
+	// global structured logger
+	logger *logrus.Entry
 )
 
 func init() {
@@ -43,6 +52,8 @@ func init() {
 	_ = viper.BindPFlag("mollie.print-json", MollieCmd.PersistentFlags().Lookup("print-json"))
 	MollieCmd.PersistentFlags().StringVarP(&Mode, "mode", "m", string(mollie.TestMode), "indicates the api target from test/live")
 	_ = viper.BindPFlag("mode", MollieCmd.PersistentFlags().Lookup("mode"))
+	MollieCmd.PersistentFlags().BoolVarP(&debug, "debug", "d", false, "enables debug logging information")
+	_ = viper.BindPFlag("debug", MollieCmd.PersistentFlags().Lookup("debug"))
 
 	addCommands()
 	cobra.OnInitialize(func() {
@@ -52,12 +63,32 @@ func init() {
 }
 
 func initConfig() {
+	logger = logrus.WithFields(logrus.Fields{
+		"version": version,
+		"mode":    Mode,
+	})
+
+	if printJSON {
+		logger.Logger.SetFormatter(&logrus.JSONFormatter{})
+	} else {
+		logger.Logger.SetFormatter(&logrus.TextFormatter{
+			TimestampFormat:        time.RFC822,
+			FullTimestamp:          true,
+			DisableLevelTruncation: true,
+			PadLevelText:           true,
+		})
+	}
+
+	if debug {
+		logger.Logger.SetReportCaller(debug)
+	}
+
 	if cfgFile != "" {
 		viper.SetConfigFile(cfgFile)
 	} else {
 		home, err := homedir.Dir()
 		if err != nil {
-			logrus.Fatal(err)
+			logger.Fatal(err)
 		}
 
 		viper.SetEnvPrefix("MOLLIE")
@@ -70,13 +101,13 @@ func initConfig() {
 	}
 
 	if err := viper.ReadInConfig(); err != nil {
-		logrus.Fatal(err)
+		logger.Fatal(err)
 	}
 
 	if Verbose {
-		logrus.Infof("Using configuration file: %s\n", viper.ConfigFileUsed())
-		logrus.Infof("Using api token: %s", viper.GetString("mollie.token"))
-		logrus.Infof("Using api mode: %s", viper.GetString("mollie.mode"))
+		logger.Infof("Using configuration file: %s\n", viper.ConfigFileUsed())
+		logger.Infof("Using api token: %s", viper.GetString("mollie.token"))
+		logger.Infof("Using api mode: %s", viper.GetString("mollie.mode"))
 	}
 }
 
@@ -87,13 +118,13 @@ func initClient() {
 	}
 
 	if Verbose {
-		logrus.Infof("connecting in %s mode", Mode)
+		logger.Infof("connecting in %s mode", Mode)
 	}
 
 	config := mollie.NewConfig(tst, Token)
 	m, err := mollie.NewClient(nil, config)
 	if err != nil {
-		logrus.Fatal(err)
+		logger.Fatal(err)
 	}
 
 	API = m
@@ -115,7 +146,7 @@ func addCommands() {
 func ParseStringFromFlags(cmd *cobra.Command, key string) string {
 	val, err := cmd.Flags().GetString(key)
 	if err != nil {
-		logrus.Fatal(err)
+		logger.Fatal(err)
 	}
 	return val
 }
@@ -126,6 +157,6 @@ func ParseStringFromFlags(cmd *cobra.Command, key string) string {
 // E.g. "using key value: val"
 func PrintNonemptyFlagValue(key, val string) {
 	if val != "" {
-		logrus.Infof("using %s value: %s", key, val)
+		logger.Infof("using %s value: %s", key, val)
 	}
 }
