@@ -3,7 +3,6 @@ package commands
 import (
 	"github.com/VictorAvelar/mollie-cli/commands/displayers"
 	"github.com/VictorAvelar/mollie-cli/internal/command"
-	"github.com/VictorAvelar/mollie-cli/internal/runners"
 	"github.com/sirupsen/logrus"
 	"github.com/spf13/cobra"
 )
@@ -60,7 +59,7 @@ ordered from newest to oldest. The results are paginated.`,
 		"cancel",
 		"Cancel a payment by its payment token.",
 		``,
-		runners.NopRunner,
+		RunCancelPayment,
 		[]string{},
 	)
 
