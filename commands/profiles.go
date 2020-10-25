@@ -1,15 +1,10 @@
 package commands
 
 import (
-	"github.com/sirupsen/logrus"
 	"github.com/spf13/cobra"
 
 	"github.com/VictorAvelar/mollie-cli/commands/displayers"
 	"github.com/VictorAvelar/mollie-cli/internal/command"
-)
-
-const (
-	profileIDArgName string = "id"
 )
 
 var (
@@ -42,7 +37,7 @@ func Profile() *command.Command {
 		profileCols,
 	)
 
-	command.AddStringFlag(gp, profileIDArgName, "", "", "profile ID to be retrieved", true)
+	command.AddStringFlag(gp, IDArg, "", "", "profile ID to be retrieved", true)
 
 	command.Builder(
 		p,
@@ -62,41 +57,42 @@ or application.`,
 func RunCurrentProfile(cmd *cobra.Command, args []string) {
 	p, err := API.Profiles.Current()
 	if err != nil {
-		logrus.Fatal(err)
+		logger.Fatal(err)
 	}
 
 	if Verbose {
-		logrus.Infof("request target: %s\n", p.Links.Self.Href)
+		logger.Infof("request target: %s", p.Links.Self.Href)
 	}
 
 	mp := displayers.MollieProfile{Profile: p}
 
 	err = command.Display(profileCols, mp.KV())
 	if err != nil {
-		logrus.Error(err)
+		logger.Error(err)
 	}
 }
 
 // RunGetProfile will retrieve the required profile details by id.
 func RunGetProfile(cmd *cobra.Command, args []string) {
-	id, err := cmd.Flags().GetString(profileIDArgName)
-	if err != nil {
-		logrus.Fatal(err)
+	id := ParseStringFromFlags(cmd, IDArg)
+
+	if Verbose {
+		logger.Infof("fetching profile with id %s", id)
 	}
 
 	p, err := API.Profiles.Get(id)
 	if err != nil {
-		logrus.Fatal(err)
+		logger.Fatal(err)
 	}
 	if Verbose {
-		logrus.Infof("using profile id: %s\n", id)
-		logrus.Infof("request target: %s\n", p.Links.Self.Href)
+		logger.Infof("using profile id: %s", id)
+		logger.Infof("request target: %s", p.Links.Self.Href)
 	}
 
 	mp := displayers.MollieProfile{Profile: p}
 
 	err = command.Display(profileCols, mp.KV())
 	if err != nil {
-		logrus.Error(err)
+		logger.Error(err)
 	}
 }

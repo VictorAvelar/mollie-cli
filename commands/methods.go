@@ -1,12 +1,7 @@
 package commands
 
 import (
-	"fmt"
-	"log"
-	"os"
-
 	"github.com/VictorAvelar/mollie-api-go/mollie"
-	"github.com/sirupsen/logrus"
 	"github.com/spf13/cobra"
 
 	"github.com/VictorAvelar/mollie-cli/commands/displayers"
@@ -112,13 +107,13 @@ func RunListPaymentMethods(cmd *cobra.Command, args []string) {
 
 	ms, err := API.Methods.List(&opts)
 	if err != nil {
-		logrus.Fatal(err)
+		logger.Fatal(err)
 	}
 
 	if Verbose {
-		logrus.Infof("received %d payment methods", ms.Count)
-		logrus.Infof("request performed: %s", ms.Links.Self.Href)
-		logrus.Infof("documentation: %s", ms.Links.Docs.Href)
+		logger.Infof("received %d payment methods", ms.Count)
+		logger.Infof("request performed: %s", ms.Links.Self.Href)
+		logger.Infof("documentation: %s", ms.Links.Docs.Href)
 	}
 
 	lpm := displayers.MollieListMethods{
@@ -127,7 +122,7 @@ func RunListPaymentMethods(cmd *cobra.Command, args []string) {
 
 	err = command.Display(methodsCols, lpm.KV())
 	if err != nil {
-		logrus.Fatal(err)
+		logger.Fatal(err)
 	}
 }
 
@@ -148,21 +143,20 @@ func RunGetAllMethods(cmd *cobra.Command, args []string) {
 
 	m, err := API.Methods.All(&opts)
 	if err != nil {
-		fmt.Println(err.Error())
-		os.Exit(1)
+		logger.Fatal(err)
 	}
 
 	if Verbose {
-		logrus.Infof("received %d payment methods", m.Count)
-		logrus.Infof("request performed: %s", m.Links.Self.Href)
-		logrus.Infof("documentation: %s", m.Links.Docs.Href)
+		logger.Infof("received %d payment methods", m.Count)
+		logger.Infof("request performed: %s", m.Links.Self.Href)
+		logger.Infof("documentation: %s", m.Links.Docs.Href)
 	}
 
 	mdis := &displayers.MollieListMethods{ListMethods: m}
 
 	err = command.Display(methodsCols, mdis.KV())
 	if err != nil {
-		logrus.Fatal(err)
+		logger.Fatal(err)
 	}
 }
 
@@ -170,7 +164,7 @@ func RunGetAllMethods(cmd *cobra.Command, args []string) {
 func RunGetPaymentMethods(cmd *cobra.Command, args []string) {
 	id, err := cmd.Flags().GetString(IDArg)
 	if err != nil {
-		log.Fatal(err)
+		logger.Fatal(err)
 	}
 
 	var opts mollie.MethodsOptions
@@ -187,8 +181,7 @@ func RunGetPaymentMethods(cmd *cobra.Command, args []string) {
 
 	m, err := API.Methods.Get(id, &opts)
 	if err != nil {
-		fmt.Println(err.Error())
-		os.Exit(1)
+		logger.Fatal(err)
 	}
 
 	mdis := &displayers.MollieMethod{
@@ -197,6 +190,6 @@ func RunGetPaymentMethods(cmd *cobra.Command, args []string) {
 
 	err = command.Display(methodsCols, mdis.KV())
 	if err != nil {
-		logrus.Fatal(err)
+		logger.Fatal(err)
 	}
 }
