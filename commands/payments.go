@@ -33,7 +33,7 @@ func Payments() *command.Command {
 	lp := command.Builder(
 		p,
 		"list",
-		"retrieve all payments created",
+		"Retrieve all payments created",
 		`Retrieve all payments created with the current website profile, 
 ordered from newest to oldest. The results are paginated.`,
 		RunListPayments,
@@ -80,6 +80,32 @@ ordered from newest to oldest. The results are paginated.`,
 	command.AddStringFlag(cpp, AmountCurrencyArg, "", "", "an ISO 4217 currency code", true)
 	command.AddStringFlag(cpp, DescriptionArg, "", "", "the description of the payment you’re creating to be show to your customers when possible", true)
 	command.AddStringFlag(cpp, RedirectURLArg, "", "", "the URL your customer will be redirected to after the payment process", true)
+	command.AddStringFlag(cpp, WebhookURLArg, "", "", "set the webhook URL, where we will send payment status updates to", false)
+	command.AddStringFlag(cpp, MetadataArg, "", "", "any data you like, for example a string or a JSON object", false)
+	command.AddStringFlag(cpp, MethodArg, "", "", "change the payment to a different payment method.", false)
+	command.AddStringFlag(cpp, LocaleArg, "", "", "update the language to be used in the hosted payment pages", false)
+	command.AddStringFlag(cpp, RPMToCountryArg, "", "", "parameter to restrict the payment methods available to your customer to those from a single country", false)
+	command.AddStringFlag(cpp, SequenceTypeArg, "", string(mollie.OneOffSequence), "indicate which type of payment this is in a recurring sequence", false)
+	command.AddStringFlag(cpp, CustomerIDArg, "", "", "the ID of the Customer for whom the payment is being created", false)
+	command.AddStringFlag(cpp, MandateIDArg, "", "", "when creating recurring payments, the ID of a specific Mandate may be supplied", false)
+
+	up := command.Builder(
+		p,
+		"update",
+		"Update some details of a created payment",
+		`There are also payment method specific parameters available, check the docs, please.`,
+		RunUpdatePayment,
+		[]string{},
+	)
+
+	command.AddStringFlag(up, IDArg, "", "", "the payment token/id", true)
+	command.AddStringFlag(up, DescriptionArg, "", "", "the description of the payment.", false)
+	command.AddStringFlag(up, RedirectURLArg, "", "", "the URL your customer will be redirected to after the payment process.", false)
+	command.AddStringFlag(up, WebhookURLArg, "", "", "set the webhook URL, where we will send payment status updates to.", false)
+	command.AddStringFlag(up, MetadataArg, "", "", "any data you like, for example a string or a JSON object", false)
+	command.AddStringFlag(up, MethodArg, "", "", "change the payment to a different payment method.", false)
+	command.AddStringFlag(up, LocaleArg, "", "", "update the language to be used in the hosted payment pages", false)
+	command.AddStringFlag(up, RPMToCountryArg, "", "", "parameter to restrict the payment methods available to your customer to those from a single country", false)
 
 	return p
 }
@@ -155,23 +181,49 @@ func RunCreatePayment(cmd *cobra.Command, args []string) {
 	currency := ParseStringFromFlags(cmd, AmountCurrencyArg)
 	desc := ParseStringFromFlags(cmd, DescriptionArg)
 	rURL := ParseStringFromFlags(cmd, RedirectURLArg)
+	whURL := ParseStringFromFlags(cmd, WebhookURLArg)
+	meta := ParseStringFromFlags(cmd, MetadataArg)
+	method := ParseStringFromFlags(cmd, MethodArg)
+	locale := ParseStringFromFlags(cmd, LocaleArg)
+	rpmCountry := ParseStringFromFlags(cmd, RPMToCountryArg)
+	sequence := ParseStringFromFlags(cmd, SequenceTypeArg)
+	mandate := ParseStringFromFlags(cmd, MandateIDArg)
+	customer := ParseStringFromFlags(cmd, CustomerIDArg)
 
 	if Verbose {
 		logger.Infof("creating payment of %s %s", amount, currency)
-		logger.Infof("redirect url received %s", rURL)
-		logger.Infof(`
-this description will be shown to your customer in their 
-payment provider statement or applications:
-%s`, desc)
+		PrintNonemptyFlagValue(RedirectURLArg, rURL)
+		PrintNonemptyFlagValue(DescriptionArg, desc)
+		PrintNonemptyFlagValue(WebhookURLArg, whURL)
+		PrintNonemptyFlagValue(MetadataArg, meta)
+		PrintNonemptyFlagValue(MethodArg, method)
+		PrintNonemptyFlagValue(LocaleArg, locale)
+		PrintNonemptyFlagValue(RPMToCountryArg, rpmCountry)
+		PrintNonemptyFlagValue(CustomerIDArg, customer)
+		PrintNonemptyFlagValue(MandateIDArg, mandate)
+		PrintNonemptyFlagValue(SequenceTypeArg, sequence)
 	}
+
+	l := mollie.Locale(locale)
+	c := mollie.Locale(rpmCountry)
+	s := mollie.SequenceType(sequence)
+	m := mollie.PaymentMethod(method)
 
 	p := mollie.Payment{
 		Amount: &mollie.Amount{
 			Currency: currency,
 			Value:    amount,
 		},
-		Description: desc,
-		RedirectURL: rURL,
+		Description:                     desc,
+		RedirectURL:                     rURL,
+		WebhookURL:                      whURL,
+		Metadata:                        meta,
+		Locale:                          &l,
+		RestrictPaymentMethodsToCountry: &c,
+		CustomerID:                      customer,
+		MandateID:                       mandate,
+		SequenceType:                    &s,
+		Method:                          &m,
 	}
 
 	p, err := API.Payments.Create(p)
@@ -181,7 +233,54 @@ payment provider statement or applications:
 
 	if Verbose {
 		logger.Info("payment successfully created")
-		logger.Infof("Payment processed at %s", p.CreatedAt)
+		logger.Infof("Payment created at %s", p.CreatedAt)
+	}
+
+	disp := displayers.MolliePayment{Payment: &p}
+
+	err = command.Display(paymentsCols, disp.KV())
+	if err != nil {
+		logger.Fatal(err)
+	}
+}
+
+// RunUpdatePayment mutates a payment method.
+func RunUpdatePayment(cmd *cobra.Command, args []string) {
+	id := ParseStringFromFlags(cmd, IDArg)
+	desc := ParseStringFromFlags(cmd, DescriptionArg)
+	rURL := ParseStringFromFlags(cmd, RedirectURLArg)
+	whURL := ParseStringFromFlags(cmd, WebhookURLArg)
+	meta := ParseStringFromFlags(cmd, MetadataArg)
+	method := ParseStringFromFlags(cmd, MethodArg)
+	locale := ParseStringFromFlags(cmd, LocaleArg)
+	rpmCountry := ParseStringFromFlags(cmd, RPMToCountryArg)
+
+	if Verbose {
+		PrintNonemptyFlagValue(IDArg, id)
+		PrintNonemptyFlagValue(RedirectURLArg, rURL)
+		PrintNonemptyFlagValue(DescriptionArg, desc)
+		PrintNonemptyFlagValue(WebhookURLArg, whURL)
+		PrintNonemptyFlagValue(MetadataArg, meta)
+		PrintNonemptyFlagValue(MethodArg, method)
+		PrintNonemptyFlagValue(LocaleArg, locale)
+		PrintNonemptyFlagValue(RPMToCountryArg, rpmCountry)
+	}
+
+	l := mollie.Locale(locale)
+	c := mollie.Locale(rpmCountry)
+	m := mollie.PaymentMethod(method)
+
+	p, err := API.Payments.Update(id, mollie.Payment{
+		RedirectURL:                     rURL,
+		Description:                     desc,
+		WebhookURL:                      whURL,
+		Metadata:                        meta,
+		Locale:                          &l,
+		RestrictPaymentMethodsToCountry: &c,
+		Method:                          &m,
+	})
+	if err != nil {
+		logger.Fatal(err)
 	}
 
 	disp := displayers.MolliePayment{Payment: &p}
