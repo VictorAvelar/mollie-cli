@@ -4,7 +4,6 @@ import (
 	"github.com/VictorAvelar/mollie-api-go/mollie"
 	"github.com/VictorAvelar/mollie-cli/commands/displayers"
 	"github.com/VictorAvelar/mollie-cli/internal/command"
-	"github.com/sirupsen/logrus"
 	"github.com/spf13/cobra"
 )
 
@@ -90,7 +89,7 @@ ordered from newest to oldest. The results are paginated.`,
 func RunListPayments(cmd *cobra.Command, args []string) {
 	ps, err := API.Payments.List(nil)
 	if err != nil {
-		logrus.Fatal(err)
+		logger.Fatal(err)
 	}
 
 	disp := displayers.MollieListPayments{
@@ -99,7 +98,7 @@ func RunListPayments(cmd *cobra.Command, args []string) {
 
 	err = command.Display(paymentsCols, disp.KV())
 	if err != nil {
-		logrus.Fatal(err)
+		logger.Fatal(err)
 	}
 }
 
@@ -108,19 +107,19 @@ func RunGetPayment(cmd *cobra.Command, args []string) {
 	id := ParseStringFromFlags(cmd, IDArg)
 
 	if Verbose {
-		logrus.Infof("retrieving payment with id (token) %d", id)
+		logger.Infof("retrieving payment with id (token) %d", id)
 	}
 
 	p, err := API.Payments.Get(id, nil)
 	if err != nil {
-		logrus.Fatal(err)
+		logger.Fatal(err)
 	}
 
 	disp := displayers.MolliePayment{Payment: &p}
 
 	err = command.Display(paymentsCols, disp.KV())
 	if err != nil {
-		logrus.Fatal(err)
+		logger.Fatal(err)
 	}
 }
 
@@ -129,24 +128,24 @@ func RunCancelPayment(cmd *cobra.Command, args []string) {
 	id := ParseStringFromFlags(cmd, IDArg)
 
 	if Verbose {
-		logrus.Infof("canceling payment with id (token) %d", id)
+		logger.Infof("canceling payment with id (token) %d", id)
 	}
 
 	p, err := API.Payments.Cancel(id)
 	if err != nil {
-		logrus.Fatal(err)
+		logger.Fatal(err)
 	}
 
 	if Verbose {
-		logrus.Info("payment successfully cancelled")
-		logrus.Infof("cancellation processed at %s", p.CanceledAt)
+		logger.Info("payment successfully cancelled")
+		logger.Infof("cancellation processed at %s", p.CanceledAt)
 	}
 
 	disp := displayers.MolliePayment{Payment: &p}
 
 	err = command.Display(paymentsCols, disp.KV())
 	if err != nil {
-		logrus.Fatal(err)
+		logger.Fatal(err)
 	}
 }
 
@@ -158,9 +157,9 @@ func RunCreatePayment(cmd *cobra.Command, args []string) {
 	rURL := ParseStringFromFlags(cmd, RedirectURLArg)
 
 	if Verbose {
-		logrus.Infof("creating payment of %s %s", amount, currency)
-		logrus.Infof("redirect url received %s", rURL)
-		logrus.Infof(`
+		logger.Infof("creating payment of %s %s", amount, currency)
+		logger.Infof("redirect url received %s", rURL)
+		logger.Infof(`
 this description will be shown to your customer in their 
 payment provider statement or applications:
 %s`, desc)
@@ -177,18 +176,18 @@ payment provider statement or applications:
 
 	p, err := API.Payments.Create(p)
 	if err != nil {
-		logrus.Fatal(err)
+		logger.Fatal(err)
 	}
 
 	if Verbose {
-		logrus.Info("payment successfully created")
-		logrus.Infof("Payment processed at %s", p.CreatedAt)
+		logger.Info("payment successfully created")
+		logger.Infof("Payment processed at %s", p.CreatedAt)
 	}
 
 	disp := displayers.MolliePayment{Payment: &p}
 
 	err = command.Display(paymentsCols, disp.KV())
 	if err != nil {
-		logrus.Fatal(err)
+		logger.Fatal(err)
 	}
 }
