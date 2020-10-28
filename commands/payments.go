@@ -133,7 +133,7 @@ func RunGetPayment(cmd *cobra.Command, args []string) {
 	id := ParseStringFromFlags(cmd, IDArg)
 
 	if Verbose {
-		logger.Infof("retrieving payment with id (token) %d", id)
+		logger.Infof("retrieving payment with id (token) %s", id)
 	}
 
 	p, err := API.Payments.Get(id, nil)
@@ -154,7 +154,7 @@ func RunCancelPayment(cmd *cobra.Command, args []string) {
 	id := ParseStringFromFlags(cmd, IDArg)
 
 	if Verbose {
-		logger.Infof("canceling payment with id (token) %d", id)
+		logger.Infof("canceling payment with id (token) %s", id)
 	}
 
 	p, err := API.Payments.Cancel(id)
