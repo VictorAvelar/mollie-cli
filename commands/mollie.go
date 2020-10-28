@@ -139,6 +139,7 @@ func addCommands() {
 	MollieCmd.AddCommand(Profile())
 	MollieCmd.AddCommand(Browse())
 	MollieCmd.AddCommand(Methods())
+	MollieCmd.AddCommand(Payments())
 }
 
 // ParseStringFromFlags returns the string value of a flag by key.

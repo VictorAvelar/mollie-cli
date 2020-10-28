@@ -5,9 +5,7 @@ builds:
     goos:
       - linux
       - darwin
-    ignore:
-      - goos: darwin
-        goarch: 386
+      - windows
     flags:
       - -v
 archives:
