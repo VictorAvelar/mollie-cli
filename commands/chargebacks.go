@@ -4,7 +4,6 @@ import (
 	"github.com/VictorAvelar/mollie-api-go/mollie"
 	"github.com/VictorAvelar/mollie-cli/commands/displayers"
 	"github.com/VictorAvelar/mollie-cli/internal/command"
-	"github.com/VictorAvelar/mollie-cli/internal/runners"
 	"github.com/spf13/cobra"
 )
 
@@ -12,39 +11,55 @@ import (
 func Chargebacks() *command.Command {
 	cb := command.Builder(
 		nil,
-		"chargebacks",
-		"Operations with the Chargebacks API",
-		``,
-		runners.NopRunner,
-		[]string{},
+		command.Config{
+			Namespace: "chargebacks",
+			ShortDesc: "Operations with the Chargebacks API",
+			Aliases:   []string{"cb", "cback"},
+		},
+		noCols,
 	)
-	cb.Aliases = []string{"cb", "cback"}
 
 	gcb := command.Builder(
 		cb,
-		"get",
-		"Retrieve a single chargeback by its ID. Note the original payment’s ID is needed as well.",
-		`Retrieve a single chargeback by its ID. Note the original payment’s ID is needed as well.
+		command.Config{
+			Namespace: "get",
+			ShortDesc: "Retrieve a single chargeback by its ID. Note the original payment’s ID is needed as well.",
+			LongDesc: `Retrieve a single chargeback by its ID. Note the original payment’s ID is needed as well.
 A debit to a depositor's account for an item that has been previously credited, as for a returned bad check.`,
-		RunGetChargebacks,
-		[]string{},
+			Execute: RunGetChargebacks,
+		},
+		noCols,
 	)
-
-	command.AddStringFlag(gcb, PaymentArg, "", "", "original payment id/token", true)
-	command.AddStringFlag(gcb, IDArg, "", "", "the chargeback id", true)
-	command.AddStringFlag(gcb, EmbedArg, "", "", "a comma separated list of embeded resources", false)
+	command.AddFlag(gcb, command.FlagConfig{
+		Name:     PaymentArg,
+		Usage:    "original payment id/token",
+		Required: true,
+	})
+	command.AddFlag(gcb, command.FlagConfig{
+		Name:     IDArg,
+		Usage:    "the chargeback id/token",
+		Required: true,
+	})
+	command.AddFlag(gcb, command.FlagConfig{
+		Name:  EmbedArg,
+		Usage: "a comma separated list of embeded resources",
+	})
 
 	lcb := command.Builder(
 		cb,
-		"list",
-		"Retrieve all received chargebacks",
-		`Retrieve all received chargebacks. If the payment-specific endpoint is used, only chargebacks 
+		command.Config{
+			Namespace: "list",
+			ShortDesc: "Retrieve all received chargebacks",
+			LongDesc: `Retrieve all received chargebacks. If the payment-specific endpoint is used, only chargebacks 
 for that specific payment are returned.`,
-		RunListChargebacks,
-		[]string{},
+			Execute: RunListChargebacks,
+		},
+		noCols,
 	)
-
-	command.AddStringFlag(lcb, EmbedArg, "", "", "a comma separated list of embeded resources", false)
+	command.AddFlag(lcb, command.FlagConfig{
+		Name:  EmbedArg,
+		Usage: "a comma separated list of embeded resources",
+	})
 
 	return cb
 }
@@ -56,7 +71,7 @@ func RunGetChargebacks(cmd *cobra.Command, args []string) {
 	chargeback := ParseStringFromFlags(cmd, IDArg)
 	embed := ParseStringFromFlags(cmd, EmbedArg)
 
-	if Verbose {
+	if verbose {
 		PrintNonemptyFlagValue(PaymentArg, payment)
 		PrintNonemptyFlagValue(IDArg, chargeback)
 		PrintNonemptyFlagValue(EmbedArg, embed)
@@ -67,7 +82,7 @@ func RunGetChargebacks(cmd *cobra.Command, args []string) {
 		logger.Fatal(err)
 	}
 
-	if Verbose {
+	if verbose {
 		logger.Infof("request target: %s", cb.Links.Self.Href)
 		logger.Infof("request docs: %s", cb.Links.Documentation.Href)
 	}
@@ -85,7 +100,7 @@ func RunGetChargebacks(cmd *cobra.Command, args []string) {
 func RunListChargebacks(cmd *cobra.Command, args []string) {
 	embed := ParseStringFromFlags(cmd, EmbedArg)
 
-	if Verbose {
+	if verbose {
 		PrintNonemptyFlagValue(EmbedArg, embed)
 	}
 
@@ -99,7 +114,7 @@ func RunListChargebacks(cmd *cobra.Command, args []string) {
 		logger.Fatal(err)
 	}
 
-	if Verbose {
+	if verbose {
 		logger.Infof("response with %d chargebacks", cbs.Count)
 		logger.Infof("request target: %s", cbs.Links.Self.Href)
 		logger.Infof("request docs: %s", cbs.Links.Docs.Href)
