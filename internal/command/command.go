@@ -6,9 +6,9 @@ import (
 	"strings"
 	"text/tabwriter"
 
-	"github.com/VictorAvelar/mollie-cli/internal/runners"
 	"github.com/sirupsen/logrus"
 	"github.com/spf13/cobra"
+	"github.com/spf13/pflag"
 )
 
 // Command wraps a base cobra command to add some
@@ -33,12 +33,18 @@ func (c *Command) GetSubCommands() []*Command {
 }
 
 // Builder constructs a new command.
-func Builder(parent *Command, cliText, shortDesc, desc string, cr runners.Runner, cols []string) *Command {
+func Builder(parent *Command, config Config, cols []string) *Command {
 	cc := &cobra.Command{
-		Use:   cliText,
-		Short: shortDesc,
-		Long:  strings.TrimSpace(desc),
-		Run:   cr,
+		Use:       config.Namespace,
+		Short:     config.ShortDesc,
+		Long:      strings.TrimSpace(config.LongDesc),
+		Run:       config.Execute,
+		PreRun:    config.PreHook,
+		PostRun:   config.PostHook,
+		Hidden:    config.Hidden,
+		ValidArgs: config.ValidArgs,
+		Example:   config.Example,
+		Aliases:   config.Aliases,
 	}
 
 	c := &Command{Command: cc, Cols: cols}
@@ -84,44 +90,37 @@ func Display(c []string, vals []map[string]interface{}) error {
 	return w.Flush()
 }
 
-// AddStringFlag will decorate the command with the string flag requirements.
-func AddStringFlag(cmd *Command, name, short, fb, usage string, req bool) {
-	cmd.Flags().StringP(name, short, fb, usage)
-	if req {
-		err := cmd.MarkFlagRequired(name)
-		if err != nil {
-			logrus.Error(err)
+// AddFlag attaches a flag of the given type with the
+// specified configuration.
+func AddFlag(cmd *Command, config FlagConfig) {
+	var flagger *pflag.FlagSet
+	{
+		if config.Persistent {
+			flagger = cmd.PersistentFlags()
+		} else {
+			flagger = cmd.Flags()
 		}
 	}
-}
-
-// AddBoolFlag will decorate the command with the bool flag requirements.
-func AddBoolFlag(cmd *Command, name, short, usage string, fb, req bool) {
-	cmd.Flags().BoolP(name, short, fb, usage)
-	if req {
-		err := cmd.MarkFlagRequired(name)
-		if err != nil {
-			logrus.Error(err)
-		}
+	switch config.FlagType {
+	case IntFlag:
+		val := config.Default.(int)
+		flagger.IntP(config.Name, config.Shorthand, val, config.Usage)
+	case Int64Flag:
+		val := config.Default.(int64)
+		flagger.Int64P(config.Name, config.Shorthand, val, config.Usage)
+	case Float64Flag:
+		val := config.Default.(float64)
+		flagger.Float64P(config.Name, config.Shorthand, val, config.Usage)
+	case BoolFlag:
+		val := config.Default.(bool)
+		flagger.BoolP(config.Name, config.Shorthand, val, config.Usage)
+	default:
+		val := config.Default.(string)
+		flagger.StringP(config.Name, config.Shorthand, val, config.Usage)
 	}
-}
 
-// AddIntFlag will decorate the command with the int flag requirements.
-func AddIntFlag(cmd *Command, name, short, usage string, fb int, req bool) {
-	cmd.Flags().IntP(name, short, fb, usage)
-	if req {
-		err := cmd.MarkFlagRequired(name)
-		if err != nil {
-			logrus.Error(err)
-		}
-	}
-}
-
-// AddInt64Flag will decorate the command with the int64 flag requirements.
-func AddInt64Flag(cmd *Command, name, short, usage string, fb int64, req bool) {
-	cmd.Flags().Int64P(name, short, fb, usage)
-	if req {
-		err := cmd.MarkFlagRequired(name)
+	if config.Required {
+		err := cmd.MarkFlagRequired(config.Name)
 		if err != nil {
 			logrus.Error(err)
 		}
