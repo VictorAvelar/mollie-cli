@@ -10,38 +10,35 @@ import (
 
 // Version creates the version command.
 func Version() *command.Command {
-	v := command.Builder(
+	return command.Builder(
 		nil,
-		"version",
-		"Displays the current command version",
-		"",
-		func(cmd *cobra.Command, args []string) {
-			fmt.Printf("Mollie CLI %s\n", version)
+		command.Config{
+			Namespace: "version",
+			ShortDesc: "Displays the current command version",
+			Execute: func(cmd *cobra.Command, args []string) {
+				fmt.Printf("Mollie CLI %s\n", version)
+			},
+			Aliases: []string{"v", "ver"},
 		},
 		[]string{},
 	)
-	v.Aliases = []string{"v", "ver"}
-
-	return v
 }
 
 // Docs creates the version command.
 func Docs() *command.Command {
-	v := command.Builder(
+	return command.Builder(
 		nil,
-		"docs",
-		"Generates markdown documentarion",
-		"",
-		func(cmd *cobra.Command, args []string) {
-			err := doc.GenMarkdownTree(MollieCmd.Command, "./docs")
-			if err != nil {
-				logger.Fatal(err)
-			}
+		command.Config{
+			Namespace: "docs",
+			ShortDesc: "Generates markdown documentation",
+			Execute: func(cmd *cobra.Command, args []string) {
+				err := doc.GenMarkdownTree(MollieCmd.Command, "./docs")
+				if err != nil {
+					logger.Fatal(err)
+				}
+			},
+			Hidden: true,
 		},
 		[]string{},
 	)
-
-	v.Hidden = true
-
-	return v
 }
