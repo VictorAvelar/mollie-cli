@@ -13,7 +13,7 @@ import (
 )
 
 const (
-	version string = "v0.1.2"
+	version string = "v0.3.0"
 )
 
 var (
@@ -141,6 +141,10 @@ func addCommands() {
 	MollieCmd.AddCommand(Methods())
 	MollieCmd.AddCommand(Payments())
 	MollieCmd.AddCommand(Chargebacks())
+
+	// Tooling
+	MollieCmd.AddCommand(Version())
+	MollieCmd.AddCommand(Docs())
 }
 
 // ParseStringFromFlags returns the string value of a flag by key.
