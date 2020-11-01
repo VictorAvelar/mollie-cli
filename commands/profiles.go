@@ -30,23 +30,30 @@ func Profile() *command.Command {
 
 	gp := command.Builder(
 		p,
-		"get",
-		"Retrieve details of a profile, using the profile’s identifier.",
-		"",
-		RunGetProfile,
+		command.Config{
+			Namespace: "get",
+			ShortDesc: "Retrieve details of a profile, using the profile’s identifier.",
+			Execute:   RunGetProfile,
+		},
 		profileCols,
 	)
 
-	command.AddStringFlag(gp, IDArg, "", "", "profile ID to be retrieved", true)
+	command.AddFlag(gp, command.FlagConfig{
+		Name:     IDArg,
+		Usage:    "profile id/token",
+		Required: true,
+	})
 
 	command.Builder(
 		p,
-		"current",
-		"Retrieve details of the profile associated to the current API token.",
-		`Use this API if you are creating a plugin or SaaS application that allows users to enter a Mollie API key, 
+		command.Config{
+			Namespace: "current",
+			ShortDesc: "Retrieve details of the profile associated to the current API token.",
+			LongDesc: `Use this API if you are creating a plugin or SaaS application that allows users to enter a Mollie API key, 
 and you want to give a confirmation of the website profile that will be used in your plugin 
 or application.`,
-		RunCurrentProfile,
+			Execute: RunCurrentProfile,
+		},
 		profileCols,
 	)
 
@@ -60,7 +67,7 @@ func RunCurrentProfile(cmd *cobra.Command, args []string) {
 		logger.Fatal(err)
 	}
 
-	if Verbose {
+	if verbose {
 		logger.Infof("request target: %s", p.Links.Self.Href)
 	}
 
@@ -76,7 +83,7 @@ func RunCurrentProfile(cmd *cobra.Command, args []string) {
 func RunGetProfile(cmd *cobra.Command, args []string) {
 	id := ParseStringFromFlags(cmd, IDArg)
 
-	if Verbose {
+	if verbose {
 		logger.Infof("fetching profile with id %s", id)
 	}
 
@@ -84,7 +91,7 @@ func RunGetProfile(cmd *cobra.Command, args []string) {
 	if err != nil {
 		logger.Fatal(err)
 	}
-	if Verbose {
+	if verbose {
 		logger.Infof("using profile id: %s", id)
 		logger.Infof("request target: %s", p.Links.Self.Href)
 	}
