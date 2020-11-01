@@ -20,7 +20,7 @@ func Version() *command.Command {
 			},
 			Aliases: []string{"v", "ver"},
 		},
-		[]string{},
+		noCols,
 	)
 }
 
@@ -39,6 +39,6 @@ func Docs() *command.Command {
 			},
 			Hidden: true,
 		},
-		[]string{},
+		noCols,
 	)
 }

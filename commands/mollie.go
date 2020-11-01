@@ -33,6 +33,7 @@ var (
 
 	// global structured logger
 	logger *logrus.Entry
+	noCols []string
 )
 
 func init() {
