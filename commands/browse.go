@@ -74,7 +74,13 @@ func Browse() *command.Command {
 		},
 	}
 
-	command.AddBoolFlag(b, "info", "i", "prints extended info about the available resources", false, false)
+	command.AddFlag(b, command.FlagConfig{
+		Name:      "info",
+		Shorthand: "i",
+		Usage:     "prints extended info about the available resources",
+		FlagType:  command.BoolFlag,
+		Default:   false,
+	})
 
 	return b
 }
