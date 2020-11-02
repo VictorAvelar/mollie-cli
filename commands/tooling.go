@@ -19,6 +19,7 @@ func Version() *command.Command {
 				fmt.Printf("Mollie CLI %s\n", version)
 			},
 			Aliases: []string{"v", "ver"},
+			Example: "mollie version",
 		},
 		noCols,
 	)
@@ -37,7 +38,8 @@ func Docs() *command.Command {
 					logger.Fatal(err)
 				}
 			},
-			Hidden: true,
+			Hidden:  true,
+			Example: "mollie docs",
 		},
 		noCols,
 	)

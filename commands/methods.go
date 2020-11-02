@@ -35,6 +35,7 @@ func Methods() *command.Command {
 			Namespace: "list",
 			ShortDesc: "Retrieves all enabled payment methods",
 			Execute:   RunListPaymentMethods,
+			Example:   "mollie methods list --locale=de_DE --sequence-type=recurring",
 		},
 		methodsCols,
 	)
@@ -76,6 +77,7 @@ func Methods() *command.Command {
 The results are not paginated. New payment methods can be activated via the Enable payment method 
 endpoint in the Profiles API.`,
 			Execute: RunGetAllMethods,
+			Example: "mollie methods all --locale=nl_NL",
 		},
 		methodsCols,
 	)
@@ -103,6 +105,7 @@ a status 404 Not found is returned. When the method is not enabled,a status 403 
 is returned. You can enable payments methods via the Enable payment method endpoint in the 
 Profiles API, or via your Mollie Dashboard.`,
 			Execute: RunGetPaymentMethods,
+			Example: "mollie methods get --id=creditcard --locale=pt_PT",
 		},
 		methodsCols,
 	)

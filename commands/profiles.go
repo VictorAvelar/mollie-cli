@@ -34,6 +34,7 @@ func Profile() *command.Command {
 			Namespace: "get",
 			ShortDesc: "Retrieve details of a profile, using the profile’s identifier.",
 			Execute:   RunGetProfile,
+			Example:   "mollie profiles get --id=pfl_token",
 		},
 		profileCols,
 	)
@@ -53,6 +54,7 @@ func Profile() *command.Command {
 and you want to give a confirmation of the website profile that will be used in your plugin 
 or application.`,
 			Execute: RunCurrentProfile,
+			Example: "mollie profiles current",
 		},
 		profileCols,
 	)

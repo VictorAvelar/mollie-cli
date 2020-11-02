@@ -40,6 +40,7 @@ func Payments() *command.Command {
 			LongDesc: `Retrieve all payments created with the current website profile, 
 ordered from newest to oldest. The results are paginated.`,
 			Execute: RunListPayments,
+			Example: "mollie payments list --limit=3",
 		},
 		paymentsCols,
 	)
@@ -59,6 +60,7 @@ ordered from newest to oldest. The results are paginated.`,
 			Namespace: "get",
 			ShortDesc: "Retrieve a single payment object by its payment token.",
 			Execute:   RunGetPayment,
+			Example:   "mollie payments get --id=tr_token",
 		},
 		noCols,
 	)
@@ -75,6 +77,7 @@ ordered from newest to oldest. The results are paginated.`,
 			Namespace: "cancel",
 			ShortDesc: "Cancel a payment by its payment token.",
 			Execute:   RunCancelPayment,
+			Example:   "mollie payments cancel --id=tr_token",
 		},
 		noCols,
 	)
@@ -92,6 +95,7 @@ ordered from newest to oldest. The results are paginated.`,
 			ShortDesc: "Create a new payment",
 			Execute:   RunCreatePayment,
 			Aliases:   []string{"new", "start"},
+			Example:   "mollie payments create --amount-value=200.00 --amount-currency=USD --redirect-to=https://victoravelar.com --description='custom example payment'",
 		},
 		noCols,
 	)
@@ -100,6 +104,12 @@ ordered from newest to oldest. The results are paginated.`,
 		Name:     AmountValueArg,
 		Usage:    "a string containing the exact amount you want to charge in the given currency",
 		Required: true,
+	})
+	command.AddFlag(cpp, command.FlagConfig{
+		FlagType: command.BoolFlag,
+		Name:     CancelableArg,
+		Usage:    "indicates if the payment can be cancelled",
+		Default:  true,
 	})
 	command.AddFlag(cpp, command.FlagConfig{
 		Name:     AmountCurrencyArg,
@@ -210,8 +220,8 @@ func RunListPayments(cmd *cobra.Command, args []string) {
 
 	if verbose {
 		logger.Infof("retrieved %d payments", ps.Count)
-		logger.Infof("request target: %s", ps.Links.Self)
-		logger.Infof("request docs: %s", ps.Links.Docs)
+		logger.Infof("request target: %s", ps.Links.Self.Href)
+		logger.Infof("request docs: %s", ps.Links.Docs.Href)
 	}
 
 	disp := displayers.MollieListPayments{
@@ -238,8 +248,8 @@ func RunGetPayment(cmd *cobra.Command, args []string) {
 	}
 
 	if verbose {
-		logger.Infof("request target: %s", p.Links.Self)
-		logger.Infof("request docs: %s", p.Links.Documentation)
+		logger.Infof("request target: %s", p.Links.Self.Href)
+		logger.Infof("request docs: %s", p.Links.Documentation.Href)
 	}
 
 	disp := displayers.MolliePayment{Payment: &p}
@@ -264,8 +274,8 @@ func RunCancelPayment(cmd *cobra.Command, args []string) {
 	}
 
 	if verbose {
-		logger.Infof("request target: %s", p.Links.Self)
-		logger.Infof("request docs: %s", p.Links.Documentation)
+		logger.Infof("request target: %s", p.Links.Self.Href)
+		logger.Infof("request docs: %s", p.Links.Documentation.Href)
 		logger.Infof("payment successfully cancelled")
 		logger.Infof("cancellation processed at %s", p.CanceledAt)
 	}
@@ -335,8 +345,8 @@ func RunCreatePayment(cmd *cobra.Command, args []string) {
 	}
 
 	if verbose {
-		logger.Infof("request target: %s", p.Links.Self)
-		logger.Infof("request docs: %s", p.Links.Documentation)
+		logger.Infof("request target: %s", p.Links.Self.Href)
+		logger.Infof("request docs: %s", p.Links.Documentation.Href)
 		logger.Infof("payment successfully created")
 		logger.Infof("Payment created at %s", p.CreatedAt)
 	}
@@ -389,8 +399,8 @@ func RunUpdatePayment(cmd *cobra.Command, args []string) {
 	}
 
 	if verbose {
-		logger.Infof("request target: %s", p.Links.Self)
-		logger.Infof("request docs: %s", p.Links.Documentation)
+		logger.Infof("request target: %s", p.Links.Self.Href)
+		logger.Infof("request docs: %s", p.Links.Documentation.Href)
 		logger.Infof("payment successfully updated")
 	}
 

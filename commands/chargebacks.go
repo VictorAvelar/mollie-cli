@@ -27,6 +27,7 @@ func Chargebacks() *command.Command {
 			LongDesc: `Retrieve a single chargeback by its ID. Note the original payment’s ID is needed as well.
 A debit to a depositor's account for an item that has been previously credited, as for a returned bad check.`,
 			Execute: RunGetChargebacks,
+			Example: "mollie chargebacks get --id=cb_token --embed=payments",
 		},
 		noCols,
 	)
@@ -53,6 +54,7 @@ A debit to a depositor's account for an item that has been previously credited, 
 			LongDesc: `Retrieve all received chargebacks. If the payment-specific endpoint is used, only chargebacks 
 for that specific payment are returned.`,
 			Execute: RunListChargebacks,
+			Example: "mollie chargebacks list --embed=payments",
 		},
 		noCols,
 	)

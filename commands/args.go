@@ -5,6 +5,7 @@ const (
 	AmountCurrencyArg = "amount-currency"
 	AmountValueArg    = "amount-value"
 	BillingCountryArg = "billing-country"
+	CancelableArg     = "cancelable"
 	CurrencyArg       = "currency"
 	CustomerIDArg     = "customer"
 	DescriptionArg    = "description"
