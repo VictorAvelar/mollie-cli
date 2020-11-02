@@ -115,6 +115,7 @@ func AddFlag(cmd *Command, config FlagConfig) {
 		val := config.Default.(bool)
 		flagger.BoolP(config.Name, config.Shorthand, val, config.Usage)
 	default:
+		config.Default = ""
 		val := config.Default.(string)
 		flagger.StringP(config.Name, config.Shorthand, val, config.Usage)
 	}
