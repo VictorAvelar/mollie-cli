@@ -79,7 +79,7 @@ func Browse() *command.Command {
 		Shorthand: "i",
 		Usage:     "prints extended info about the available resources",
 		FlagType:  command.BoolFlag,
-		Default:   true,
+		Default:   false,
 	})
 
 	return b
