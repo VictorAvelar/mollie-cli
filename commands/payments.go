@@ -209,9 +209,9 @@ func RunListPayments(cmd *cobra.Command, args []string) {
 	}
 
 	if verbose {
-		logger.Info("retrieved %d payments", ps.Count)
-		logger.Info("request target: %s", ps.Links.Self)
-		logger.Info("request docs: %s", ps.Links.Docs)
+		logger.Infof("retrieved %d payments", ps.Count)
+		logger.Infof("request target: %s", ps.Links.Self)
+		logger.Infof("request docs: %s", ps.Links.Docs)
 	}
 
 	disp := displayers.MollieListPayments{
@@ -238,8 +238,8 @@ func RunGetPayment(cmd *cobra.Command, args []string) {
 	}
 
 	if verbose {
-		logger.Info("request target: %s", p.Links.Self)
-		logger.Info("request docs: %s", p.Links.Documentation)
+		logger.Infof("request target: %s", p.Links.Self)
+		logger.Infof("request docs: %s", p.Links.Documentation)
 	}
 
 	disp := displayers.MolliePayment{Payment: &p}
@@ -264,9 +264,9 @@ func RunCancelPayment(cmd *cobra.Command, args []string) {
 	}
 
 	if verbose {
-		logger.Info("request target: %s", p.Links.Self)
-		logger.Info("request docs: %s", p.Links.Documentation)
-		logger.Info("payment successfully cancelled")
+		logger.Infof("request target: %s", p.Links.Self)
+		logger.Infof("request docs: %s", p.Links.Documentation)
+		logger.Infof("payment successfully cancelled")
 		logger.Infof("cancellation processed at %s", p.CanceledAt)
 	}
 
@@ -335,9 +335,9 @@ func RunCreatePayment(cmd *cobra.Command, args []string) {
 	}
 
 	if verbose {
-		logger.Info("request target: %s", p.Links.Self)
-		logger.Info("request docs: %s", p.Links.Documentation)
-		logger.Info("payment successfully created")
+		logger.Infof("request target: %s", p.Links.Self)
+		logger.Infof("request docs: %s", p.Links.Documentation)
+		logger.Infof("payment successfully created")
 		logger.Infof("Payment created at %s", p.CreatedAt)
 	}
 
@@ -389,9 +389,9 @@ func RunUpdatePayment(cmd *cobra.Command, args []string) {
 	}
 
 	if verbose {
-		logger.Info("request target: %s", p.Links.Self)
-		logger.Info("request docs: %s", p.Links.Documentation)
-		logger.Info("payment successfully updated")
+		logger.Infof("request target: %s", p.Links.Self)
+		logger.Infof("request docs: %s", p.Links.Documentation)
+		logger.Infof("payment successfully updated")
 	}
 
 	disp := displayers.MolliePayment{Payment: &p}
