@@ -79,7 +79,7 @@ func TestMollieListMethods(t *testing.T) {
 		ListMethods: &mollie.ListMethods{
 			Count: 2,
 			Links: mollie.PaginationLinks{
-				Docs: mollie.URL{Href: "https://example.com", Type: "text/html"},
+				Documentation: mollie.URL{Href: "https://example.com", Type: "text/html"},
 				Self: mollie.URL{Href: "https://example.com", Type: "text/html"},
 			},
 			Embedded: struct{ Methods []mollie.PaymentMethodInfo }{
