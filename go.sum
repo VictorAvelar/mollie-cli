@@ -36,8 +36,6 @@ github.com/BurntSushi/toml v0.3.1 h1:WXkYYl6Yr3qBf1K79EBnL4mak0OimBfB0XUf9Vl28OQ
 github.com/BurntSushi/toml v0.3.1/go.mod h1:xHWCNGjB5oqiDr8zfno3MHue2Ht5sIBksp03qcyfWMU=
 github.com/BurntSushi/xgb v0.0.0-20160522181843-27f122750802/go.mod h1:IVnqGOEym/WlBOVXweHU+Q+/VP0lqqI8lqeDx9IjBqo=
 github.com/OneOfOne/xxhash v1.2.2/go.mod h1:HSdplMjZKSmBqAxg5vPj2TmRDmfkzw+cTzAElWljhcU=
-github.com/VictorAvelar/mollie-api-go/v2 v2.0.1 h1:IVbh07N/kknDRpDt+zH4lTTaI93KtDfpcjAMrWJhCNs=
-github.com/VictorAvelar/mollie-api-go/v2 v2.0.1/go.mod h1:T5Lf1juo2BZGQd8pGp2U3WrOl5irxuxLJw0m+okaG5A=
 github.com/VictorAvelar/mollie-api-go/v2 v2.0.2 h1:/lHCLc2b0Lfm/jEsJpSCyTFmLFFxx/GbcWL0PDWGLSg=
 github.com/VictorAvelar/mollie-api-go/v2 v2.0.2/go.mod h1:T5Lf1juo2BZGQd8pGp2U3WrOl5irxuxLJw0m+okaG5A=
 github.com/alecthomas/template v0.0.0-20160405071501-a0175ee3bccc/go.mod h1:LOuyumcjzFXgccqObfd/Ljyb9UuFJ6TxHnclSeseNhc=
