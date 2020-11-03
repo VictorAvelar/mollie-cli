@@ -145,6 +145,15 @@ func ParseStringFromFlags(cmd *cobra.Command, key string) string {
 	return val
 }
 
+// ParseIntFromFlags returns the string value of a flag by key.
+func ParseIntFromFlags(cmd *cobra.Command, key string) int {
+	val, err := cmd.Flags().GetInt(key)
+	if err != nil {
+		logger.Fatal(err)
+	}
+	return val
+}
+
 // PrintNonemptyFlagValue will log with level info any non empty
 // string value.
 // The key will be used as name indicator.
