@@ -50,8 +50,18 @@ ordered from newest to oldest. The results are paginated.`,
 		Usage: "offset the result set to the payment with this ID.",
 	})
 	command.AddFlag(lp, command.FlagConfig{
-		Name:  LimitArg,
-		Usage: "the number of payments to return",
+		FlagType: command.IntFlag,
+		Name:     LimitArg,
+		Usage:    "the number of payments to return",
+		Default:  250,
+	})
+	command.AddFlag(lp, command.FlagConfig{
+		Name:  EmbedArg,
+		Usage: "embedding additional information (refunds/chargebacks)",
+	})
+	command.AddFlag(lp, command.FlagConfig{
+		Name:  IncludeArg,
+		Usage: "include additional information (details.qrCode)",
 	})
 
 	gp := command.Builder(
@@ -213,7 +223,13 @@ ordered from newest to oldest. The results are paginated.`,
 // RunListPayments retrieves a list of payments for the current
 // profile.
 func RunListPayments(cmd *cobra.Command, args []string) {
-	ps, err := API.Payments.List(nil)
+	var opts mollie.ListPaymentOptions
+	{
+		opts.Limit = ParseIntFromFlags(cmd, LimitArg)
+		opts.From = ParseStringFromFlags(cmd, FromArg)
+		opts.Embed = ParseStringFromFlags(cmd, EmbedArg)
+	}
+	ps, err := API.Payments.List(&opts)
 	if err != nil {
 		logger.Fatal(err)
 	}
