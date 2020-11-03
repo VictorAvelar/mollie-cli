@@ -158,7 +158,7 @@ func RunListPaymentMethods(cmd *cobra.Command, args []string) {
 	if verbose {
 		logger.Infof("received %d payment methods", ms.Count)
 		logger.Infof("request performed: %s", ms.Links.Self.Href)
-		logger.Infof("documentation: %s", ms.Links.Docs.Href)
+		logger.Infof("documentation: %s", ms.Links.Documentation.Href)
 	}
 
 	lpm := displayers.MollieListMethods{
@@ -194,7 +194,7 @@ func RunGetAllMethods(cmd *cobra.Command, args []string) {
 	if verbose {
 		logger.Infof("received %d payment methods", m.Count)
 		logger.Infof("request performed: %s", m.Links.Self.Href)
-		logger.Infof("documentation: %s", m.Links.Docs.Href)
+		logger.Infof("documentation: %s", m.Links.Documentation.Href)
 	}
 
 	mdis := &displayers.MollieListMethods{ListMethods: m}

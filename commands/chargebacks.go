@@ -119,7 +119,7 @@ func RunListChargebacks(cmd *cobra.Command, args []string) {
 	if verbose {
 		logger.Infof("response with %d chargebacks", cbs.Count)
 		logger.Infof("request target: %s", cbs.Links.Self.Href)
-		logger.Infof("request docs: %s", cbs.Links.Docs.Href)
+		logger.Infof("request docs: %s", cbs.Links.Documentation.Href)
 	}
 
 	display := displayers.MollieChargebackList{ChargebackList: cbs}

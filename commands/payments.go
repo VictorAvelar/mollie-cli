@@ -237,7 +237,7 @@ func RunListPayments(cmd *cobra.Command, args []string) {
 	if verbose {
 		logger.Infof("retrieved %d payments", ps.Count)
 		logger.Infof("request target: %s", ps.Links.Self.Href)
-		logger.Infof("request docs: %s", ps.Links.Docs.Href)
+		logger.Infof("request docs: %s", ps.Links.Documentation.Href)
 	}
 
 	disp := displayers.MollieListPayments{
