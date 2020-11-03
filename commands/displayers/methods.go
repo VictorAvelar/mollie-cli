@@ -3,7 +3,7 @@ package displayers
 import (
 	"strings"
 
-	"github.com/VictorAvelar/mollie-api-go/mollie"
+	"github.com/VictorAvelar/mollie-api-go/v2/mollie"
 )
 
 // MollieListMethods wrapper for displaying
@@ -60,16 +60,16 @@ func stringCombinator(sep string, vals ...string) string {
 }
 
 func normalizePaymentMethodInfo(pm *mollie.PaymentMethodInfo) *mollie.PaymentMethodInfo {
-	if pm.MaximumAmount == nil && pm.MinimumAmount != nil {
-		pm.MaximumAmount = &mollie.Amount{Currency: pm.MinimumAmount.Currency, Value: "N.A."}
+	if &pm.MaximumAmount == nil && &pm.MinimumAmount != nil {
+		pm.MaximumAmount = mollie.Amount{Currency: pm.MinimumAmount.Currency, Value: "N.A."}
 	}
-	if pm.MinimumAmount == nil && pm.MaximumAmount != nil {
-		pm.MinimumAmount = &mollie.Amount{Currency: pm.MaximumAmount.Currency, Value: "N.A."}
+	if &pm.MinimumAmount == nil && &pm.MaximumAmount != nil {
+		pm.MinimumAmount = mollie.Amount{Currency: pm.MaximumAmount.Currency, Value: "N.A."}
 	}
 
-	if pm.MaximumAmount == nil && pm.MinimumAmount == nil {
-		pm.MaximumAmount = &mollie.Amount{Currency: "N.A.", Value: "N.A."}
-		pm.MinimumAmount = &mollie.Amount{Currency: "N.A.", Value: "N.A."}
+	if &pm.MaximumAmount == nil && &pm.MinimumAmount == nil {
+		pm.MaximumAmount = mollie.Amount{Currency: "N.A.", Value: "N.A."}
+		pm.MinimumAmount = mollie.Amount{Currency: "N.A.", Value: "N.A."}
 	}
 
 	return pm

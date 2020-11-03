@@ -1,7 +1,7 @@
 package commands
 
 import (
-	"github.com/VictorAvelar/mollie-api-go/mollie"
+	"github.com/VictorAvelar/mollie-api-go/v2/mollie"
 	"github.com/VictorAvelar/mollie-cli/commands/displayers"
 	"github.com/VictorAvelar/mollie-cli/internal/command"
 	"github.com/spf13/cobra"
@@ -323,7 +323,7 @@ func RunCreatePayment(cmd *cobra.Command, args []string) {
 	m := mollie.PaymentMethod(method)
 
 	p := mollie.Payment{
-		Amount: &mollie.Amount{
+		Amount: mollie.Amount{
 			Currency: currency,
 			Value:    amount,
 		},
@@ -331,12 +331,12 @@ func RunCreatePayment(cmd *cobra.Command, args []string) {
 		RedirectURL:                     rURL,
 		WebhookURL:                      whURL,
 		Metadata:                        meta,
-		Locale:                          &l,
-		RestrictPaymentMethodsToCountry: &c,
+		Locale:                          l,
+		RestrictPaymentMethodsToCountry: c,
 		CustomerID:                      customer,
 		MandateID:                       mandate,
-		SequenceType:                    &s,
-		Method:                          &m,
+		SequenceType:                    s,
+		Method:                          m,
 	}
 
 	p, err := API.Payments.Create(p)
@@ -390,9 +390,9 @@ func RunUpdatePayment(cmd *cobra.Command, args []string) {
 		Description:                     desc,
 		WebhookURL:                      whURL,
 		Metadata:                        meta,
-		Locale:                          &l,
-		RestrictPaymentMethodsToCountry: &c,
-		Method:                          &m,
+		Locale:                          l,
+		RestrictPaymentMethodsToCountry: c,
+		Method:                          m,
 	})
 	if err != nil {
 		logger.Fatal(err)

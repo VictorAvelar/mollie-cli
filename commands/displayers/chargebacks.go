@@ -1,6 +1,6 @@
 package displayers
 
-import "github.com/VictorAvelar/mollie-api-go/mollie"
+import "github.com/VictorAvelar/mollie-api-go/v2/mollie"
 
 // MollieChargeback wrapper for displaying
 type MollieChargeback struct {

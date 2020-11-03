@@ -1,7 +1,7 @@
 package displayers
 
 import (
-	"github.com/VictorAvelar/mollie-api-go/mollie"
+	"github.com/VictorAvelar/mollie-api-go/v2/mollie"
 )
 
 // MollieListPayments wrapper for displaying.
@@ -16,10 +16,10 @@ func (lp *MollieListPayments) KV() []map[string]interface{} {
 	for _, p := range lp.Embedded.Payments {
 		ped := getSafeExpiration(p)
 		var m string
-		if p.Method == nil {
+		if &p.Method == nil {
 			m = "none"
 		} else {
-			m = string(*p.Method)
+			m = string(p.Method)
 		}
 		x := map[string]interface{}{
 			"ID":          p.ID,
@@ -48,10 +48,10 @@ func (p *MolliePayment) KV() []map[string]interface{} {
 	var out []map[string]interface{}
 	ped := getSafeExpiration(*p.Payment)
 	var m string
-	if p.Method == nil {
+	if &p.Method == nil {
 		m = "none"
 	} else {
-		m = string(*p.Method)
+		m = string(p.Method)
 	}
 	x := map[string]interface{}{
 		"ID":          p.ID,
@@ -68,7 +68,7 @@ func (p *MolliePayment) KV() []map[string]interface{} {
 }
 
 func getSafeExpiration(p mollie.Payment) string {
-	if p.ExpiresAt != nil {
+	if &p.ExpiresAt != nil {
 		return p.ExpiresAt.Format("01-02-2006")
 	}
 

@@ -1,7 +1,7 @@
 package commands
 
 import (
-	"github.com/VictorAvelar/mollie-api-go/mollie"
+	"github.com/VictorAvelar/mollie-api-go/v2/mollie"
 	"github.com/spf13/cobra"
 
 	"github.com/VictorAvelar/mollie-cli/commands/displayers"
