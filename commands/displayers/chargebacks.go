@@ -14,9 +14,9 @@ func (cb *MollieChargeback) KV() []map[string]interface{} {
 	x := map[string]interface{}{
 		"ID":         cb.ID,
 		"Payment":    cb.PaymentID,
-		"Amount":     cb.Amount.Value + cb.Amount.Currency,
-		"Settlement": cb.SettlementAmount.Value + cb.SettlementAmount.Currency,
-		"Created at": cb.CreatedAt.Format("01-02-2006"),
+		"Amount":     stringCombinator(" ", cb.Amount.Value, cb.Amount.Currency),
+		"Settlement": stringCombinator(" ", cb.SettlementAmount.Value, cb.SettlementAmount.Currency),
+		"Created at": cb.CreatedAt.Format("02-01-2006"),
 	}
 
 	out = append(out, x)
@@ -37,9 +37,9 @@ func (lp *MollieChargebackList) KV() []map[string]interface{} {
 		x := map[string]interface{}{
 			"ID":         p.ID,
 			"Payment":    p.PaymentID,
-			"Amount":     p.Amount.Value + p.Amount.Currency,
-			"Settlement": p.SettlementAmount.Value + p.SettlementAmount.Currency,
-			"Created at": p.CreatedAt.Format("01-02-2006"),
+			"Amount":     stringCombinator(" ", p.Amount.Value, p.Amount.Currency),
+			"Settlement": stringCombinator(" ", p.SettlementAmount.Value, p.SettlementAmount.Currency),
+			"Created at": p.CreatedAt.Format("02-01-2006"),
 		}
 
 		out = append(out, x)
