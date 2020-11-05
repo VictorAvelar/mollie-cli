@@ -29,8 +29,8 @@ func TestMolliePayment_KV(t *testing.T) {
 	w := map[string]interface{}{
 		"ID":          "tr_test",
 		"Mode":        mollie.TestMode,
-		"Created":     time.Now().Format("02-01-2006"),
-		"Expires":     time.Now().AddDate(0, 0, 2).Format("02-01-2006"),
+		"Created":     n.Format("02-01-2006"),
+		"Expires":     n.AddDate(0, 0, 2).Format("02-01-2006"),
 		"Cancelable":  false,
 		"Amount":      "1.00 EUR",
 		"Method":      "paypal",
@@ -91,8 +91,8 @@ func TestMollieListPayments_KV(t *testing.T) {
 	w := map[string]interface{}{
 		"ID":          "tr_test",
 		"Mode":        mollie.TestMode,
-		"Created":     time.Now().Format("02-01-2006"),
-		"Expires":     time.Now().AddDate(0, 0, 2).Format("02-01-2006"),
+		"Created":     n.Format("02-01-2006"),
+		"Expires":     n.AddDate(0, 0, 2).Format("02-01-2006"),
 		"Cancelable":  false,
 		"Amount":      "1.00 EUR",
 		"Method":      "paypal",
@@ -102,8 +102,8 @@ func TestMollieListPayments_KV(t *testing.T) {
 	w1 := map[string]interface{}{
 		"ID":          "tr_test_2",
 		"Mode":        mollie.TestMode,
-		"Created":     time.Now().Format("02-01-2006"),
-		"Expires":     time.Now().AddDate(0, 0, 2).Format("02-01-2006"),
+		"Created":     n.Format("02-01-2006"),
+		"Expires":     n.AddDate(0, 0, 2).Format("02-01-2006"),
 		"Cancelable":  false,
 		"Amount":      "2.00 USD",
 		"Method":      "banktransfer",
@@ -117,6 +117,10 @@ func TestMollieListPayments_KV(t *testing.T) {
 }
 
 func TestGetSafeExpiration(t *testing.T) {
+	n, err := time.Parse("02-01-2006", "01-11-2020")
+	if err != nil {
+		t.Error(err)
+	}
 	cases := []struct {
 		name   string
 		expect string
@@ -124,9 +128,9 @@ func TestGetSafeExpiration(t *testing.T) {
 	}{
 		{
 			name:   "non zero date",
-			expect: "04-11-2020",
+			expect: "01-11-2020",
 			input: mollie.Payment{
-				ExpiresAt: time.Now(),
+				ExpiresAt: n,
 			},
 		},
 		{
