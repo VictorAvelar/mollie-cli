@@ -16,10 +16,10 @@ It is based on the [mollie-api-go](https://github.com/VictorAvelar/mollie-api-go
 - [ ] Mollie connect OAuth2
 
 ## Resources
-- [ ] Payments
+- [x] Payments
 - [ ] Methods
 - [ ] Refunds
-- [ ] Chargebacks
+- [x] Chargebacks
 - [ ] Captures
 - [ ] Orders
 - [ ] Shipments

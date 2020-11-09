@@ -1,7 +1,7 @@
 package commands
 
 import (
-	"github.com/VictorAvelar/mollie-api-go/mollie"
+	"github.com/VictorAvelar/mollie-api-go/v2/mollie"
 	"github.com/VictorAvelar/mollie-cli/commands/displayers"
 	"github.com/VictorAvelar/mollie-cli/internal/command"
 	"github.com/spf13/cobra"
@@ -119,7 +119,7 @@ func RunListChargebacks(cmd *cobra.Command, args []string) {
 	if verbose {
 		logger.Infof("response with %d chargebacks", cbs.Count)
 		logger.Infof("request target: %s", cbs.Links.Self.Href)
-		logger.Infof("request docs: %s", cbs.Links.Docs.Href)
+		logger.Infof("request docs: %s", cbs.Links.Documentation.Href)
 	}
 
 	display := displayers.MollieChargebackList{ChargebackList: cbs}

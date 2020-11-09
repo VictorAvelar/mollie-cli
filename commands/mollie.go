@@ -3,7 +3,7 @@ package commands
 import (
 	"time"
 
-	"github.com/VictorAvelar/mollie-api-go/mollie"
+	"github.com/VictorAvelar/mollie-api-go/v2/mollie"
 	"github.com/mitchellh/go-homedir"
 	"github.com/sirupsen/logrus"
 	"github.com/spf13/cobra"
@@ -13,7 +13,7 @@ import (
 )
 
 const (
-	version string = "v0.3.0"
+	version string = "v0.5.0"
 )
 
 var (
@@ -139,6 +139,15 @@ func addCommands() {
 // ParseStringFromFlags returns the string value of a flag by key.
 func ParseStringFromFlags(cmd *cobra.Command, key string) string {
 	val, err := cmd.Flags().GetString(key)
+	if err != nil {
+		logger.Fatal(err)
+	}
+	return val
+}
+
+// ParseIntFromFlags returns the string value of a flag by key.
+func ParseIntFromFlags(cmd *cobra.Command, key string) int {
+	val, err := cmd.Flags().GetInt(key)
 	if err != nil {
 		logger.Fatal(err)
 	}

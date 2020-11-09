@@ -12,6 +12,7 @@ const (
 	EmbedArg          = "embed"
 	FromArg           = "from"
 	IDArg             = "id"
+	IncludeArg        = "include"
 	LimitArg          = "limit"
 	LocaleArg         = "locale"
 	MandateIDArg      = "mandate"

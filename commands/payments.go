@@ -1,7 +1,7 @@
 package commands
 
 import (
-	"github.com/VictorAvelar/mollie-api-go/mollie"
+	"github.com/VictorAvelar/mollie-api-go/v2/mollie"
 	"github.com/VictorAvelar/mollie-cli/commands/displayers"
 	"github.com/VictorAvelar/mollie-cli/internal/command"
 	"github.com/spf13/cobra"
@@ -50,8 +50,18 @@ ordered from newest to oldest. The results are paginated.`,
 		Usage: "offset the result set to the payment with this ID.",
 	})
 	command.AddFlag(lp, command.FlagConfig{
-		Name:  LimitArg,
-		Usage: "the number of payments to return",
+		FlagType: command.IntFlag,
+		Name:     LimitArg,
+		Usage:    "the number of payments to return",
+		Default:  250,
+	})
+	command.AddFlag(lp, command.FlagConfig{
+		Name:  EmbedArg,
+		Usage: "embedding additional information (refunds/chargebacks)",
+	})
+	command.AddFlag(lp, command.FlagConfig{
+		Name:  IncludeArg,
+		Usage: "include additional information (details.qrCode)",
 	})
 
 	gp := command.Builder(
@@ -213,7 +223,13 @@ ordered from newest to oldest. The results are paginated.`,
 // RunListPayments retrieves a list of payments for the current
 // profile.
 func RunListPayments(cmd *cobra.Command, args []string) {
-	ps, err := API.Payments.List(nil)
+	var opts mollie.ListPaymentOptions
+	{
+		opts.Limit = ParseIntFromFlags(cmd, LimitArg)
+		opts.From = ParseStringFromFlags(cmd, FromArg)
+		opts.Embed = ParseStringFromFlags(cmd, EmbedArg)
+	}
+	ps, err := API.Payments.List(&opts)
 	if err != nil {
 		logger.Fatal(err)
 	}
@@ -221,7 +237,7 @@ func RunListPayments(cmd *cobra.Command, args []string) {
 	if verbose {
 		logger.Infof("retrieved %d payments", ps.Count)
 		logger.Infof("request target: %s", ps.Links.Self.Href)
-		logger.Infof("request docs: %s", ps.Links.Docs.Href)
+		logger.Infof("request docs: %s", ps.Links.Documentation.Href)
 	}
 
 	disp := displayers.MollieListPayments{
@@ -323,7 +339,7 @@ func RunCreatePayment(cmd *cobra.Command, args []string) {
 	m := mollie.PaymentMethod(method)
 
 	p := mollie.Payment{
-		Amount: &mollie.Amount{
+		Amount: mollie.Amount{
 			Currency: currency,
 			Value:    amount,
 		},
@@ -331,12 +347,12 @@ func RunCreatePayment(cmd *cobra.Command, args []string) {
 		RedirectURL:                     rURL,
 		WebhookURL:                      whURL,
 		Metadata:                        meta,
-		Locale:                          &l,
-		RestrictPaymentMethodsToCountry: &c,
+		Locale:                          l,
+		RestrictPaymentMethodsToCountry: c,
 		CustomerID:                      customer,
 		MandateID:                       mandate,
-		SequenceType:                    &s,
-		Method:                          &m,
+		SequenceType:                    s,
+		Method:                          m,
 	}
 
 	p, err := API.Payments.Create(p)
@@ -390,9 +406,9 @@ func RunUpdatePayment(cmd *cobra.Command, args []string) {
 		Description:                     desc,
 		WebhookURL:                      whURL,
 		Metadata:                        meta,
-		Locale:                          &l,
-		RestrictPaymentMethodsToCountry: &c,
-		Method:                          &m,
+		Locale:                          l,
+		RestrictPaymentMethodsToCountry: c,
+		Method:                          m,
 	})
 	if err != nil {
 		logger.Fatal(err)

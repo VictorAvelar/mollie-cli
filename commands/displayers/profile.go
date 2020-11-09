@@ -1,6 +1,6 @@
 package displayers
 
-import "github.com/VictorAvelar/mollie-api-go/mollie"
+import "github.com/VictorAvelar/mollie-api-go/v2/mollie"
 
 // MollieProfileList wrapper for displaying.
 type MollieProfileList struct {
@@ -19,7 +19,7 @@ func (mpl *MollieProfileList) KV() []map[string]interface{} {
 			"Phone":   r.Phone,
 			"Status":  r.Status,
 			"Mode":    r.Mode,
-			"Since":   r.CreatedAt.Format("01-02-2006"),
+			"Since":   r.CreatedAt.Format("02-01-2006"),
 		}
 
 		out = append(out, x)
@@ -44,7 +44,7 @@ func (mp *MollieProfile) KV() []map[string]interface{} {
 		"Phone":   mp.Profile.Phone,
 		"Status":  mp.Profile.Status,
 		"Mode":    mp.Profile.Mode,
-		"Since":   mp.CreatedAt.Format("01-02-2006"),
+		"Since":   mp.CreatedAt.Format("02-01-2006"),
 	}
 
 	out = append(out, x)
