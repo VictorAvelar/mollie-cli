@@ -1,6 +1,8 @@
 package commands
 
 import (
+	"os"
+
 	"github.com/VictorAvelar/mollie-api-go/v2/mollie"
 	"github.com/VictorAvelar/mollie-cli/commands/displayers"
 	"github.com/VictorAvelar/mollie-cli/internal/command"
@@ -133,6 +135,35 @@ func Refunds() *command.Command {
 		Usage: "provide any data you like to attach to the refund",
 	})
 
+	dr := command.Builder(
+		r,
+		command.Config{
+			Namespace: "cancel",
+			Aliases:   []string{"delete", "remove", "cncl"},
+			ShortDesc: "for certain payment methods where cancelation is possible.",
+			LongDesc: `For certain payment methods, like iDEAL, the underlying banking system will delay refunds
+until the next day. Until that time, refunds may be canceled manually in the Mollie Dashboard, 
+or programmatically by using this endpoint.
+
+A Refund can only be canceled while its status field is either queued or pending.`,
+			Example: "mollie refunds cancel --id=rf_test --payment=tr_test",
+			Execute: RunCancelRefund,
+		},
+		noCols,
+	)
+
+	command.AddFlag(dr, command.FlagConfig{
+		Name:     IDArg,
+		Usage:    "the refund id/token",
+		Required: true,
+	})
+
+	command.AddFlag(dr, command.FlagConfig{
+		Name:     PaymentArg,
+		Usage:    "original payment id/token",
+		Required: true,
+	})
+
 	return r
 }
 
@@ -239,6 +270,27 @@ func RunCreateRefund(cmd *cobra.Command, args []string) {
 	if err != nil {
 		logger.Fatal(err)
 	}
+}
+
+// RunCancelRefund cancels a refund for allowed payment methods
+// and when the status is queued or pending.
+func RunCancelRefund(cmd *cobra.Command, args []string) {
+	payment := ParseStringFromFlags(cmd, PaymentArg)
+	id := ParseStringFromFlags(cmd, IDArg)
+
+	if verbose {
+		PrintNonemptyFlagValue(IDArg, id)
+		PrintNonemptyFlagValue(PaymentArg, payment)
+	}
+
+	err := API.Refunds.Cancel(payment, id, nil)
+	if err != nil {
+		logger.Fatal(err)
+	}
+
+	logger.Infof("refund %s cancelled", id)
+
+	os.Exit(0)
 }
 
 func getRefundList(opts *mollie.ListRefundOptions, payment string) (*mollie.RefundList, error) {
