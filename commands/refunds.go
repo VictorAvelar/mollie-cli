@@ -92,6 +92,47 @@ func Refunds() *command.Command {
 		Usage: "embedding additional information (payments)",
 	})
 
+	cr := command.Builder(
+		r,
+		command.Config{
+			Namespace: "create",
+			Aliases:   []string{"new", "add"},
+			ShortDesc: "Creates a Refund on the Payment",
+			LongDesc:  "Creates a Refund on the Payment. The refunded amount is credited to your customer.",
+			Example:   "mollie refunds create --payment=tr_test",
+			Execute:   RunCreateRefund,
+		},
+		noCols,
+	)
+
+	command.AddFlag(cr, command.FlagConfig{
+		Name:     PaymentArg,
+		Usage:    "original payment id/token",
+		Required: true,
+	})
+
+	command.AddFlag(cr, command.FlagConfig{
+		Name:     AmountValueArg,
+		Usage:    "a string containing the exact amount you want to refund",
+		Required: true,
+	})
+
+	command.AddFlag(cr, command.FlagConfig{
+		Name:     AmountCurrencyArg,
+		Usage:    "an ISO 4217 currency code (same as payment)",
+		Required: true,
+	})
+
+	command.AddFlag(cr, command.FlagConfig{
+		Name:  DescriptionArg,
+		Usage: "the description of the refund you are creating",
+	})
+
+	command.AddFlag(cr, command.FlagConfig{
+		Name:  MetadataArg,
+		Usage: "provide any data you like to attach to the refund",
+	})
+
 	return r
 }
 
@@ -152,6 +193,45 @@ func RunGetRefund(cmd *cobra.Command, args []string) {
 	disp := displayers.MollieRefund{
 		Refund: &r,
 	}
+
+	err = command.Display(refundsCols, disp.KV())
+	if err != nil {
+		logger.Fatal(err)
+	}
+}
+
+// RunCreateRefund creates a refund for the given payment.
+func RunCreateRefund(cmd *cobra.Command, args []string) {
+	r := mollie.Refund{}
+	r.Amount.Currency = ParseStringFromFlags(cmd, AmountCurrencyArg)
+	r.Amount.Value = ParseStringFromFlags(cmd, AmountValueArg)
+	r.Description = ParseStringFromFlags(cmd, DescriptionArg)
+	r.Metadata = ParseStringFromFlags(cmd, MetadataArg)
+
+	payment := ParseStringFromFlags(cmd, PaymentArg)
+
+	if verbose {
+		PrintNonemptyFlagValue(AmountCurrencyArg, r.Amount.Currency)
+		PrintNonemptyFlagValue(AmountValueArg, r.Amount.Value)
+		PrintNonemptyFlagValue(DescriptionArg, r.Description)
+		PrintNonemptyFlagValue(MetadataArg, r.Metadata.(string))
+		PrintNonemptyFlagValue(PaymentArg, payment)
+	}
+
+	rs, err := API.Refunds.Create(payment, r, nil)
+	if err != nil {
+		logger.Errorf("%+v", rs)
+		logger.Errorf("%+v", r)
+		logger.Fatal(err)
+	}
+
+	if verbose {
+		logger.Infof("refund for payment %s created", payment)
+		logger.Infof("request target: %s", rs.Links.Self.Href)
+		logger.Infof("request docs: %s", rs.Links.Documentation.Href)
+	}
+
+	disp := displayers.MollieRefund{Refund: &rs}
 
 	err = command.Display(refundsCols, disp.KV())
 	if err != nil {
