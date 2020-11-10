@@ -18,6 +18,7 @@ func TestMolliePayment_KV(t *testing.T) {
 		Payment: &mollie.Payment{
 			ID:            "tr_test",
 			Mode:          mollie.TestMode,
+			Status:        "paid",
 			CreatedAt:     &n,
 			ExpiresAt:     &tomorrow,
 			IsCancellable: false,
@@ -30,6 +31,7 @@ func TestMolliePayment_KV(t *testing.T) {
 	w := map[string]interface{}{
 		"ID":          "tr_test",
 		"Mode":        mollie.TestMode,
+		"Status":      "paid",
 		"Created":     n.Format("02-01-2006"),
 		"Expires":     n.AddDate(0, 0, 2).Format("02-01-2006"),
 		"Cancelable":  false,
@@ -57,6 +59,7 @@ func TestMollieListPayments_KV(t *testing.T) {
 			mollie.Payment{
 				ID:            "tr_test",
 				Mode:          mollie.TestMode,
+				Status:        "paid",
 				CreatedAt:     &n,
 				ExpiresAt:     &tomorrow,
 				IsCancellable: false,
@@ -67,6 +70,7 @@ func TestMollieListPayments_KV(t *testing.T) {
 			mollie.Payment{
 				ID:            "tr_test_2",
 				Mode:          mollie.TestMode,
+				Status:        "expired",
 				CreatedAt:     &n,
 				ExpiresAt:     &tomorrow,
 				IsCancellable: false,
@@ -93,6 +97,7 @@ func TestMollieListPayments_KV(t *testing.T) {
 	w := map[string]interface{}{
 		"ID":          "tr_test",
 		"Mode":        mollie.TestMode,
+		"Status":      "paid",
 		"Created":     n.Format("02-01-2006"),
 		"Expires":     n.AddDate(0, 0, 2).Format("02-01-2006"),
 		"Cancelable":  false,
@@ -104,6 +109,7 @@ func TestMollieListPayments_KV(t *testing.T) {
 	w1 := map[string]interface{}{
 		"ID":          "tr_test_2",
 		"Mode":        mollie.TestMode,
+		"Status":      "expired",
 		"Created":     n.Format("02-01-2006"),
 		"Expires":     n.AddDate(0, 0, 2).Format("02-01-2006"),
 		"Cancelable":  false,

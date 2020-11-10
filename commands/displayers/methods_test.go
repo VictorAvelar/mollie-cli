@@ -49,8 +49,8 @@ func TestMollieMethod_KV(t *testing.T) {
 	w := map[string]interface{}{
 		"ID":             "ideal",
 		"Name":           "iDeal payments",
-		"Minimum Amount": "10.00/EUR",
-		"Maximum Amount": "100.00/EUR",
+		"Minimum Amount": "10.00 EUR",
+		"Maximum Amount": "100.00 EUR",
 	}
 
 	want := []map[string]interface{}{}
@@ -73,7 +73,7 @@ func TestMollieListMethods(t *testing.T) {
 			ID:            "paypal",
 			Description:   "PayPal",
 			MinimumAmount: &mollie.Amount{Value: "0.01", Currency: "EUR"},
-			MaximumAmount: &mollie.Amount{Value: "", Currency: ""},
+			MaximumAmount: nil,
 		})
 	disp := MollieListMethods{
 		ListMethods: &mollie.ListMethods{
@@ -93,14 +93,14 @@ func TestMollieListMethods(t *testing.T) {
 	w1 := map[string]interface{}{
 		"ID":             "ideal",
 		"Name":           "iDeal payments",
-		"Minimum Amount": "10.00/EUR",
-		"Maximum Amount": "100.00/EUR",
+		"Minimum Amount": "10.00 EUR",
+		"Maximum Amount": "100.00 EUR",
 	}
 	w2 := map[string]interface{}{
 		"ID":             "paypal",
 		"Name":           "PayPal",
-		"Minimum Amount": "0.01/EUR",
-		"Maximum Amount": "-/-",
+		"Minimum Amount": "0.01 EUR",
+		"Maximum Amount": "----- ---",
 	}
 
 	want = append(want, w1, w2)
