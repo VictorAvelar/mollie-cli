@@ -11,6 +11,7 @@ var (
 	paymentsCols = []string{
 		"ID",
 		"Mode",
+		"Status",
 		"Created",
 		"Expires",
 		"Cancelable",
