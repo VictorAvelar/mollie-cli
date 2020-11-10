@@ -17,8 +17,8 @@ It is based on the [mollie-api-go](https://github.com/VictorAvelar/mollie-api-go
 
 ## Resources
 - [x] Payments
-- [ ] Methods
-- [ ] Refunds
+- [x] Methods
+- [x] Refunds
 - [x] Chargebacks
 - [ ] Captures
 - [ ] Orders
