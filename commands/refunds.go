@@ -203,8 +203,10 @@ func RunGetRefund(cmd *cobra.Command, args []string) {
 // RunCreateRefund creates a refund for the given payment.
 func RunCreateRefund(cmd *cobra.Command, args []string) {
 	r := mollie.Refund{}
-	r.Amount.Currency = ParseStringFromFlags(cmd, AmountCurrencyArg)
-	r.Amount.Value = ParseStringFromFlags(cmd, AmountValueArg)
+	r.Amount = &mollie.Amount{
+		Currency: ParseStringFromFlags(cmd, AmountCurrencyArg),
+		Value:    ParseStringFromFlags(cmd, AmountValueArg),
+	}
 	r.Description = ParseStringFromFlags(cmd, DescriptionArg)
 	r.Metadata = ParseStringFromFlags(cmd, MetadataArg)
 
