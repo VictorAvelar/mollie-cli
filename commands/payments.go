@@ -339,7 +339,7 @@ func RunCreatePayment(cmd *cobra.Command, args []string) {
 	m := mollie.PaymentMethod(method)
 
 	p := mollie.Payment{
-		Amount: mollie.Amount{
+		Amount: &mollie.Amount{
 			Currency: currency,
 			Value:    amount,
 		},

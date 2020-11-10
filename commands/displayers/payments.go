@@ -59,7 +59,7 @@ func (p *MolliePayment) KV() []map[string]interface{} {
 }
 
 func getSafeExpiration(p mollie.Payment) string {
-	if p.ExpiresAt.IsZero() {
+	if p.ExpiresAt == nil {
 		return "----------"
 	}
 

@@ -13,14 +13,15 @@ func TestMolliePayment_KV(t *testing.T) {
 	if err != nil {
 		t.Error(err)
 	}
+	tomorrow := n.AddDate(0, 0, 2)
 	disp := MolliePayment{
 		Payment: &mollie.Payment{
 			ID:            "tr_test",
 			Mode:          mollie.TestMode,
-			CreatedAt:     n,
-			ExpiresAt:     n.AddDate(0, 0, 2),
+			CreatedAt:     &n,
+			ExpiresAt:     &tomorrow,
 			IsCancellable: false,
-			Amount:        mollie.Amount{Currency: "EUR", Value: "1.00"},
+			Amount:        &mollie.Amount{Currency: "EUR", Value: "1.00"},
 			Method:        mollie.PayPal,
 			Description:   "testing KV",
 		},
@@ -48,6 +49,7 @@ func TestMollieListPayments_KV(t *testing.T) {
 	if err != nil {
 		t.Error(err)
 	}
+	tomorrow := n.AddDate(0, 0, 2)
 	var ps []mollie.Payment
 	{
 		ps = append(
@@ -55,20 +57,20 @@ func TestMollieListPayments_KV(t *testing.T) {
 			mollie.Payment{
 				ID:            "tr_test",
 				Mode:          mollie.TestMode,
-				CreatedAt:     n,
-				ExpiresAt:     n.AddDate(0, 0, 2),
+				CreatedAt:     &n,
+				ExpiresAt:     &tomorrow,
 				IsCancellable: false,
-				Amount:        mollie.Amount{Currency: "EUR", Value: "1.00"},
+				Amount:        &mollie.Amount{Currency: "EUR", Value: "1.00"},
 				Method:        mollie.PayPal,
 				Description:   "testing KV",
 			},
 			mollie.Payment{
 				ID:            "tr_test_2",
 				Mode:          mollie.TestMode,
-				CreatedAt:     n,
-				ExpiresAt:     n.AddDate(0, 0, 2),
+				CreatedAt:     &n,
+				ExpiresAt:     &tomorrow,
 				IsCancellable: false,
-				Amount:        mollie.Amount{Currency: "USD", Value: "2.00"},
+				Amount:        &mollie.Amount{Currency: "USD", Value: "2.00"},
 				Method:        mollie.BankTransfer,
 				Description:   "testing KV list payments",
 			},
@@ -130,7 +132,7 @@ func TestGetSafeExpiration(t *testing.T) {
 			name:   "non zero date",
 			expect: "01-11-2020",
 			input: mollie.Payment{
-				ExpiresAt: n,
+				ExpiresAt: &n,
 			},
 		},
 		{
