@@ -187,14 +187,12 @@ ordered from newest to oldest. The results are paginated.`,
 		Required: true,
 	})
 	command.AddFlag(up, command.FlagConfig{
-		Name:     DescriptionArg,
-		Usage:    "the description of the payment to show to your customers when possible",
-		Required: true,
+		Name:  DescriptionArg,
+		Usage: "the description of the payment to show to your customers when possible",
 	})
 	command.AddFlag(up, command.FlagConfig{
-		Name:     RedirectURLArg,
-		Usage:    "the URL your customer will be redirected to after the payment process",
-		Required: true,
+		Name:  RedirectURLArg,
+		Usage: "the URL your customer will be redirected to after the payment process",
 	})
 	command.AddFlag(up, command.FlagConfig{
 		Name:  WebhookURLArg,
