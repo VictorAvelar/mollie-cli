@@ -15,5 +15,5 @@ func NopRunner(cmd *cobra.Command, args []string) {}
 
 // ArgPrinterRunner will print all the received arguments.
 func ArgPrinterRunner(cmd *cobra.Command, args []string) {
-	fmt.Fprintf(cmd.OutOrStdout(), strings.Join(args, " "))
+	fmt.Fprint(cmd.OutOrStdout(), strings.Join(args, " "))
 }
