@@ -130,6 +130,7 @@ func addCommands() {
 	MollieCmd.AddCommand(Methods())
 	MollieCmd.AddCommand(Payments())
 	MollieCmd.AddCommand(Chargebacks())
+	MollieCmd.AddCommand(Refunds())
 
 	// Tooling
 	MollieCmd.AddCommand(Version())

@@ -21,11 +21,11 @@ func TestMollieProfile_KV(t *testing.T) {
 			Phone:     "+0000000000000",
 			Status:    mollie.StatusVerified,
 			Mode:      mollie.TestMode,
-			CreatedAt: n,
+			CreatedAt: &n,
 		},
 	}
 
-	out := expectProfileSlice(*disp.Profile)
+	out := expectProfileSlice(disp.Profile)
 	assert.Len(t, out, 1)
 	assert.Equal(t, out, disp.KV())
 }
@@ -35,25 +35,25 @@ func TestMollieProfileList_KV(t *testing.T) {
 	if err != nil {
 		t.Error(err)
 	}
-	var ps []mollie.Profile
+	var ps []*mollie.Profile
 	{
-		ps = append(ps, mollie.Profile{
+		ps = append(ps, &mollie.Profile{
 			ID:        "pr_test",
 			Name:      "testing profile",
 			Website:   "https://example.com",
 			Phone:     "+0000000000000",
 			Status:    mollie.StatusVerified,
 			Mode:      mollie.TestMode,
-			CreatedAt: n,
+			CreatedAt: &n,
 		},
-			mollie.Profile{
+			&mollie.Profile{
 				ID:        "pr_test_2",
 				Name:      "testing profile 2",
 				Website:   "https://example.com/2",
 				Phone:     "+0000000000000",
 				Status:    mollie.StatusUnverified,
 				Mode:      mollie.LiveMode,
-				CreatedAt: n,
+				CreatedAt: &n,
 			},
 		)
 	}
@@ -62,7 +62,7 @@ func TestMollieProfileList_KV(t *testing.T) {
 		ProfileList: &mollie.ProfileList{
 			Count: 2,
 			Embedded: struct {
-				Profiles []mollie.Profile "json:\"profiles,omitempty\""
+				Profiles []*mollie.Profile "json:\"profiles,omitempty\""
 			}{
 				Profiles: ps,
 			},
@@ -80,7 +80,7 @@ func TestMollieProfileList_KV(t *testing.T) {
 	assert.Equal(t, out, disp.KV())
 }
 
-func expectProfileSlice(pfs ...mollie.Profile) (out []map[string]interface{}) {
+func expectProfileSlice(pfs ...*mollie.Profile) (out []map[string]interface{}) {
 	for _, r := range pfs {
 		x := map[string]interface{}{
 			"ID":      r.ID,

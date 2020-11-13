@@ -17,9 +17,9 @@ func TestMollieChargeback_KV(t *testing.T) {
 		&mollie.Chargeback{
 			ID:               "chg_test",
 			PaymentID:        "tr_test",
-			Amount:           mollie.Amount{Currency: "USD", Value: "10.00"},
-			SettlementAmount: mollie.Amount{Currency: "USD", Value: "12.00"},
-			CreatedAt:        n,
+			Amount:           &mollie.Amount{Currency: "USD", Value: "10.00"},
+			SettlementAmount: &mollie.Amount{Currency: "USD", Value: "12.00"},
+			CreatedAt:        &n,
 		},
 	}
 
@@ -38,16 +38,16 @@ func TestMollieListChargebacks(t *testing.T) {
 		cbs = append(cbs, mollie.Chargeback{
 			ID:               "chg_test",
 			PaymentID:        "tr_test",
-			Amount:           mollie.Amount{Currency: "USD", Value: "10.00"},
-			SettlementAmount: mollie.Amount{Currency: "USD", Value: "12.00"},
-			CreatedAt:        n,
+			Amount:           &mollie.Amount{Currency: "USD", Value: "10.00"},
+			SettlementAmount: &mollie.Amount{Currency: "USD", Value: "12.00"},
+			CreatedAt:        &n,
 		},
 			mollie.Chargeback{
 				ID:               "chg_test_2",
 				PaymentID:        "tr_test_2",
-				Amount:           mollie.Amount{Currency: "USD", Value: "100.00"},
-				SettlementAmount: mollie.Amount{Currency: "USD", Value: "120.00"},
-				CreatedAt:        n,
+				Amount:           &mollie.Amount{Currency: "USD", Value: "100.00"},
+				SettlementAmount: &mollie.Amount{Currency: "USD", Value: "120.00"},
+				CreatedAt:        &n,
 			},
 		)
 	}

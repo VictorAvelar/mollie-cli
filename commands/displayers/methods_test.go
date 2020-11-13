@@ -41,16 +41,16 @@ func TestMollieMethod_KV(t *testing.T) {
 		&mollie.PaymentMethodInfo{
 			ID:            "ideal",
 			Description:   "iDeal payments",
-			MinimumAmount: mollie.Amount{Value: "10.00", Currency: "EUR"},
-			MaximumAmount: mollie.Amount{Value: "100.00", Currency: "EUR"},
+			MinimumAmount: &mollie.Amount{Value: "10.00", Currency: "EUR"},
+			MaximumAmount: &mollie.Amount{Value: "100.00", Currency: "EUR"},
 		},
 	}
 
 	w := map[string]interface{}{
 		"ID":             "ideal",
 		"Name":           "iDeal payments",
-		"Minimum Amount": "10.00/EUR",
-		"Maximum Amount": "100.00/EUR",
+		"Minimum Amount": "10.00 EUR",
+		"Maximum Amount": "100.00 EUR",
 	}
 
 	want := []map[string]interface{}{}
@@ -60,29 +60,29 @@ func TestMollieMethod_KV(t *testing.T) {
 }
 
 func TestMollieListMethods(t *testing.T) {
-	var meths []mollie.PaymentMethodInfo
+	var meths []*mollie.PaymentMethodInfo
 	meths = append(
 		meths,
-		mollie.PaymentMethodInfo{
+		&mollie.PaymentMethodInfo{
 			ID:            "ideal",
 			Description:   "iDeal payments",
-			MinimumAmount: mollie.Amount{Value: "10.00", Currency: "EUR"},
-			MaximumAmount: mollie.Amount{Value: "100.00", Currency: "EUR"},
+			MinimumAmount: &mollie.Amount{Value: "10.00", Currency: "EUR"},
+			MaximumAmount: &mollie.Amount{Value: "100.00", Currency: "EUR"},
 		},
-		mollie.PaymentMethodInfo{
+		&mollie.PaymentMethodInfo{
 			ID:            "paypal",
 			Description:   "PayPal",
-			MinimumAmount: mollie.Amount{Value: "0.01", Currency: "EUR"},
-			MaximumAmount: mollie.Amount{Value: "", Currency: ""},
+			MinimumAmount: &mollie.Amount{Value: "0.01", Currency: "EUR"},
+			MaximumAmount: nil,
 		})
 	disp := MollieListMethods{
 		ListMethods: &mollie.ListMethods{
 			Count: 2,
 			Links: mollie.PaginationLinks{
 				Documentation: mollie.URL{Href: "https://example.com", Type: "text/html"},
-				Self: mollie.URL{Href: "https://example.com", Type: "text/html"},
+				Self:          mollie.URL{Href: "https://example.com", Type: "text/html"},
 			},
-			Embedded: struct{ Methods []mollie.PaymentMethodInfo }{
+			Embedded: struct{ Methods []*mollie.PaymentMethodInfo }{
 				Methods: meths,
 			},
 		},
@@ -93,14 +93,14 @@ func TestMollieListMethods(t *testing.T) {
 	w1 := map[string]interface{}{
 		"ID":             "ideal",
 		"Name":           "iDeal payments",
-		"Minimum Amount": "10.00/EUR",
-		"Maximum Amount": "100.00/EUR",
+		"Minimum Amount": "10.00 EUR",
+		"Maximum Amount": "100.00 EUR",
 	}
 	w2 := map[string]interface{}{
 		"ID":             "paypal",
 		"Name":           "PayPal",
-		"Minimum Amount": "0.01/EUR",
-		"Maximum Amount": "-/-",
+		"Minimum Amount": "0.01 EUR",
+		"Maximum Amount": "----- ---",
 	}
 
 	want = append(want, w1, w2)

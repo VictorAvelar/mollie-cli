@@ -20,6 +20,7 @@ func (lp *MollieListPayments) KV() []map[string]interface{} {
 		x := map[string]interface{}{
 			"ID":          p.ID,
 			"Mode":        p.Mode,
+			"Status":      p.Status,
 			"Created":     p.CreatedAt.Format("02-01-2006"),
 			"Expires":     ped,
 			"Cancelable":  p.IsCancellable,
@@ -47,6 +48,7 @@ func (p *MolliePayment) KV() []map[string]interface{} {
 	x := map[string]interface{}{
 		"ID":          p.ID,
 		"Mode":        p.Mode,
+		"Status":      p.Status,
 		"Created":     p.CreatedAt.Format("02-01-2006"),
 		"Expires":     ped,
 		"Cancelable":  p.IsCancellable,
@@ -59,7 +61,7 @@ func (p *MolliePayment) KV() []map[string]interface{} {
 }
 
 func getSafeExpiration(p mollie.Payment) string {
-	if p.ExpiresAt.IsZero() {
+	if p.ExpiresAt == nil {
 		return "----------"
 	}
 
