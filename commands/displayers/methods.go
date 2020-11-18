@@ -1,8 +1,6 @@
 package displayers
 
 import (
-	"strings"
-
 	"github.com/VictorAvelar/mollie-api-go/v2/mollie"
 )
 
@@ -64,13 +62,4 @@ func safeDisplayableAmount(a *mollie.Amount) *mollie.Amount {
 	}
 
 	return a
-}
-
-func stringCombinator(sep string, vals ...string) string {
-	for i, v := range vals {
-		if v == "" {
-			vals[i] = "-"
-		}
-	}
-	return strings.Join(vals, sep)
 }
