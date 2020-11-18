@@ -445,7 +445,7 @@ func RunUpdatePayment(cmd *cobra.Command, args []string) {
 
 	disp := displayers.MolliePayment{Payment: &p}
 
-	err = command.Display(paymentsCols, disp.KV())
+	err = command.Display(getPaymentCols(cmd), disp.KV())
 	if err != nil {
 		logger.Fatal(err)
 	}
