@@ -130,7 +130,7 @@ ordered from newest to oldest. The results are paginated.`,
 			Aliases:   []string{"new", "start"},
 			Example:   "mollie payments create --amount-value=200.00 --amount-currency=USD --redirect-to=https://victoravelar.com --description='custom example payment'",
 		},
-		noCols,
+		paymentsCols,
 	)
 
 	command.AddFlag(cpp, command.FlagConfig{
@@ -201,7 +201,7 @@ ordered from newest to oldest. The results are paginated.`,
 			LongDesc:  `There are also payment method specific parameters available, check the docs, please.`,
 			Execute:   RunUpdatePayment,
 		},
-		noCols,
+		paymentsCols,
 	)
 
 	command.AddFlag(up, command.FlagConfig{
