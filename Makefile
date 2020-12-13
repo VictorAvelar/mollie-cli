@@ -32,3 +32,11 @@ clean:
 	@go mod verify
 	@go mod tidy
 .PHONY: clean
+
+compile-master:
+	@go build -o mollie-master ./cmd/mollie/main.go
+.PHONY: compile-master
+
+compile-current:
+	@go build -o mollie ./cmd/mollie/main.go
+.PHONY: compile-current
