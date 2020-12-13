@@ -14,20 +14,7 @@ func (lp *MollieListPayments) KV() []map[string]interface{} {
 	var out []map[string]interface{}
 
 	for _, p := range lp.Embedded.Payments {
-		ped := getSafeExpiration(p)
-		m := getSafePaymentMethod(p)
-
-		x := map[string]interface{}{
-			"ID":          p.ID,
-			"Mode":        p.Mode,
-			"Status":      p.Status,
-			"Created":     p.CreatedAt.Format("02-01-2006"),
-			"Expires":     ped,
-			"Cancelable":  p.IsCancellable,
-			"Amount":      p.Amount.Value + " " + p.Amount.Currency,
-			"Method":      m,
-			"Description": p.Description,
-		}
+		x := buildXPayment(&p)
 
 		out = append(out, x)
 	}
@@ -43,21 +30,43 @@ type MolliePayment struct {
 // KV is a displayable group of key value
 func (p *MolliePayment) KV() []map[string]interface{} {
 	var out []map[string]interface{}
-	ped := getSafeExpiration(*p.Payment)
-	m := getSafePaymentMethod(*p.Payment)
-	x := map[string]interface{}{
-		"ID":          p.ID,
-		"Mode":        p.Mode,
-		"Status":      p.Status,
-		"Created":     p.CreatedAt.Format("02-01-2006"),
-		"Expires":     ped,
-		"Cancelable":  p.IsCancellable,
-		"Amount":      p.Amount.Value + " " + p.Amount.Currency,
-		"Method":      m,
-		"Description": p.Description,
-	}
+	x := buildXPayment(p.Payment)
 	out = append(out, x)
 	return out
+}
+
+func buildXPayment(p *mollie.Payment) map[string]interface{} {
+	return map[string]interface{}{
+		"RESOURCE":        p.Resource,
+		"ID":              p.ID,
+		"MODE":            fallbackSafeMode(p.Mode),
+		"STATUS":          p.Status,
+		"CANCELABLE":      p.IsCancellable,
+		"AMOUNT":          fallbackSafeAmount(p.Amount),
+		"METHOD":          fallbackSafePaymentMethod(p.Method),
+		"DESCRIPTION":     p.Description,
+		"SEQUENCE":        fallbackSafeSequence(p.SequenceType),
+		"REMAINING":       fallbackSafeAmount(p.AmountRemaining),
+		"REFUNDED":        fallbackSafeAmount(p.AmountRefunded),
+		"CAPTURED":        fallbackSafeAmount(p.AmountCaptured),
+		"SETTLEMENT":      fallbackSafeAmount(p.SettlementAmount),
+		"APP FEE":         fallbackSafeAppFee(p.ApplicationFee),
+		"CREATED AT":      fallbackSafeDate(p.CreatedAt),
+		"AUTHORIZED AT":   fallbackSafeDate(p.AuthorizedAt),
+		"EXPIRES":         fallbackSafeDate(p.ExpiresAt),
+		"PAID AT":         fallbackSafeDate(p.PaidAt),
+		"FAILED AT":       fallbackSafeDate(p.FailedAt),
+		"CANCELED AT":     fallbackSafeDate(p.CanceledAt),
+		"CUSTOMER ID":     p.CustomerID,
+		"SETTLEMENT ID":   p.SettlementID,
+		"MANDATE ID":      p.MandateID,
+		"SUBSCRIPTION ID": p.SubscriptionID,
+		"ORDER ID":        p.OrderID,
+		"REDIRECT":        p.RedirectURL,
+		"WEBHOOK":         p.WebhookURL,
+		"LOCALE":          fallbackSafeLocale(p.Locale),
+		"COUNTRY":         p.CountryCode,
+	}
 }
 
 func getSafeExpiration(p mollie.Payment) string {

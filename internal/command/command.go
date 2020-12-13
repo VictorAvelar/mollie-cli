@@ -53,6 +53,16 @@ func Builder(parent *Command, config Config, cols []string) *Command {
 		parent.AddCommand(c)
 	}
 
+	AddFlag(
+		c,
+		FlagConfig{
+			Name:       "fields",
+			Persistent: true,
+			Shorthand:  "f",
+			Usage:      "select displayable fields to filter the console output",
+		},
+	)
+
 	return c
 }
 
