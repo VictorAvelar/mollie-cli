@@ -34,7 +34,9 @@ clean:
 .PHONY: clean
 
 compile-master:
+	@git checkout master
 	@go build -o mollie-master ./cmd/mollie/main.go
+	@git checkout -
 .PHONY: compile-master
 
 compile-current:
