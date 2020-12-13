@@ -13,6 +13,30 @@ const (
 	noAppFee          = "none"
 )
 
+func fallbackSafeLocale(loc mollie.Locale) string {
+	if loc == mollie.Locale("") {
+		return ""
+	}
+
+	return string(loc)
+}
+
+func fallbackSafeMode(mode mollie.Mode) string {
+	if mode == mollie.Mode("") {
+		return ""
+	}
+
+	return string(mode)
+}
+
+func fallbackSafeSequence(seq mollie.SequenceType) string {
+	if seq == mollie.SequenceType("") {
+		return ""
+	}
+
+	return string(seq)
+}
+
 func fallbackSafeDate(t *time.Time) string {
 	if t == nil {
 		return noDateContent

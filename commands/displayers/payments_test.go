@@ -25,19 +25,40 @@ func TestMolliePayment_KV(t *testing.T) {
 			Amount:        &mollie.Amount{Currency: "EUR", Value: "1.00"},
 			Method:        mollie.PayPal,
 			Description:   "testing KV",
+			Locale:        mollie.Locale(""),
 		},
 	}
 
 	w := map[string]interface{}{
-		"ID":          "tr_test",
-		"Mode":        mollie.TestMode,
-		"Status":      "paid",
-		"Created":     n.Format("02-01-2006"),
-		"Expires":     n.AddDate(0, 0, 2).Format("02-01-2006"),
-		"Cancelable":  false,
-		"Amount":      "1.00 EUR",
-		"Method":      "paypal",
-		"Description": "testing KV",
+		"AMOUNT":          "1.00 EUR",
+		"APP FEE":         "none",
+		"AUTHORIZED AT":   "----------",
+		"CANCELABLE":      false,
+		"CANCELED AT":     "----------",
+		"CAPTURED":        "--- ---",
+		"COUNTRY":         "",
+		"CREATED AT":      "04-11-2020",
+		"CUSTOMER ID":     "",
+		"DESCRIPTION":     "testing KV",
+		"EXPIRES":         "06-11-2020",
+		"FAILED AT":       "----------",
+		"ID":              "tr_test",
+		"LOCALE":          "",
+		"MANDATE ID":      "",
+		"METHOD":          "paypal",
+		"MODE":            "test",
+		"ORDER ID":        "",
+		"PAID AT":         "----------",
+		"REDIRECT":        "",
+		"REFUNDED":        "--- ---",
+		"REMAINING":       "--- ---",
+		"RESOURCE":        "",
+		"SEQUENCE":        "",
+		"SETTLEMENT":      "--- ---",
+		"SETTLEMENT ID":   "",
+		"STATUS":          "paid",
+		"SUBSCRIPTION ID": "",
+		"WEBHOOK":         "",
 	}
 
 	want := []map[string]interface{}{}
@@ -94,29 +115,9 @@ func TestMollieListPayments_KV(t *testing.T) {
 		},
 	}
 
-	w := map[string]interface{}{
-		"ID":          "tr_test",
-		"Mode":        mollie.TestMode,
-		"Status":      "paid",
-		"Created":     n.Format("02-01-2006"),
-		"Expires":     n.AddDate(0, 0, 2).Format("02-01-2006"),
-		"Cancelable":  false,
-		"Amount":      "1.00 EUR",
-		"Method":      "paypal",
-		"Description": "testing KV",
-	}
+	w := map[string]interface{}{"AMOUNT": "1.00 EUR", "APP FEE": "none", "AUTHORIZED AT": "----------", "CANCELABLE": false, "CANCELED AT": "----------", "CAPTURED": "--- ---", "COUNTRY": "", "CREATED AT": "04-11-2020", "CUSTOMER ID": "", "DESCRIPTION": "testing KV", "EXPIRES": "06-11-2020", "FAILED AT": "----------", "ID": "tr_test", "LOCALE": "", "MANDATE ID": "", "METHOD": "paypal", "MODE": "test", "ORDER ID": "", "PAID AT": "----------", "REDIRECT": "", "REFUNDED": "--- ---", "REMAINING": "--- ---", "RESOURCE": "", "SEQUENCE": "", "SETTLEMENT": "--- ---", "SETTLEMENT ID": "", "STATUS": "paid", "SUBSCRIPTION ID": "", "WEBHOOK": ""}
 
-	w1 := map[string]interface{}{
-		"ID":          "tr_test_2",
-		"Mode":        mollie.TestMode,
-		"Status":      "expired",
-		"Created":     n.Format("02-01-2006"),
-		"Expires":     n.AddDate(0, 0, 2).Format("02-01-2006"),
-		"Cancelable":  false,
-		"Amount":      "2.00 USD",
-		"Method":      "banktransfer",
-		"Description": "testing KV list payments",
-	}
+	w1 := map[string]interface{}{"AMOUNT": "2.00 USD", "APP FEE": "none", "AUTHORIZED AT": "----------", "CANCELABLE": false, "CANCELED AT": "----------", "CAPTURED": "--- ---", "COUNTRY": "", "CREATED AT": "04-11-2020", "CUSTOMER ID": "", "DESCRIPTION": "testing KV list payments", "EXPIRES": "06-11-2020", "FAILED AT": "----------", "ID": "tr_test_2", "LOCALE": "", "MANDATE ID": "", "METHOD": "banktransfer", "MODE": "test", "ORDER ID": "", "PAID AT": "----------", "REDIRECT": "", "REFUNDED": "--- ---", "REMAINING": "--- ---", "RESOURCE": "", "SEQUENCE": "", "SETTLEMENT": "--- ---", "SETTLEMENT ID": "", "STATUS": "expired", "SUBSCRIPTION ID": "", "WEBHOOK": ""}
 
 	want := []map[string]interface{}{}
 	want = append(want, w, w1)
