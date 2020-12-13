@@ -1,6 +1,8 @@
 package commands
 
 import (
+	"strings"
+
 	"github.com/spf13/cobra"
 
 	"github.com/VictorAvelar/mollie-cli/commands/displayers"
@@ -9,13 +11,17 @@ import (
 
 var (
 	profileCols = []string{
+		"RESOURCE",
 		"ID",
-		"Name",
-		"Website",
-		"Phone",
-		"Status",
-		"Mode",
-		"Since",
+		"MODE",
+		"NAME",
+		"WEBSITE",
+		"EMAIL",
+		"PHONE",
+		"CATEGORY_CODE",
+		"STATUS",
+		"REVIEW",
+		"CREATED_AT",
 	}
 )
 
@@ -75,7 +81,7 @@ func RunCurrentProfile(cmd *cobra.Command, args []string) {
 
 	mp := displayers.MollieProfile{Profile: p}
 
-	err = command.Display(profileCols, mp.KV())
+	err = command.Display(getProfileCols(cmd), mp.KV())
 	if err != nil {
 		logger.Error(err)
 	}
@@ -100,8 +106,30 @@ func RunGetProfile(cmd *cobra.Command, args []string) {
 
 	mp := displayers.MollieProfile{Profile: p}
 
-	err = command.Display(profileCols, mp.KV())
+	err = command.Display(getProfileCols(cmd), mp.KV())
 	if err != nil {
 		logger.Error(err)
 	}
+}
+
+func getProfileCols(cmd *cobra.Command) []string {
+	var cols []string
+	{
+		cls := ParseStringFromFlags(cmd, FieldsArg)
+
+		if cls != "" {
+			cols = strings.Split(cls, ",")
+			if verbose {
+				PrintNonemptyFlagValue(FieldsArg, cls)
+			}
+		} else {
+			cols = profileCols
+			if verbose {
+				logger.Info("returning all fields")
+			}
+		}
+
+	}
+
+	return cols
 }

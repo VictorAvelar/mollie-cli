@@ -12,15 +12,7 @@ func (mpl *MollieProfileList) KV() []map[string]interface{} {
 	var out []map[string]interface{}
 
 	for _, r := range mpl.Embedded.Profiles {
-		x := map[string]interface{}{
-			"ID":      r.ID,
-			"Name":    r.Name,
-			"Website": r.Website,
-			"Phone":   r.Phone,
-			"Status":  r.Status,
-			"Mode":    r.Mode,
-			"Since":   r.CreatedAt.Format("02-01-2006"),
-		}
+		x := buildXProfile(r)
 
 		out = append(out, x)
 	}
@@ -37,17 +29,25 @@ type MollieProfile struct {
 func (mp *MollieProfile) KV() []map[string]interface{} {
 	var out []map[string]interface{}
 
-	x := map[string]interface{}{
-		"ID":      mp.Profile.ID,
-		"Name":    mp.Profile.Name,
-		"Website": mp.Profile.Website,
-		"Phone":   mp.Profile.Phone,
-		"Status":  mp.Profile.Status,
-		"Mode":    mp.Profile.Mode,
-		"Since":   mp.CreatedAt.Format("02-01-2006"),
-	}
+	x := buildXProfile(mp.Profile)
 
 	out = append(out, x)
 
 	return out
+}
+
+func buildXProfile(p *mollie.Profile) map[string]interface{} {
+	return map[string]interface{}{
+		"RESOURCE":      p.Resource,
+		"ID":            p.ID,
+		"MODE":          fallbackSafeMode(p.Mode),
+		"NAME":          p.Name,
+		"WEBSITE":       p.Website,
+		"EMAIL":         p.Email,
+		"PHONE":         p.Phone,
+		"CATEGORY_CODE": p.CategoryCode,
+		"STATUS":        p.Status,
+		"REVIEW":        p.Review.Status,
+		"CREATED_AT":    fallbackSafeDate(p.CreatedAt),
+	}
 }
