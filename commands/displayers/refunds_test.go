@@ -92,14 +92,17 @@ func TestMollieRefundList_KV(t *testing.T) {
 func expectedRefundSlice(refs ...*mollie.Refund) (out []map[string]interface{}) {
 	for _, r := range refs {
 		x := map[string]interface{}{
-			"ID":          r.ID,
-			"Payment":     r.PaymentID,
-			"Order":       r.OrderID,
-			"Settlement":  r.SettlementID,
-			"Amount":      stringCombinator(" ", r.Amount.Value, r.Amount.Currency),
-			"Status":      r.Status,
-			"Description": r.Description,
-			"Created at":  r.CreatedAt.Format("02-01-2006"),
+			"RESOURCE":          r.Resource,
+			"ID":                r.ID,
+			"AMOUNT":            fallbackSafeAmount(r.Amount),
+			"SETTLEMENT_ID":     r.SettlementID,
+			"SETTLEMENT_AMOUNT": fallbackSafeAmount(r.SettlementAmount),
+			"DESCRIPTION":       r.Description,
+			"METADATA":          r.Metadata,
+			"STATUS":            r.Status,
+			"PAYMENT_ID":        r.PaymentID,
+			"ORDER_ID":          r.OrderID,
+			"CREATED_AT":        fallbackSafeDate(r.CreatedAt),
 		}
 
 		out = append(out, x)
