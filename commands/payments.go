@@ -1,8 +1,6 @@
 package commands
 
 import (
-	"strings"
-
 	"github.com/VictorAvelar/mollie-api-go/v2/mollie"
 	"github.com/VictorAvelar/mollie-cli/commands/displayers"
 	"github.com/VictorAvelar/mollie-cli/internal/command"
@@ -326,7 +324,10 @@ func RunCancelPayment(cmd *cobra.Command, args []string) {
 
 	disp := displayers.MolliePayment{Payment: &p}
 
-	err = command.Display(getPaymentCols(cmd), disp.KV())
+	err = command.Display(
+		command.FilterColumns(parseFieldsFromFlag(cmd), paymentsCols),
+		disp.KV(),
+	)
 	if err != nil {
 		logger.Fatal(err)
 	}
@@ -395,11 +396,12 @@ func RunCreatePayment(cmd *cobra.Command, args []string) {
 		logger.Infof("Payment created at %s", p.CreatedAt)
 	}
 
-	cols := getPaymentCols(cmd)
-
 	disp := displayers.MolliePayment{Payment: &p}
 
-	err = command.Display(cols, disp.KV())
+	err = command.Display(
+		command.FilterColumns(parseFieldsFromFlag(cmd), paymentsCols),
+		disp.KV(),
+	)
 	if err != nil {
 		logger.Fatal(err)
 	}
@@ -452,30 +454,11 @@ func RunUpdatePayment(cmd *cobra.Command, args []string) {
 
 	disp := displayers.MolliePayment{Payment: &p}
 
-	err = command.Display(getPaymentCols(cmd), disp.KV())
+	err = command.Display(
+		command.FilterColumns(parseFieldsFromFlag(cmd), paymentsCols),
+		disp.KV(),
+	)
 	if err != nil {
 		logger.Fatal(err)
 	}
-}
-
-func getPaymentCols(cmd *cobra.Command) []string {
-	var cols []string
-	{
-		cls := ParseStringFromFlags(cmd, FieldsArg)
-
-		if cls != "" {
-			cols = strings.Split(cls, ",")
-			if verbose {
-				PrintNonemptyFlagValue(FieldsArg, cls)
-			}
-		} else {
-			cols = paymentsCols
-			if verbose {
-				logger.Info("returning all fields")
-			}
-		}
-
-	}
-
-	return cols
 }

@@ -1,8 +1,6 @@
 package commands
 
 import (
-	"strings"
-
 	"github.com/VictorAvelar/mollie-api-go/v2/mollie"
 	"github.com/VictorAvelar/mollie-cli/commands/displayers"
 	"github.com/VictorAvelar/mollie-cli/internal/command"
@@ -103,9 +101,12 @@ func RunGetChargebacks(cmd *cobra.Command, args []string) {
 		logger.Infof("request docs: %s", cb.Links.Documentation.Href)
 	}
 
-	display := &displayers.MollieChargeback{Chargeback: &cb}
+	disp := &displayers.MollieChargeback{Chargeback: &cb}
 
-	err = command.Display(getChargbackCols(cmd), display.KV())
+	err = command.Display(
+		command.FilterColumns(parseFieldsFromFlag(cmd), chargebacksCols),
+		disp.KV(),
+	)
 	if err != nil {
 		logger.Fatal(err)
 	}
@@ -136,32 +137,13 @@ func RunListChargebacks(cmd *cobra.Command, args []string) {
 		logger.Infof("request docs: %s", cbs.Links.Documentation.Href)
 	}
 
-	display := displayers.MollieChargebackList{ChargebackList: cbs}
+	disp := displayers.MollieChargebackList{ChargebackList: cbs}
 
-	err = command.Display(getChargbackCols(cmd), display.KV())
+	err = command.Display(
+		command.FilterColumns(parseFieldsFromFlag(cmd), chargebacksCols),
+		disp.KV(),
+	)
 	if err != nil {
 		logger.Fatal(err)
 	}
-}
-
-func getChargbackCols(cmd *cobra.Command) []string {
-	var cols []string
-	{
-		cls := ParseStringFromFlags(cmd, FieldsArg)
-
-		if cls != "" {
-			cols = strings.Split(cls, ",")
-			if verbose {
-				PrintNonemptyFlagValue(FieldsArg, cls)
-			}
-		} else {
-			cols = chargebacksCols
-			if verbose {
-				logger.Info("returning all fields")
-			}
-		}
-
-	}
-
-	return cols
 }

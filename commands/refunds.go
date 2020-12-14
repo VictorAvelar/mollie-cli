@@ -2,7 +2,6 @@ package commands
 
 import (
 	"os"
-	"strings"
 
 	"github.com/VictorAvelar/mollie-api-go/v2/mollie"
 	"github.com/VictorAvelar/mollie-cli/commands/displayers"
@@ -202,7 +201,10 @@ func RunListRefunds(cmd *cobra.Command, args []string) {
 
 	disp := displayers.MollieRefundList{RefundList: refunds}
 
-	err = command.Display(getRefundsCols(cmd), disp.KV())
+	err = command.Display(
+		command.FilterColumns(parseFieldsFromFlag(cmd), refundsCols),
+		disp.KV(),
+	)
 	if err != nil {
 		logger.Fatal(err)
 	}
@@ -229,7 +231,10 @@ func RunGetRefund(cmd *cobra.Command, args []string) {
 		Refund: &r,
 	}
 
-	err = command.Display(getRefundsCols(cmd), disp.KV())
+	err = command.Display(
+		command.FilterColumns(parseFieldsFromFlag(cmd), refundsCols),
+		disp.KV(),
+	)
 	if err != nil {
 		logger.Fatal(err)
 	}
@@ -270,7 +275,10 @@ func RunCreateRefund(cmd *cobra.Command, args []string) {
 
 	disp := displayers.MollieRefund{Refund: &rs}
 
-	err = command.Display(getRefundsCols(cmd), disp.KV())
+	err = command.Display(
+		command.FilterColumns(parseFieldsFromFlag(cmd), refundsCols),
+		disp.KV(),
+	)
 	if err != nil {
 		logger.Fatal(err)
 	}
@@ -303,26 +311,4 @@ func getRefundList(opts *mollie.ListRefundOptions, payment string) (*mollie.Refu
 	}
 
 	return API.Refunds.ListRefund(opts)
-}
-
-func getRefundsCols(cmd *cobra.Command) []string {
-	var cols []string
-	{
-		cls := ParseStringFromFlags(cmd, FieldsArg)
-
-		if cls != "" {
-			cols = strings.Split(cls, ",")
-			if verbose {
-				PrintNonemptyFlagValue(FieldsArg, cls)
-			}
-		} else {
-			cols = refundsCols
-			if verbose {
-				logger.Info("returning all fields")
-			}
-		}
-
-	}
-
-	return cols
 }

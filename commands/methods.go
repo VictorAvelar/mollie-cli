@@ -1,8 +1,6 @@
 package commands
 
 import (
-	"strings"
-
 	"github.com/VictorAvelar/mollie-api-go/v2/mollie"
 	"github.com/spf13/cobra"
 
@@ -165,11 +163,14 @@ func RunListPaymentMethods(cmd *cobra.Command, args []string) {
 		logger.Infof("documentation: %s", ms.Links.Documentation.Href)
 	}
 
-	lpm := displayers.MollieListMethods{
+	disp := displayers.MollieListMethods{
 		ListMethods: ms,
 	}
 
-	err = command.Display(getMethodsCols(cmd), lpm.KV())
+	err = command.Display(
+		command.FilterColumns(parseFieldsFromFlag(cmd), methodsCols),
+		disp.KV(),
+	)
 	if err != nil {
 		logger.Fatal(err)
 	}
@@ -201,9 +202,12 @@ func RunGetAllMethods(cmd *cobra.Command, args []string) {
 		logger.Infof("documentation: %s", m.Links.Documentation.Href)
 	}
 
-	mdis := &displayers.MollieListMethods{ListMethods: m}
+	disp := &displayers.MollieListMethods{ListMethods: m}
 
-	err = command.Display(getMethodsCols(cmd), mdis.KV())
+	err = command.Display(
+		command.FilterColumns(parseFieldsFromFlag(cmd), methodsCols),
+		disp.KV(),
+	)
 	if err != nil {
 		logger.Fatal(err)
 	}
@@ -233,34 +237,15 @@ func RunGetPaymentMethods(cmd *cobra.Command, args []string) {
 		logger.Fatal(err)
 	}
 
-	mdis := &displayers.MollieMethod{
+	disp := &displayers.MollieMethod{
 		PaymentMethodInfo: m,
 	}
 
-	err = command.Display(getMethodsCols(cmd), mdis.KV())
+	err = command.Display(
+		command.FilterColumns(parseFieldsFromFlag(cmd), methodsCols),
+		disp.KV(),
+	)
 	if err != nil {
 		logger.Fatal(err)
 	}
-}
-
-func getMethodsCols(cmd *cobra.Command) []string {
-	var cols []string
-	{
-		cls := ParseStringFromFlags(cmd, FieldsArg)
-
-		if cls != "" {
-			cols = strings.Split(cls, ",")
-			if verbose {
-				PrintNonemptyFlagValue(FieldsArg, cls)
-			}
-		} else {
-			cols = methodsCols
-			if verbose {
-				logger.Info("returning all fields")
-			}
-		}
-
-	}
-
-	return cols
 }
