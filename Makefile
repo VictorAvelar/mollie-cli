@@ -1,10 +1,6 @@
 test:
-	@docker run --rm .
+	@docker build -t mollie-cli:latest -f Dockerfile .
 .PHONY: build
-
-run:
-	@docker run --rm mollie-cli:latest
-.PHONY: run
 
 lint:
 	@go version
