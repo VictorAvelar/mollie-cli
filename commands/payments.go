@@ -24,18 +24,18 @@ var (
 		"REFUNDED",
 		"CAPTURED",
 		"SETTLEMENT",
-		"APP FEE",
-		"CREATED AT",
-		"AUTHORIZED AT",
+		"APP_FEE",
+		"CREATED_AT",
+		"AUTHORIZED_AT",
 		"EXPIRES",
-		"PAID AT",
-		"FAILED AT",
-		"CANCELED AT",
-		"CUSTOMER ID",
-		"SETTLEMENT ID",
-		"MANDATE ID",
-		"SUBSCRIPTION ID",
-		"ORDER ID",
+		"PAID_AT",
+		"FAILED_AT",
+		"CANCELED_AT",
+		"CUSTOMER_ID",
+		"SETTLEMENT_ID",
+		"MANDATE_ID",
+		"SUBSCRIPTION_ID",
+		"ORDER_ID",
 		"REDIRECT",
 		"WEBHOOK",
 		"LOCALE",
@@ -265,7 +265,10 @@ func RunListPayments(cmd *cobra.Command, args []string) {
 		PaymentList: &ps,
 	}
 
-	err = command.Display(getPaymentCols(cmd), disp.KV())
+	err = command.Display(
+		command.FilterColumns(parseFieldsFromFlag(cmd), paymentsCols),
+		disp.KV(),
+	)
 	if err != nil {
 		logger.Fatal(err)
 	}
@@ -291,7 +294,11 @@ func RunGetPayment(cmd *cobra.Command, args []string) {
 
 	disp := displayers.MolliePayment{Payment: &p}
 
-	err = command.Display(getPaymentCols(cmd), disp.KV())
+	err = command.Display(
+		command.FilterColumns(parseFieldsFromFlag(cmd), paymentsCols),
+		disp.KV(),
+	)
+
 	if err != nil {
 		logger.Fatal(err)
 	}
