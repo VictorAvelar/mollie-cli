@@ -11,14 +11,17 @@ import (
 
 var (
 	refundsCols = []string{
+		"RESOURCE",
 		"ID",
-		"Payment",
-		"Order",
-		"Settlement",
-		"Amount",
-		"Status",
-		"Description",
-		"Created at",
+		"AMOUNT",
+		"SETTLEMENT_ID",
+		"SETTLEMENT_AMOUNT",
+		"DESCRIPTION",
+		"METADATA",
+		"STATUS",
+		"PAYMENT_ID",
+		"ORDER_ID",
+		"CREATED_AT",
 	}
 )
 
@@ -198,7 +201,10 @@ func RunListRefunds(cmd *cobra.Command, args []string) {
 
 	disp := displayers.MollieRefundList{RefundList: refunds}
 
-	err = command.Display(refundsCols, disp.KV())
+	err = command.Display(
+		command.FilterColumns(parseFieldsFromFlag(cmd), refundsCols),
+		disp.KV(),
+	)
 	if err != nil {
 		logger.Fatal(err)
 	}
@@ -225,7 +231,10 @@ func RunGetRefund(cmd *cobra.Command, args []string) {
 		Refund: &r,
 	}
 
-	err = command.Display(refundsCols, disp.KV())
+	err = command.Display(
+		command.FilterColumns(parseFieldsFromFlag(cmd), refundsCols),
+		disp.KV(),
+	)
 	if err != nil {
 		logger.Fatal(err)
 	}
@@ -266,7 +275,10 @@ func RunCreateRefund(cmd *cobra.Command, args []string) {
 
 	disp := displayers.MollieRefund{Refund: &rs}
 
-	err = command.Display(refundsCols, disp.KV())
+	err = command.Display(
+		command.FilterColumns(parseFieldsFromFlag(cmd), refundsCols),
+		disp.KV(),
+	)
 	if err != nil {
 		logger.Fatal(err)
 	}

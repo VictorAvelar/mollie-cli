@@ -81,15 +81,19 @@ func TestMollieProfileList_KV(t *testing.T) {
 }
 
 func expectProfileSlice(pfs ...*mollie.Profile) (out []map[string]interface{}) {
-	for _, r := range pfs {
+	for _, p := range pfs {
 		x := map[string]interface{}{
-			"ID":      r.ID,
-			"Name":    r.Name,
-			"Website": r.Website,
-			"Phone":   r.Phone,
-			"Status":  r.Status,
-			"Mode":    r.Mode,
-			"Since":   r.CreatedAt.Format("02-01-2006"),
+			"RESOURCE":      p.Resource,
+			"ID":            p.ID,
+			"MODE":          fallbackSafeMode(p.Mode),
+			"NAME":          p.Name,
+			"WEBSITE":       p.Website,
+			"EMAIL":         p.Email,
+			"PHONE":         p.Phone,
+			"CATEGORY_CODE": p.CategoryCode,
+			"STATUS":        p.Status,
+			"REVIEW":        p.Review.Status,
+			"CREATED_AT":    fallbackSafeDate(p.CreatedAt),
 		}
 
 		out = append(out, x)
