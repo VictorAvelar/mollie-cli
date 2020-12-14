@@ -139,3 +139,17 @@ func AddFlag(cmd *Command, config FlagConfig) {
 		}
 	}
 }
+
+// FilterColumns will check if the filterable flag is used
+// and return only the requested set of columns.
+//
+// It takes the string parsed from the filterable flag as
+// first argument and the default set of columns (default)
+// as second parameter.
+func FilterColumns(req string, def []string) []string {
+	if req != "" {
+		return strings.Split(req, ",")
+	}
+
+	return def
+}
