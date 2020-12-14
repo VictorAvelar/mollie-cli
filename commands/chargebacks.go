@@ -1,10 +1,24 @@
 package commands
 
 import (
+	"strings"
+
 	"github.com/VictorAvelar/mollie-api-go/v2/mollie"
 	"github.com/VictorAvelar/mollie-cli/commands/displayers"
 	"github.com/VictorAvelar/mollie-cli/internal/command"
 	"github.com/spf13/cobra"
+)
+
+var (
+	chargebacksCols = []string{
+		"RESOURCE",
+		"ID",
+		"AMOUNT",
+		"SETTLEMENT_AMOUNT",
+		"CREATED_AT",
+		"REVERSED_AT",
+		"PAYMENT_ID",
+	}
 )
 
 // Chargebacks creates the chargebacks commands tree.
@@ -91,7 +105,7 @@ func RunGetChargebacks(cmd *cobra.Command, args []string) {
 
 	display := &displayers.MollieChargeback{Chargeback: &cb}
 
-	err = command.Display([]string{"ID", "Payment", "Amount", "Settlement", "Created at"}, display.KV())
+	err = command.Display(getChargbackCols(cmd), display.KV())
 	if err != nil {
 		logger.Fatal(err)
 	}
@@ -124,8 +138,30 @@ func RunListChargebacks(cmd *cobra.Command, args []string) {
 
 	display := displayers.MollieChargebackList{ChargebackList: cbs}
 
-	err = command.Display([]string{"ID", "Payment", "Amount", "Settlement", "Created at"}, display.KV())
+	err = command.Display(getChargbackCols(cmd), display.KV())
 	if err != nil {
 		logger.Fatal(err)
 	}
+}
+
+func getChargbackCols(cmd *cobra.Command) []string {
+	var cols []string
+	{
+		cls := ParseStringFromFlags(cmd, FieldsArg)
+
+		if cls != "" {
+			cols = strings.Split(cls, ",")
+			if verbose {
+				PrintNonemptyFlagValue(FieldsArg, cls)
+			}
+		} else {
+			cols = chargebacksCols
+			if verbose {
+				logger.Info("returning all fields")
+			}
+		}
+
+	}
+
+	return cols
 }

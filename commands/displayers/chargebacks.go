@@ -11,13 +11,7 @@ type MollieChargeback struct {
 func (cb *MollieChargeback) KV() []map[string]interface{} {
 	var out []map[string]interface{}
 
-	x := map[string]interface{}{
-		"ID":         cb.ID,
-		"Payment":    cb.PaymentID,
-		"Amount":     stringCombinator(" ", cb.Amount.Value, cb.Amount.Currency),
-		"Settlement": stringCombinator(" ", cb.SettlementAmount.Value, cb.SettlementAmount.Currency),
-		"Created at": cb.CreatedAt.Format("02-01-2006"),
-	}
+	x := buildXChargeback(cb.Chargeback)
 
 	out = append(out, x)
 
@@ -34,16 +28,22 @@ func (lp *MollieChargebackList) KV() []map[string]interface{} {
 	var out []map[string]interface{}
 
 	for _, p := range lp.Embedded.Chargebacks {
-		x := map[string]interface{}{
-			"ID":         p.ID,
-			"Payment":    p.PaymentID,
-			"Amount":     stringCombinator(" ", p.Amount.Value, p.Amount.Currency),
-			"Settlement": stringCombinator(" ", p.SettlementAmount.Value, p.SettlementAmount.Currency),
-			"Created at": p.CreatedAt.Format("02-01-2006"),
-		}
+		x := buildXChargeback(&p)
 
 		out = append(out, x)
 	}
 
 	return out
+}
+
+func buildXChargeback(cb *mollie.Chargeback) map[string]interface{} {
+	return map[string]interface{}{
+		"RESOURCE":          cb.Resource,
+		"ID":                cb.ID,
+		"AMOUNT":            fallbackSafeAmount(cb.Amount),
+		"SETTLEMENT_AMOUNT": fallbackSafeAmount(cb.SettlementAmount),
+		"CREATED_AT":        fallbackSafeDate(cb.CreatedAt),
+		"REVERSED_AT":       fallbackSafeDate(cb.ReversedAt),
+		"PAYMENT_ID":        cb.PaymentID,
+	}
 }
