@@ -1,5 +1,5 @@
-build:
-	@docker build -t mollie-cli:latest -f Dockerfile .
+test:
+	@docker run --rm .
 .PHONY: build
 
 run:
@@ -15,9 +15,6 @@ lint:
 	@echo "Running go vet"
 	@go vet ./...
 .PHONY: lint
-
-test: run
-.PHONY: test
 
 test-local:
 	@go test -v ./... -coverprofile cover.out
