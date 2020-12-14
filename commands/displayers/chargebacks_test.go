@@ -74,11 +74,13 @@ func TestMollieListChargebacks(t *testing.T) {
 func expectedChargebackSlice(cbs ...mollie.Chargeback) (out []map[string]interface{}) {
 	for _, c := range cbs {
 		x := map[string]interface{}{
-			"ID":         c.ID,
-			"Payment":    c.PaymentID,
-			"Amount":     stringCombinator(" ", c.Amount.Value, c.Amount.Currency),
-			"Settlement": stringCombinator(" ", c.SettlementAmount.Value, c.SettlementAmount.Currency),
-			"Created at": c.CreatedAt.Format("02-01-2006"),
+			"RESOURCE":          c.Resource,
+			"ID":                c.ID,
+			"AMOUNT":            fallbackSafeAmount(c.Amount),
+			"SETTLEMENT_AMOUNT": fallbackSafeAmount(c.SettlementAmount),
+			"CREATED_AT":        fallbackSafeDate(c.CreatedAt),
+			"REVERSED_AT":       fallbackSafeDate(c.ReversedAt),
+			"PAYMENT_ID":        c.PaymentID,
 		}
 
 		out = append(out, x)
