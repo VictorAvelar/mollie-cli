@@ -13,7 +13,7 @@ import (
 )
 
 const (
-	version string = "v0.0.0-alpha-filterable"
+	version string = "v0.7.0"
 )
 
 var (
