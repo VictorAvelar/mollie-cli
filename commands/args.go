@@ -10,6 +10,7 @@ const (
 	CustomerIDArg     = "customer"
 	DescriptionArg    = "description"
 	EmbedArg          = "embed"
+	FieldsArg         = "fields"
 	FromArg           = "from"
 	IDArg             = "id"
 	IncludeArg        = "include"

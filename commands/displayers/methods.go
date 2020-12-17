@@ -1,8 +1,6 @@
 package displayers
 
 import (
-	"strings"
-
 	"github.com/VictorAvelar/mollie-api-go/v2/mollie"
 )
 
@@ -16,14 +14,7 @@ func (mlm *MollieListMethods) KV() []map[string]interface{} {
 	var out []map[string]interface{}
 
 	for _, pm := range mlm.Embedded.Methods {
-		ma := safeDisplayableAmount(pm.MinimumAmount)
-		max := safeDisplayableAmount(pm.MaximumAmount)
-		x := map[string]interface{}{
-			"ID":             pm.ID,
-			"Name":           pm.Description,
-			"Minimum Amount": stringCombinator(" ", ma.Value, ma.Currency),
-			"Maximum Amount": stringCombinator(" ", max.Value, max.Currency),
-		}
+		x := buildXMethod(pm)
 
 		out = append(out, x)
 	}
@@ -40,19 +31,22 @@ type MollieMethod struct {
 func (pm *MollieMethod) KV() []map[string]interface{} {
 	var out []map[string]interface{}
 
-	ma := safeDisplayableAmount(pm.MinimumAmount)
-	max := safeDisplayableAmount(pm.MaximumAmount)
-
-	x := map[string]interface{}{
-		"ID":             pm.ID,
-		"Name":           pm.Description,
-		"Minimum Amount": stringCombinator(" ", ma.Value, ma.Currency),
-		"Maximum Amount": stringCombinator(" ", max.Value, max.Currency),
-	}
+	x := buildXMethod(pm.PaymentMethodInfo)
 
 	out = append(out, x)
 
 	return out
+}
+
+func buildXMethod(m *mollie.PaymentMethodInfo) map[string]interface{} {
+	return map[string]interface{}{
+		"RESOURCE":    m.Resource,
+		"ID":          m.ID,
+		"DESCRIPTION": m.Description,
+		"MIN_AMOUNT":  fallbackSafeAmount(m.MinimumAmount),
+		"MAX_AMOUNT":  fallbackSafeAmount(m.MaximumAmount),
+		"LOGO":        m.Image.Size1x,
+	}
 }
 
 func safeDisplayableAmount(a *mollie.Amount) *mollie.Amount {
@@ -64,13 +58,4 @@ func safeDisplayableAmount(a *mollie.Amount) *mollie.Amount {
 	}
 
 	return a
-}
-
-func stringCombinator(sep string, vals ...string) string {
-	for i, v := range vals {
-		if v == "" {
-			vals[i] = "-"
-		}
-	}
-	return strings.Join(vals, sep)
 }

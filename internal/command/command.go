@@ -53,6 +53,16 @@ func Builder(parent *Command, config Config, cols []string) *Command {
 		parent.AddCommand(c)
 	}
 
+	AddFlag(
+		c,
+		FlagConfig{
+			Name:       "fields",
+			Persistent: true,
+			Shorthand:  "f",
+			Usage:      "select displayable fields to filter the console output",
+		},
+	)
+
 	return c
 }
 
@@ -128,4 +138,18 @@ func AddFlag(cmd *Command, config FlagConfig) {
 			logrus.Error(err)
 		}
 	}
+}
+
+// FilterColumns will check if the filterable flag is used
+// and return only the requested set of columns.
+//
+// It takes the string parsed from the filterable flag as
+// first argument and the default set of columns (default)
+// as second parameter.
+func FilterColumns(req string, def []string) []string {
+	if req != "" {
+		return strings.Split(req, ",")
+	}
+
+	return def
 }

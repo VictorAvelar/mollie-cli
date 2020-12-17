@@ -39,18 +39,26 @@ func TestStringCombinator(t *testing.T) {
 func TestMollieMethod_KV(t *testing.T) {
 	disp := MollieMethod{
 		&mollie.PaymentMethodInfo{
+			Resource:      "methods",
 			ID:            "ideal",
 			Description:   "iDeal payments",
 			MinimumAmount: &mollie.Amount{Value: "10.00", Currency: "EUR"},
 			MaximumAmount: &mollie.Amount{Value: "100.00", Currency: "EUR"},
+			Image: &mollie.Image{
+				Size1x: "https://victoravelar.com/logo-example/1.png",
+				Size2X: "https://victoravelar.com/logo-example/2x.png",
+				Svg:    "https://victoravelar.com/logo-example/logo.svg",
+			},
 		},
 	}
 
 	w := map[string]interface{}{
-		"ID":             "ideal",
-		"Name":           "iDeal payments",
-		"Minimum Amount": "10.00 EUR",
-		"Maximum Amount": "100.00 EUR",
+		"DESCRIPTION": "iDeal payments",
+		"ID":          "ideal",
+		"LOGO":        "https://victoravelar.com/logo-example/1.png",
+		"MAX_AMOUNT":  "100.00 EUR",
+		"MIN_AMOUNT":  "10.00 EUR",
+		"RESOURCE":    "methods",
 	}
 
 	want := []map[string]interface{}{}
@@ -64,16 +72,28 @@ func TestMollieListMethods(t *testing.T) {
 	meths = append(
 		meths,
 		&mollie.PaymentMethodInfo{
+			Resource:      "methods",
 			ID:            "ideal",
 			Description:   "iDeal payments",
 			MinimumAmount: &mollie.Amount{Value: "10.00", Currency: "EUR"},
 			MaximumAmount: &mollie.Amount{Value: "100.00", Currency: "EUR"},
+			Image: &mollie.Image{
+				Size1x: "https://victoravelar.com/logo-example/1.png",
+				Size2X: "https://victoravelar.com/logo-example/2x.png",
+				Svg:    "https://victoravelar.com/logo-example/logo.svg",
+			},
 		},
 		&mollie.PaymentMethodInfo{
+			Resource:      "methods",
 			ID:            "paypal",
-			Description:   "PayPal",
-			MinimumAmount: &mollie.Amount{Value: "0.01", Currency: "EUR"},
+			Description:   "Paypal",
+			MinimumAmount: &mollie.Amount{Value: "10.00", Currency: "EUR"},
 			MaximumAmount: nil,
+			Image: &mollie.Image{
+				Size1x: "https://victoravelar.com/logo-example/1.png",
+				Size2X: "https://victoravelar.com/logo-example/2x.png",
+				Svg:    "https://victoravelar.com/logo-example/logo.svg",
+			},
 		})
 	disp := MollieListMethods{
 		ListMethods: &mollie.ListMethods{
@@ -91,16 +111,20 @@ func TestMollieListMethods(t *testing.T) {
 	var want []map[string]interface{}
 
 	w1 := map[string]interface{}{
-		"ID":             "ideal",
-		"Name":           "iDeal payments",
-		"Minimum Amount": "10.00 EUR",
-		"Maximum Amount": "100.00 EUR",
+		"DESCRIPTION": "iDeal payments",
+		"ID":          "ideal",
+		"LOGO":        "https://victoravelar.com/logo-example/1.png",
+		"MAX_AMOUNT":  "100.00 EUR",
+		"MIN_AMOUNT":  "10.00 EUR",
+		"RESOURCE":    "methods",
 	}
 	w2 := map[string]interface{}{
-		"ID":             "paypal",
-		"Name":           "PayPal",
-		"Minimum Amount": "0.01 EUR",
-		"Maximum Amount": "----- ---",
+		"DESCRIPTION": "Paypal",
+		"ID":          "paypal",
+		"LOGO":        "https://victoravelar.com/logo-example/1.png",
+		"MAX_AMOUNT":  "--- ---",
+		"MIN_AMOUNT":  "10.00 EUR",
+		"RESOURCE":    "methods",
 	}
 
 	want = append(want, w1, w2)

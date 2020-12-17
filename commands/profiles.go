@@ -9,13 +9,17 @@ import (
 
 var (
 	profileCols = []string{
+		"RESOURCE",
 		"ID",
-		"Name",
-		"Website",
-		"Phone",
-		"Status",
-		"Mode",
-		"Since",
+		"MODE",
+		"NAME",
+		"WEBSITE",
+		"EMAIL",
+		"PHONE",
+		"CATEGORY_CODE",
+		"STATUS",
+		"REVIEW",
+		"CREATED_AT",
 	}
 )
 
@@ -73,9 +77,12 @@ func RunCurrentProfile(cmd *cobra.Command, args []string) {
 		logger.Infof("request target: %s", p.Links.Self.Href)
 	}
 
-	mp := displayers.MollieProfile{Profile: p}
+	disp := displayers.MollieProfile{Profile: p}
 
-	err = command.Display(profileCols, mp.KV())
+	err = command.Display(
+		command.FilterColumns(parseFieldsFromFlag(cmd), profileCols),
+		disp.KV(),
+	)
 	if err != nil {
 		logger.Error(err)
 	}
@@ -98,9 +105,12 @@ func RunGetProfile(cmd *cobra.Command, args []string) {
 		logger.Infof("request target: %s", p.Links.Self.Href)
 	}
 
-	mp := displayers.MollieProfile{Profile: p}
+	disp := displayers.MollieProfile{Profile: p}
 
-	err = command.Display(profileCols, mp.KV())
+	err = command.Display(
+		command.FilterColumns(parseFieldsFromFlag(cmd), profileCols),
+		disp.KV(),
+	)
 	if err != nil {
 		logger.Error(err)
 	}

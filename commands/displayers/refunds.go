@@ -12,16 +12,7 @@ func (mrl *MollieRefundList) KV() []map[string]interface{} {
 	var out []map[string]interface{}
 
 	for _, r := range mrl.Embedded.Refunds {
-		x := map[string]interface{}{
-			"ID":          r.ID,
-			"Payment":     r.PaymentID,
-			"Order":       r.OrderID,
-			"Settlement":  r.SettlementID,
-			"Amount":      stringCombinator(" ", r.Amount.Value, r.Amount.Currency),
-			"Status":      r.Status,
-			"Description": r.Description,
-			"Created at":  r.CreatedAt.Format("02-01-2006"),
-		}
+		x := buildXRefund(r)
 
 		out = append(out, x)
 	}
@@ -38,18 +29,25 @@ type MollieRefund struct {
 func (mr *MollieRefund) KV() []map[string]interface{} {
 	var out []map[string]interface{}
 
-	x := map[string]interface{}{
-		"ID":          mr.ID,
-		"Payment":     mr.PaymentID,
-		"Order":       mr.OrderID,
-		"Settlement":  mr.SettlementID,
-		"Amount":      stringCombinator(" ", mr.Amount.Value, mr.Amount.Currency),
-		"Status":      mr.Status,
-		"Description": mr.Description,
-		"Created at":  mr.CreatedAt.Format("02-01-2006"),
-	}
+	x := buildXRefund(mr.Refund)
 
 	out = append(out, x)
 
 	return out
+}
+
+func buildXRefund(r *mollie.Refund) map[string]interface{} {
+	return map[string]interface{}{
+		"RESOURCE":          r.Resource,
+		"ID":                r.ID,
+		"AMOUNT":            fallbackSafeAmount(r.Amount),
+		"SETTLEMENT_ID":     r.SettlementID,
+		"SETTLEMENT_AMOUNT": fallbackSafeAmount(r.SettlementAmount),
+		"DESCRIPTION":       r.Description,
+		"METADATA":          r.Metadata,
+		"STATUS":            r.Status,
+		"PAYMENT_ID":        r.PaymentID,
+		"ORDER_ID":          r.OrderID,
+		"CREATED_AT":        fallbackSafeDate(r.CreatedAt),
+	}
 }

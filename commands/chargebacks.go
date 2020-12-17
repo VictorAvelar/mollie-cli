@@ -7,6 +7,18 @@ import (
 	"github.com/spf13/cobra"
 )
 
+var (
+	chargebacksCols = []string{
+		"RESOURCE",
+		"ID",
+		"AMOUNT",
+		"SETTLEMENT_AMOUNT",
+		"CREATED_AT",
+		"REVERSED_AT",
+		"PAYMENT_ID",
+	}
+)
+
 // Chargebacks creates the chargebacks commands tree.
 func Chargebacks() *command.Command {
 	cb := command.Builder(
@@ -89,9 +101,12 @@ func RunGetChargebacks(cmd *cobra.Command, args []string) {
 		logger.Infof("request docs: %s", cb.Links.Documentation.Href)
 	}
 
-	display := &displayers.MollieChargeback{Chargeback: &cb}
+	disp := &displayers.MollieChargeback{Chargeback: &cb}
 
-	err = command.Display([]string{"ID", "Payment", "Amount", "Settlement", "Created at"}, display.KV())
+	err = command.Display(
+		command.FilterColumns(parseFieldsFromFlag(cmd), chargebacksCols),
+		disp.KV(),
+	)
 	if err != nil {
 		logger.Fatal(err)
 	}
@@ -122,9 +137,12 @@ func RunListChargebacks(cmd *cobra.Command, args []string) {
 		logger.Infof("request docs: %s", cbs.Links.Documentation.Href)
 	}
 
-	display := displayers.MollieChargebackList{ChargebackList: cbs}
+	disp := displayers.MollieChargebackList{ChargebackList: cbs}
 
-	err = command.Display([]string{"ID", "Payment", "Amount", "Settlement", "Created at"}, display.KV())
+	err = command.Display(
+		command.FilterColumns(parseFieldsFromFlag(cmd), chargebacksCols),
+		disp.KV(),
+	)
 	if err != nil {
 		logger.Fatal(err)
 	}

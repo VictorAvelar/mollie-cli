@@ -10,10 +10,12 @@ import (
 
 var (
 	methodsCols = []string{
+		"RESOURCE",
 		"ID",
-		"Name",
-		"Minimum Amount",
-		"Maximum Amount",
+		"DESCRIPTION",
+		"MIN_AMOUNT",
+		"MAX_AMOUNT",
+		"LOGO",
 	}
 )
 
@@ -26,7 +28,7 @@ func Methods() *command.Command {
 			Aliases:   []string{"meth", "vendors"},
 			ShortDesc: "All payment methods that Mollie offers and can be activated",
 		},
-		noCols,
+		methodsCols,
 	)
 
 	lm := command.Builder(
@@ -161,11 +163,14 @@ func RunListPaymentMethods(cmd *cobra.Command, args []string) {
 		logger.Infof("documentation: %s", ms.Links.Documentation.Href)
 	}
 
-	lpm := displayers.MollieListMethods{
+	disp := displayers.MollieListMethods{
 		ListMethods: ms,
 	}
 
-	err = command.Display(methodsCols, lpm.KV())
+	err = command.Display(
+		command.FilterColumns(parseFieldsFromFlag(cmd), methodsCols),
+		disp.KV(),
+	)
 	if err != nil {
 		logger.Fatal(err)
 	}
@@ -197,9 +202,12 @@ func RunGetAllMethods(cmd *cobra.Command, args []string) {
 		logger.Infof("documentation: %s", m.Links.Documentation.Href)
 	}
 
-	mdis := &displayers.MollieListMethods{ListMethods: m}
+	disp := &displayers.MollieListMethods{ListMethods: m}
 
-	err = command.Display(methodsCols, mdis.KV())
+	err = command.Display(
+		command.FilterColumns(parseFieldsFromFlag(cmd), methodsCols),
+		disp.KV(),
+	)
 	if err != nil {
 		logger.Fatal(err)
 	}
@@ -229,11 +237,14 @@ func RunGetPaymentMethods(cmd *cobra.Command, args []string) {
 		logger.Fatal(err)
 	}
 
-	mdis := &displayers.MollieMethod{
+	disp := &displayers.MollieMethod{
 		PaymentMethodInfo: m,
 	}
 
-	err = command.Display(methodsCols, mdis.KV())
+	err = command.Display(
+		command.FilterColumns(parseFieldsFromFlag(cmd), methodsCols),
+		disp.KV(),
+	)
 	if err != nil {
 		logger.Fatal(err)
 	}
