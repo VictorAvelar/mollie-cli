@@ -10,4 +10,4 @@ RUN go mod download
 
 COPY . .
 
-RUN go test -v ./...
+ENTRYPOINT [ "go", "test", "./...", "-v"]
