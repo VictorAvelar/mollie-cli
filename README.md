@@ -23,7 +23,7 @@ It is based on the [mollie-api-go](https://github.com/VictorAvelar/mollie-api-go
 - [ ] Captures
 - [ ] Orders
 - [ ] Shipments
-- [ ] Customers
+- [x] Customers
 - [ ] Mandates
 - [ ] Subscriptions
 - [ ] Connect
