@@ -1,10 +1,10 @@
 package commands
 
 import (
-	"fmt"
 	"strconv"
 
 	"github.com/VictorAvelar/mollie-api-go/v2/mollie"
+	"github.com/VictorAvelar/mollie-cli/commands/displayers"
 	"github.com/VictorAvelar/mollie-cli/internal/command"
 	"github.com/spf13/cobra"
 )
@@ -184,12 +184,25 @@ func RunGetCustomer(cmd *cobra.Command, args []string) {
 		logger.Infof("request docs: %s", c.Links.Documentation.Href)
 	}
 
-	fmt.Printf("%+v", c)
+	disp := displayers.MollieCustomer{
+		Customer: c,
+	}
+
+	err = command.Display(
+		command.FilterColumns(
+			parseFieldsFromFlag(cmd),
+			customerCols,
+		),
+		disp.KV(),
+	)
+	if err != nil {
+		logger.Fatal(err)
+	}
 }
 
 // RunListCustomers retrieves all the created customers for the account.
 func RunListCustomers(cmd *cobra.Command, args []string) {
-	var opts *mollie.ListCustomersOptions
+	var opts mollie.ListCustomersOptions
 	{
 		opts.Limit = ParseIntFromFlags(cmd, LimitArg)
 		opts.From = ParseStringFromFlags(cmd, FromArg)
@@ -200,7 +213,7 @@ func RunListCustomers(cmd *cobra.Command, args []string) {
 		PrintNonemptyFlagValue(FromArg, opts.From)
 	}
 
-	cl, err := API.Customers.List(opts)
+	cl, err := API.Customers.List(&opts)
 	if err != nil {
 		logger.Fatal(err)
 	}
@@ -210,7 +223,20 @@ func RunListCustomers(cmd *cobra.Command, args []string) {
 		logger.Infof("request docs: %s", cl.Links.Documentation.Href)
 	}
 
-	fmt.Printf("%+v", cl)
+	disp := displayers.MollieCustomerList{
+		CustomersList: cl,
+	}
+
+	err = command.Display(
+		command.FilterColumns(
+			parseFieldsFromFlag(cmd),
+			customerCols,
+		),
+		disp.KV(),
+	)
+	if err != nil {
+		logger.Fatal(err)
+	}
 }
 
 // RunCreateCustomer creates a simple minimal representation of a customer.
@@ -220,7 +246,7 @@ func RunCreateCustomer(cmd *cobra.Command, args []string) {
 		name := ParseStringFromFlags(cmd, NameArg)
 		email := ParseStringFromFlags(cmd, EmailArg)
 		locale := ParseStringFromFlags(cmd, LocaleArg)
-		meta := ParseStringFromFlags(cmd, LocaleArg)
+		meta := ParseStringFromFlags(cmd, MetadataArg)
 
 		if verbose {
 			PrintNonemptyFlagValue(NameArg, name)
@@ -247,7 +273,20 @@ func RunCreateCustomer(cmd *cobra.Command, args []string) {
 		logger.Infof("request docs: %s", nc.Links.Documentation.Href)
 	}
 
-	fmt.Printf("%+v", nc)
+	disp := displayers.MollieCustomer{
+		Customer: nc,
+	}
+
+	err = command.Display(
+		command.FilterColumns(
+			parseFieldsFromFlag(cmd),
+			customerCols,
+		),
+		disp.KV(),
+	)
+	if err != nil {
+		logger.Fatal(err)
+	}
 }
 
 // RunUpdateCustomer updates an existing customer.
@@ -287,7 +326,20 @@ func RunUpdateCustomer(cmd *cobra.Command, args []string) {
 		logger.Infof("request docs: %s", uc.Links.Documentation.Href)
 	}
 
-	fmt.Printf("%+v", uc)
+	disp := displayers.MollieCustomer{
+		Customer: uc,
+	}
+
+	err = command.Display(
+		command.FilterColumns(
+			parseFieldsFromFlag(cmd),
+			customerCols,
+		),
+		disp.KV(),
+	)
+	if err != nil {
+		logger.Fatal(err)
+	}
 }
 
 // RunDeleteCustomer removes a customer by its id/token.
@@ -307,5 +359,5 @@ func RunDeleteCustomer(cmd *cobra.Command, args []string) {
 		logger.Infof("removed customer with id/token: %s", id)
 	}
 
-	fmt.Printf("%+v", id)
+	logger.Info("customer successfully removed")
 }
