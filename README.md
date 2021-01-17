@@ -20,7 +20,7 @@ It is based on the [mollie-api-go](https://github.com/VictorAvelar/mollie-api-go
 - [x] Methods
 - [x] Refunds
 - [x] Chargebacks
-- [ ] Captures
+- [x] Captures
 - [ ] Orders
 - [ ] Shipments
 - [x] Customers
