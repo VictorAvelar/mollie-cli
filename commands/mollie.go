@@ -13,7 +13,7 @@ import (
 )
 
 const (
-	version string = "v0.8.0"
+	version string = "v0.9.0"
 )
 
 var (
@@ -132,6 +132,7 @@ func addCommands() {
 	MollieCmd.AddCommand(Chargebacks())
 	MollieCmd.AddCommand(Refunds())
 	MollieCmd.AddCommand(Customers())
+	MollieCmd.AddCommand(Captures())
 
 	// Tooling
 	MollieCmd.AddCommand(Version())
