@@ -3,6 +3,12 @@ on:
   push:
     branches:
       - master
+    paths:
+      - "commands/**.go"
+      - "internal/**/*.go"
+      - "pkg/**/*.go"
+      - "cmd/*/*.go"
+      - "go.*"
   pull_request:
 jobs:
   golangci:
