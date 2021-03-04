@@ -22,6 +22,7 @@ const (
 	MethodArg         = "method"
 	NameArg           = "name"
 	PaymentArg        = "payment"
+	PermissionArg     = "permission"
 	RedirectURLArg    = "redirect-to"
 	RPMToCountryArg   = "restrict-payment-to-country"
 	ResourceArg       = "resource"
