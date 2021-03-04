@@ -133,6 +133,7 @@ func addCommands() {
 	MollieCmd.AddCommand(Refunds())
 	MollieCmd.AddCommand(Customers())
 	MollieCmd.AddCommand(Captures())
+	MollieCmd.AddCommand(Permissions())
 
 	// Tooling
 	MollieCmd.AddCommand(Version())
