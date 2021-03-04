@@ -2,20 +2,23 @@
 
 ### :warning: WIP
 
-The Mollie CLI helps you build, test, and manage your Mollie integration right from the terminal. 
+The Mollie CLI helps you build, test, and manage your Mollie integration right from the terminal.
 
-It is based on the [mollie-api-go](https://github.com/VictorAvelar/mollie-api-go) wrapper and attempts to ease the integration process with Mollie. 
+It is based on the [mollie-api-go](https://github.com/VictorAvelar/mollie-api-go) wrapper and attempts to ease the integration process with Mollie.
 
 ##### This project is inspired by the doctl implementation.
 
 # Roadmap
 
 ## Authentication
+
 - [x] API token authentication
-- [ ] Organization token authentication
+- [x] Organization token authentication
+- [x] Custom env variable authentication
 - [ ] Mollie connect OAuth2
 
 ## Resources
+
 - [x] Payments
 - [x] Methods
 - [x] Refunds
@@ -27,7 +30,7 @@ It is based on the [mollie-api-go](https://github.com/VictorAvelar/mollie-api-go
 - [ ] Mandates
 - [ ] Subscriptions
 - [ ] Connect
-- [ ] Permissions
+- [x] Permissions
 - [ ] Organizations
 - [x] Profiles
 - [ ] Onboarding
@@ -36,4 +39,5 @@ It is based on the [mollie-api-go](https://github.com/VictorAvelar/mollie-api-go
 - [ ] Miscellaneous
 
 ## Utilities
+
 - [x] Browse - Opens Mollie related resources on a web browser.

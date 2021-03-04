@@ -20,4 +20,5 @@ changelog:
     exclude:
       - docs
       - changelog
+      - Readme
       - ^Merge pull request
