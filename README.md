@@ -35,7 +35,7 @@ It is based on the [mollie-api-go](https://github.com/VictorAvelar/mollie-api-go
 - [x] Profiles
 - [ ] Onboarding
 - [ ] Settlements
-- [ ] Invoices
+- [x] Invoices
 - [ ] Miscellaneous
 
 ## Utilities
