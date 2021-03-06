@@ -74,6 +74,7 @@ func Invoices() *command.Command {
 		i,
 		command.Config{
 			Namespace: "get",
+			Execute:   RunGetInvoice,
 			Example:   "mollie invoices get",
 			LongDesc: `Retrieve details of an invoice, using the invoice’s identifier.
 If you want to retrieve the details of an invoice by its invoice number, 
