@@ -75,7 +75,7 @@ func Invoices() *command.Command {
 		command.Config{
 			Namespace: "get",
 			Execute:   RunGetInvoice,
-			Example:   "mollie invoices get",
+			Example:   "mollie invoices get --id inv_test",
 			LongDesc: `Retrieve details of an invoice, using the invoice’s identifier.
 If you want to retrieve the details of an invoice by its invoice number, 
 use the list endpoint with the reference parameter.`,
