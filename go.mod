@@ -3,7 +3,7 @@ module github.com/VictorAvelar/mollie-cli
 go 1.15
 
 require (
-	github.com/VictorAvelar/mollie-api-go/v2 v2.5.1
+	github.com/VictorAvelar/mollie-api-go/v2 v2.8.0
 	github.com/mitchellh/go-homedir v1.1.0
 	github.com/sirupsen/logrus v1.8.0
 	github.com/spf13/cobra v1.1.3
