@@ -2,6 +2,7 @@ package commands
 
 import (
 	"github.com/VictorAvelar/mollie-api-go/v2/mollie"
+	"github.com/avocatl/admiral/pkg/commander"
 	"github.com/spf13/cobra"
 
 	"github.com/VictorAvelar/mollie-cli/commands/displayers"
@@ -20,63 +21,37 @@ var (
 )
 
 // Methods builds the methods commands tree.
-func Methods() *command.Command {
-	m := command.Builder(
-		nil,
-		command.Config{
-			Namespace: "methods",
-			Aliases:   []string{"meth", "vendors"},
-			ShortDesc: "All payment methods that Mollie offers and can be activated",
-		},
-		methodsCols,
-	)
+func Methods() *commander.Command {
+	m := commander.Builder(nil, commander.Config{
+		Namespace: "methods",
+		Aliases:   []string{"vendors", "meths"},
+		ShortDesc: "All payment methods that Mollie offers and can be activated",
+	}, methodsCols)
 
-	lm := command.Builder(
+	lm := commander.Builder(
 		m,
-		command.Config{
+		commander.Config{
 			Namespace: "list",
 			ShortDesc: "Retrieves all enabled payment methods",
-			Execute:   RunListPaymentMethods,
 			Example:   "mollie methods list --locale=de_DE --sequence-type=recurring",
+			Execute:   RunListPaymentMethods,
 		},
 		methodsCols,
 	)
-	command.AddFlag(lm, command.FlagConfig{
-		Name:  LocaleArg,
-		Usage: "get the payment method name in the corresponding language",
-	})
-	command.AddFlag(lm, command.FlagConfig{
-		Name:  SequenceTypeArg,
-		Usage: "filter methods by sequence type (oneoff, first, recurring)",
-	})
-	command.AddFlag(lm, command.FlagConfig{
-		Name:  AmountCurrencyArg,
-		Usage: "get only payment methods that support the amount and currency (linked to amount-value)",
-	})
-	command.AddFlag(lm, command.FlagConfig{
-		Name:  AmountValueArg,
-		Usage: "get only payment methods that support the amount and currency (linked to amount-currency)",
-	})
-	command.AddFlag(lm, command.FlagConfig{
-		Name:  ResourceArg,
-		Usage: "filter for methods that can be used in combination with the provided resource (orders/payments)",
-	})
-	command.AddFlag(lm, command.FlagConfig{
-		Name:  BillingCountryArg,
-		Usage: "filter for methods supporting the ISO-3166 alpha-2 customer billing country",
-	})
-	command.AddFlag(lm, command.FlagConfig{
-		Name:  WalletsArg,
-		Usage: "a comma-separated list of the wallets you support in your checkout (applepay)",
-	})
+	AddResourceFlag(lm)
+	AddSequenceTypeFlag(lm)
+	AddCurrencyFlags(lm)
+	AddLocaleFlag(lm)
+	AddBillingCountryFlag(lm)
+	AddWalletFlag(lm)
 
-	ga := command.Builder(
+	ga := commander.Builder(
 		m,
-		command.Config{
+		commander.Config{
 			Namespace: "all",
 			ShortDesc: "Retrieve all payment methods that Mollie offers and can be activated by the Organization.",
-			LongDesc: `Retrieve all payment methods that Mollie offers and can be activated by the Organization. 
-The results are not paginated. New payment methods can be activated via the Enable payment method 
+			LongDesc: `Retrieve all payment methods that Mollie offers and can be activated by the Organization.
+The results are not paginated. New payment methods can be activated via the Enable payment method
 endpoint in the Profiles API.`,
 			Execute: RunGetAllMethods,
 			Example: "mollie methods all --locale=nl_NL",
@@ -84,27 +59,17 @@ endpoint in the Profiles API.`,
 		methodsCols,
 	)
 
-	command.AddFlag(ga, command.FlagConfig{
-		Name:  LocaleArg,
-		Usage: "get the payment method name in the corresponding language",
-	})
-	command.AddFlag(ga, command.FlagConfig{
-		Name:  AmountCurrencyArg,
-		Usage: "get only payment methods that support the amount and currency (linked to amount-value)",
-	})
-	command.AddFlag(ga, command.FlagConfig{
-		Name:  AmountValueArg,
-		Usage: "get only payment methods that support the amount and currency (linked to amount-currency)",
-	})
+	AddLocaleFlag(ga)
+	AddCurrencyFlags(ga)
 
-	gm := command.Builder(
+	gm := commander.Builder(
 		m,
-		command.Config{
+		commander.Config{
 			Namespace: "get",
 			ShortDesc: "Retrieve a single method by its ID.",
-			LongDesc: `Retrieve a single method by its ID. Note that if a method is not available on the website profile 
-a status 404 Not found is returned. When the method is not enabled,a status 403 Forbidden 
-is returned. You can enable payments methods via the Enable payment method endpoint in the 
+			LongDesc: `Retrieve a single method by its ID. Note that if a method is not available on the website profile
+a status 404 Not found is returned. When the method is not enabled,a status 403 Forbidden
+is returned. You can enable payments methods via the Enable payment method endpoint in the
 Profiles API, or via your Mollie Dashboard.`,
 			Execute: RunGetPaymentMethods,
 			Example: "mollie methods get --id=creditcard --locale=pt_PT",
@@ -112,19 +77,8 @@ Profiles API, or via your Mollie Dashboard.`,
 		methodsCols,
 	)
 
-	command.AddFlag(gm, command.FlagConfig{
-		Name:     IDArg,
-		Usage:    "the payment method id",
-		Required: true,
-	})
-	command.AddFlag(gm, command.FlagConfig{
-		Name:  LocaleArg,
-		Usage: "get the payment method name in the corresponding language",
-	})
-	command.AddFlag(gm, command.FlagConfig{
-		Name:  CurrencyArg,
-		Usage: "the currency to receiving the minimumAmount and maximumAmount in",
-	})
+	AddIDFlag(gm, true)
+	AddCurrencyFlags(gm)
 
 	return m
 }
