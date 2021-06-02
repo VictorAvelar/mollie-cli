@@ -1,12 +1,15 @@
 package commands
 
 import (
+	"fmt"
+
 	"github.com/VictorAvelar/mollie-api-go/v2/mollie"
 	"github.com/avocatl/admiral/pkg/commander"
+	"github.com/avocatl/admiral/pkg/display"
+	"github.com/avocatl/admiral/pkg/prompter"
 	"github.com/spf13/cobra"
 
 	"github.com/VictorAvelar/mollie-cli/commands/displayers"
-	"github.com/VictorAvelar/mollie-cli/internal/command"
 )
 
 var (
@@ -14,6 +17,7 @@ var (
 		"RESOURCE",
 		"ID",
 		"DESCRIPTION",
+		"ISSUERS",
 		"MIN_AMOUNT",
 		"MAX_AMOUNT",
 		"LOGO",
@@ -28,13 +32,19 @@ func Methods() *commander.Command {
 		ShortDesc: "All payment methods that Mollie offers and can be activated",
 	}, methodsCols)
 
+	AddIncludeFlag(m, true)
+	AddPrompterFlag(m, true)
+
 	lm := commander.Builder(
 		m,
 		commander.Config{
 			Namespace: "list",
 			ShortDesc: "Retrieves all enabled payment methods",
-			Example:   "mollie methods list --locale=de_DE --sequence-type=recurring",
-			Execute:   RunListPaymentMethods,
+			LongDesc: `Retrieves all enabled payment methods.
+
+To check the payment method embeded resources use the get payment methods command.`,
+			Example: "mollie methods list --locale=de_DE --sequence-type=recurring",
+			Execute: RunListPaymentMethods,
 		},
 		methodsCols,
 	)
@@ -52,7 +62,9 @@ func Methods() *commander.Command {
 			ShortDesc: "Retrieve all payment methods that Mollie offers and can be activated by the Organization.",
 			LongDesc: `Retrieve all payment methods that Mollie offers and can be activated by the Organization.
 The results are not paginated. New payment methods can be activated via the Enable payment method
-endpoint in the Profiles API.`,
+endpoint in the Profiles API.
+
+To check the payment method embeded resources use the get payment methods command.`,
 			Execute: RunGetAllMethods,
 			Example: "mollie methods all --locale=nl_NL",
 		},
@@ -78,7 +90,8 @@ Profiles API, or via your Mollie Dashboard.`,
 	)
 
 	AddIDFlag(gm, true)
-	AddCurrencyFlags(gm)
+	AddLocaleFlag(gm)
+	AddCurrencyCodeFlag(gm)
 
 	return m
 }
@@ -87,28 +100,38 @@ Profiles API, or via your Mollie Dashboard.`,
 func RunListPaymentMethods(cmd *cobra.Command, args []string) {
 	var opts mollie.MethodsOptions
 	{
-		opts.SequenceType = mollie.SequenceType(ParseStringFromFlags(cmd, SequenceTypeArg))
-		opts.AmountCurrency = ParseStringFromFlags(cmd, AmountCurrencyArg)
-		opts.AmountValue = ParseStringFromFlags(cmd, AmountValueArg)
-		opts.Locale = mollie.Locale(ParseStringFromFlags(cmd, LocaleArg))
-		opts.IncludeWallets = ParseStringFromFlags(cmd, WalletsArg)
-		opts.Resource = ParseStringFromFlags(cmd, ResourceArg)
-		opts.BillingCountry = ParseStringFromFlags(cmd, BillingCountryArg)
+		if ParsePromptBool(cmd) {
+			oi, err := prompter.Struct(&opts)
+			if err != nil {
+				logger.Fatal(err)
+			}
+
+			optsi := oi.(*mollie.MethodsOptions)
+			opts = *optsi
+		} else {
+			opts.SequenceType = mollie.SequenceType(ParseStringFromFlags(cmd, SequenceTypeArg))
+			opts.AmountCurrency = ParseStringFromFlags(cmd, AmountCurrencyArg)
+			opts.AmountValue = ParseStringFromFlags(cmd, AmountValueArg)
+			opts.Locale = mollie.Locale(ParseStringFromFlags(cmd, LocaleArg))
+			opts.IncludeWallets = ParseStringFromFlags(cmd, WalletsArg)
+			opts.Resource = ParseStringFromFlags(cmd, ResourceArg)
+			opts.BillingCountry = ParseStringFromFlags(cmd, BillingCountryArg)
+			opts.Include = ParseStringFromFlags(cmd, IncludeArg)
+		}
+
 	}
 
 	if verbose {
-		PrintNonemptyFlagValue(SequenceTypeArg, string(opts.SequenceType))
-		PrintNonemptyFlagValue(LocaleArg, string(opts.Locale))
-		PrintNonemptyFlagValue(WalletsArg, opts.IncludeWallets)
-		PrintNonemptyFlagValue(ResourceArg, opts.Resource)
-		PrintNonemptyFlagValue(AmountCurrencyArg, opts.AmountCurrency)
-		PrintNonemptyFlagValue(AmountValueArg, opts.AmountValue)
-		PrintNonemptyFlagValue(BillingCountryArg, opts.BillingCountry)
+		PrintNonEmptyFlags(cmd)
 	}
 
 	ms, err := API.Methods.List(&opts)
 	if err != nil {
 		logger.Fatal(err)
+	}
+
+	if json {
+		PrintJsonP(ms)
 	}
 
 	if verbose {
@@ -121,10 +144,8 @@ func RunListPaymentMethods(cmd *cobra.Command, args []string) {
 		ListMethods: ms,
 	}
 
-	err = command.Display(
-		command.FilterColumns(parseFieldsFromFlag(cmd), methodsCols),
-		disp.KV(),
-	)
+	err = printer.Display(&disp)
+
 	if err != nil {
 		logger.Fatal(err)
 	}
@@ -137,17 +158,20 @@ func RunGetAllMethods(cmd *cobra.Command, args []string) {
 		opts.AmountCurrency = ParseStringFromFlags(cmd, AmountCurrencyArg)
 		opts.AmountValue = ParseStringFromFlags(cmd, AmountValueArg)
 		opts.Locale = mollie.Locale(ParseStringFromFlags(cmd, LocaleArg))
+		opts.Include = ParseStringFromFlags(cmd, IncludeArg)
 	}
 
 	if verbose {
-		PrintNonemptyFlagValue(LocaleArg, string(opts.Locale))
-		PrintNonemptyFlagValue(AmountCurrencyArg, opts.AmountCurrency)
-		PrintNonemptyFlagValue(AmountValueArg, opts.AmountValue)
+		PrintNonEmptyFlags(cmd)
 	}
 
 	m, err := API.Methods.All(&opts)
 	if err != nil {
 		logger.Fatal(err)
+	}
+
+	if json {
+		PrintJsonP(m)
 	}
 
 	if verbose {
@@ -158,13 +182,15 @@ func RunGetAllMethods(cmd *cobra.Command, args []string) {
 
 	disp := &displayers.MollieListMethods{ListMethods: m}
 
-	err = command.Display(
-		command.FilterColumns(parseFieldsFromFlag(cmd), methodsCols),
-		disp.KV(),
-	)
+	err = printer.Display(disp)
 	if err != nil {
 		logger.Fatal(err)
 	}
+}
+
+type getMethodPropmter struct {
+	Locale  string
+	Include string
 }
 
 // RunGetPaymentMethods retrieves a payment method by its id.
@@ -176,14 +202,25 @@ func RunGetPaymentMethods(cmd *cobra.Command, args []string) {
 
 	var opts mollie.MethodsOptions
 	{
-		opts.Locale = mollie.Locale(ParseStringFromFlags(cmd, LocaleArg))
-		opts.Currency = ParseStringFromFlags(cmd, CurrencyArg)
+		if ParsePromptBool(cmd) {
+			v, err := prompter.Struct(&getMethodPropmter{})
+			if err != nil {
+				logger.Fatal(err)
+			}
+			val := v.(*getMethodPropmter)
+
+			opts.Locale = mollie.Locale(val.Locale)
+			opts.Include = val.Include
+		} else {
+			opts.Locale = mollie.Locale(ParseStringFromFlags(cmd, LocaleArg))
+			opts.Currency = ParseStringFromFlags(cmd, CurrencyArg)
+			opts.Include = ParseStringFromFlags(cmd, IncludeArg)
+
+		}
 	}
 
 	if verbose {
-		PrintNonemptyFlagValue(IDArg, id)
-		PrintNonemptyFlagValue(LocaleArg, string(opts.Locale))
-		PrintNonemptyFlagValue(CurrencyArg, opts.Currency)
+		PrintNonEmptyFlags(cmd)
 	}
 
 	m, err := API.Methods.Get(id, &opts)
@@ -191,15 +228,48 @@ func RunGetPaymentMethods(cmd *cobra.Command, args []string) {
 		logger.Fatal(err)
 	}
 
-	disp := &displayers.MollieMethod{
-		PaymentMethodInfo: m,
+	if json {
+		PrintJsonP(m)
 	}
 
-	err = command.Display(
-		command.FilterColumns(parseFieldsFromFlag(cmd), methodsCols),
-		disp.KV(),
-	)
+	err = printer.DisplayMany(getMethodsDisplayables(m))
 	if err != nil {
 		logger.Fatal(err)
 	}
+}
+
+func getMethodsDisplayables(m *mollie.PaymentMethodInfo) []display.Displayable {
+	method := &displayers.MollieMethod{
+		PaymentMethodInfo: m,
+	}
+
+	var dp []display.Displayable
+	{
+		dp = append(dp, method)
+
+		if verbose {
+			dp = append(dp, displayers.NewSimpleTextDisplayer("=", fmt.Sprintf("Embeded issuers for method %s", m.Description)))
+		}
+
+		if len(m.Issuers) > 0 {
+			dp = append(dp, &displayers.MollieListPaymentMethodsIssuers{
+				Issuers: m.Issuers,
+			})
+		}
+	}
+
+	if verbose {
+		var text string
+		{
+			for c, d := range method.ColMap() {
+				text += fmt.Sprintf("%s:\t%v\n", c, d)
+			}
+		}
+
+		colmap := displayers.NewSimpleTextDisplayer("=", text)
+
+		dp = append([]display.Displayable{colmap}, dp...)
+	}
+
+	return dp
 }
