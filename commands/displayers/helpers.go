@@ -1,9 +1,12 @@
 package displayers
 
 import (
+	"fmt"
+	"strconv"
 	"strings"
 	"time"
 
+	"github.com/Rhymond/go-money"
 	"github.com/VictorAvelar/mollie-api-go/v2/mollie"
 )
 
@@ -50,7 +53,10 @@ func fallbackSafeAmount(a *mollie.Amount) string {
 		return "--- ---"
 	}
 
-	return stringCombinator(" ", a.Value, a.Currency)
+	clean := strings.Replace(a.Value, ".", "", -1)
+
+	val, _ := strconv.ParseInt(clean, 10, 64)
+	return money.New(val, a.Currency).Display()
 }
 
 func fallbackSafePaymentMethod(pm mollie.PaymentMethod) string {
@@ -67,6 +73,14 @@ func fallbackSafeAppFee(af *mollie.ApplicationFee) string {
 	}
 
 	return fallbackSafeAmount(af.Amount)
+}
+
+func fallbackSafeIssuers(i []*mollie.PaymentMethodIssuer) string {
+	if len(i) == 0 {
+		return "N/A"
+	}
+
+	return fmt.Sprintf("%v", len(i))
 }
 
 func stringCombinator(s string, parts ...string) string {
