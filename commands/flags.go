@@ -45,6 +45,14 @@ func AddCurrencyFlags(cmd *commander.Command) {
 	})
 }
 
+// AddCurrencyCodeFlag attaches the --currency flag to the given command.
+func AddCurrencyCodeFlag(cmd *commander.Command) {
+	commander.AddFlag(cmd, commander.FlagConfig{
+		Name:  CurrencyArg,
+		Usage: "the currency to receiving the minimumAmount and maximumAmount in",
+	})
+}
+
 // AddBillingCountryFlag attaches the --billing-country flag
 // to the given command.
 func AddBillingCountryFlag(cmd *commander.Command) {
@@ -70,5 +78,31 @@ func AddIDFlag(cmd *commander.Command, req bool) {
 		Name:     IDArg,
 		Usage:    "the payment method id",
 		Required: req,
+	})
+}
+
+// AddIncludeFlag attaches the --include flag to the given command.
+// It accepts a boolean to indicate if this flag should be a persistent
+// field for the command.
+func AddIncludeFlag(cmd *commander.Command, p bool) {
+	commander.AddFlag(cmd, commander.FlagConfig{
+		Name:       IncludeArg,
+		Shorthand:  "i",
+		Usage:      "this resource allows to enrich the request by including other objects",
+		Persistent: p,
+	})
+}
+
+// AddPrompterFlag attaches the --prompt flag to the given command.
+// It accepts a boolean to indicate if this flag should be a persistent
+// field for the command.
+func AddPrompterFlag(cmd *commander.Command, p bool) {
+	commander.AddFlag(cmd, commander.FlagConfig{
+		FlagType:   commander.BoolFlag,
+		Name:       "prompt",
+		Shorthand:  "p",
+		Usage:      "prompts for values instead of parsing them from flags (not required only)",
+		Persistent: p,
+		Default:    false,
 	})
 }
