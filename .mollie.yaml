@@ -1,6 +1,6 @@
 mollie:
   token: MOLLIE_API_TOKEN
   mode: test
-  print-json: false
+  json: false
   config: ""
   verbose: false
