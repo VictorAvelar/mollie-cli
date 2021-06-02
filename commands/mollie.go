@@ -1,13 +1,17 @@
 package commands
 
 import (
+	"os"
 	"time"
 
 	"github.com/VictorAvelar/mollie-api-go/v2/mollie"
+	"github.com/VictorAvelar/mollie-cli/commands/displayers"
 	"github.com/avocatl/admiral/pkg/commander"
+	"github.com/avocatl/admiral/pkg/display"
 	"github.com/mitchellh/go-homedir"
 	"github.com/sirupsen/logrus"
 	"github.com/spf13/cobra"
+	"github.com/spf13/pflag"
 	"github.com/spf13/viper"
 )
 
@@ -28,10 +32,11 @@ var (
 	)
 
 	token, mode, cfgFile string
-	verbose, debug       bool
+	verbose, debug, json bool
 
 	// API client
-	API *mollie.Client
+	API     *mollie.Client
+	printer display.Displayer
 
 	// global structured logger
 	logger *logrus.Entry
@@ -39,6 +44,7 @@ var (
 )
 
 func init() {
+	printer = display.DefaultDisplayer(nil)
 	addPersistentFlags()
 	addCommands()
 	cobra.OnInitialize(func() {
@@ -178,6 +184,19 @@ func addPersistentFlags() {
 		},
 	})
 	_ = viper.BindPFlag("debug", MollieCmd.PersistentFlags().Lookup("debug"))
+
+	commander.AddFlag(MollieCmd, commander.FlagConfig{
+		FlagType:   commander.BoolFlag,
+		Name:       "json",
+		Usage:      "dumpts the json response instead of the column based output",
+		Default:    false,
+		Persistent: true,
+		Binding: commander.FlagBindOptions{
+			Bound:    true,
+			BindBool: &json,
+		},
+	})
+	_ = viper.BindPFlag("json", MollieCmd.PersistentFlags().Lookup("json"))
 }
 
 func addCommands() {
@@ -218,6 +237,17 @@ func ParseIntFromFlags(cmd *cobra.Command, key string) int {
 	return val
 }
 
+// ParsePromptBool returns a boolean to indicate if the values
+// should be prompted to the user.
+func ParsePromptBool(cmd *cobra.Command) bool {
+	val, err := cmd.Flags().GetBool("prompt")
+	if err != nil {
+		logger.Fatal(err)
+	}
+
+	return val
+}
+
 // PrintNonemptyFlagValue will log with level info any non empty
 // string value.
 // The key will be used as name indicator.
@@ -226,4 +256,37 @@ func PrintNonemptyFlagValue(key, val string) {
 	if val != "" {
 		logger.Infof("using %s value: %s", key, val)
 	}
+}
+
+// PrintNonEmptyFlags will print all the defined flags for this
+// command, both persistent and local flags will be printed.
+func PrintNonEmptyFlags(cmd *cobra.Command) {
+	cmd.Flags().Visit(printFlagValues)
+}
+
+func printFlagValues(f *pflag.Flag) {
+	logger.Infof("using %s with value %s", f.Name, f.Value)
+}
+
+// PrintJson dumps the given data as json and then it exits
+// gracefully from the execution.
+func PrintJson(d interface{}) {
+	disp := displayers.JsonDisplayer{
+		Data: d,
+	}
+
+	printer.Display(&disp)
+	os.Exit(0)
+}
+
+// PrintJsonP dumps the given data as pretty json and then it exits
+// gracefully from the execution.
+func PrintJsonP(d interface{}) {
+	disp := displayers.JsonDisplayer{
+		Data:   d,
+		Pretty: true,
+	}
+
+	printer.Display(&disp)
+	os.Exit(0)
 }
