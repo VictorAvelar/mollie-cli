@@ -3,7 +3,8 @@ package commands
 import (
 	"os"
 
-	"github.com/VictorAvelar/mollie-cli/commands/displayers"
+	"github.com/avocatl/admiral/pkg/commander"
+	"github.com/avocatl/admiral/pkg/display"
 	"github.com/spf13/cobra"
 	"github.com/spf13/pflag"
 )
@@ -60,22 +61,17 @@ func printFlagValues(f *pflag.Flag) {
 // PrintJson dumps the given data as json and then it exits
 // gracefully from the execution.
 func PrintJson(d interface{}) {
-	disp := displayers.JsonDisplayer{
-		Data: d,
-	}
+	disp := display.Json(d, false)
 
-	printer.Display(&disp)
+	printer.Display(disp, commander.NoCols())
 	os.Exit(0)
 }
 
 // PrintJsonP dumps the given data as pretty json and then it exits
 // gracefully from the execution.
 func PrintJsonP(d interface{}) {
-	disp := displayers.JsonDisplayer{
-		Data:   d,
-		Pretty: true,
-	}
+	disp := display.Json(d, true)
 
-	printer.Display(&disp)
+	printer.Display(disp, commander.NoCols())
 	os.Exit(0)
 }
