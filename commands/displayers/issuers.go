@@ -42,6 +42,12 @@ func (mpi *MolliePaymentMethodIssuer) NoHeaders() bool {
 	return false
 }
 
+// Filterable indicates if the displayable output can be filtered
+// using the fields flag.
+func (mpi *MolliePaymentMethodIssuer) Filterable() bool {
+	return true
+}
+
 // MollieListPaymentMethodsIssuers wrapper for displaying.
 type MollieListPaymentMethodsIssuers struct {
 	Issuers []*mollie.PaymentMethodIssuer
@@ -82,6 +88,12 @@ func (lpmi *MollieListPaymentMethodsIssuers) ColMap() map[string]string {
 // or not to the provided output.
 func (lpmi *MollieListPaymentMethodsIssuers) NoHeaders() bool {
 	return false
+}
+
+// Filterable indicates if the displayable output can be filtered
+// using the fields flag.
+func (lpmi *MollieListPaymentMethodsIssuers) Filterable() bool {
+	return true
 }
 
 func buildXIssuer(mi *mollie.PaymentMethodIssuer) map[string]interface{} {

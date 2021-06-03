@@ -75,7 +75,9 @@ func getPaymentMethodAction(cmd *cobra.Command, args []string) {
 		PrintJsonP(m)
 	}
 
-	err = printer.DisplayMany(getMethodsDisplayables(m))
+	err = printer.DisplayMany(getMethodsDisplayables(m), display.FilterColumns(
+		parseFieldsFromFlag(cmd), getMethodsCols(),
+	))
 	if err != nil {
 		logger.Fatal(err)
 	}
@@ -92,7 +94,10 @@ func getMethodsDisplayables(m *mollie.PaymentMethodInfo) []display.Displayable {
 
 		if len(m.Issuers) > 0 {
 			if verbose {
-				dp = append(dp, displayers.NewSimpleTextDisplayer("=", fmt.Sprintf("Embeded issuers for method %s", m.Description)))
+				dp = append(dp, display.Text(
+					"=",
+					fmt.Sprintf("Embeded issuers for method %s", m.Description),
+				))
 			}
 			dp = append(dp, &displayers.MollieListPaymentMethodsIssuers{
 				Issuers: m.Issuers,
@@ -108,7 +113,7 @@ func getMethodsDisplayables(m *mollie.PaymentMethodInfo) []display.Displayable {
 			}
 		}
 
-		colmap := displayers.NewSimpleTextDisplayer("=", text)
+		colmap := display.Text("=", text)
 
 		dp = append([]display.Displayable{colmap}, dp...)
 	}

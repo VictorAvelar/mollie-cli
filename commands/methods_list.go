@@ -4,6 +4,7 @@ import (
 	"github.com/VictorAvelar/mollie-api-go/v2/mollie"
 	"github.com/VictorAvelar/mollie-cli/commands/displayers"
 	"github.com/avocatl/admiral/pkg/commander"
+	"github.com/avocatl/admiral/pkg/display"
 	"github.com/avocatl/admiral/pkg/prompter"
 	"github.com/spf13/cobra"
 )
@@ -77,7 +78,9 @@ func listPaymentMethodsAction(cmd *cobra.Command, args []string) {
 		ListMethods: ms,
 	}
 
-	err = printer.Display(&disp)
+	err = printer.Display(&disp, display.FilterColumns(
+		parseFieldsFromFlag(cmd), getMethodsCols(),
+	))
 
 	if err != nil {
 		logger.Fatal(err)

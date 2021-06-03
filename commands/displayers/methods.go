@@ -54,6 +54,12 @@ func (mlm *MollieListMethods) NoHeaders() bool {
 	return false
 }
 
+// Filterable indicates if the displayable output can be filtered
+// using the fields flag.
+func (mlm *MollieListMethods) Filterable() bool {
+	return true
+}
+
 // MollieMethod wrapper for displaying.
 type MollieMethod struct {
 	*mollie.PaymentMethodInfo
@@ -100,6 +106,12 @@ func (mlm *MollieMethod) ColMap() map[string]string {
 // or not to the provided output.
 func (mlm *MollieMethod) NoHeaders() bool {
 	return false
+}
+
+// Filterable indicates if the displayable output can be filtered
+// using the fields flag.
+func (mlm *MollieMethod) Filterable() bool {
+	return true
 }
 
 func buildXMethod(m *mollie.PaymentMethodInfo) map[string]interface{} {
