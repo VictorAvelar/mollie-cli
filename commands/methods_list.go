@@ -20,7 +20,7 @@ To check the payment method embeded resources use the get payment methods comman
 			Example: "mollie methods list --locale=de_DE --sequence-type=recurring",
 			Execute: listPaymentMethodsAction,
 		},
-		methodsCols,
+		getMethodsCols(),
 	)
 	AddResourceFlag(lm)
 	AddSequenceTypeFlag(lm)

@@ -21,7 +21,7 @@ To check the payment method embeded resources use the get payment methods comman
 			Execute: getAllMethodsAction,
 			Example: "mollie methods all --locale=nl_NL",
 		},
-		methodsCols,
+		getMethodsCols(),
 	)
 
 	AddLocaleFlag(ga)

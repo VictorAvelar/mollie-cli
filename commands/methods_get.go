@@ -24,7 +24,7 @@ Profiles API, or via your Mollie Dashboard.`,
 			Execute: getPaymentMethodAction,
 			Example: "mollie methods get --id=creditcard --locale=pt_PT",
 		},
-		methodsCols,
+		getMethodsCols(),
 	)
 
 	AddIDFlag(gm, true)

@@ -4,24 +4,12 @@ import (
 	"github.com/avocatl/admiral/pkg/commander"
 )
 
-var (
-	methodsCols = []string{
-		"RESOURCE",
-		"ID",
-		"DESCRIPTION",
-		"ISSUERS",
-		"MIN_AMOUNT",
-		"MAX_AMOUNT",
-		"LOGO",
-	}
-)
-
 func methods() *commander.Command {
 	m := commander.Builder(nil, commander.Config{
 		Namespace: "methods",
 		Aliases:   []string{"vendors", "meths"},
 		ShortDesc: "All payment methods that Mollie offers and can be activated",
-	}, methodsCols)
+	}, getMethodsCols())
 
 	// Add namespace persistent flags.
 	AddIncludeFlag(m, true)
@@ -33,4 +21,16 @@ func methods() *commander.Command {
 	getPaymentMethodCmd(m)
 
 	return m
+}
+
+func getMethodsCols() []string {
+	return []string{
+		"RESOURCE",
+		"ID",
+		"DESCRIPTION",
+		"ISSUERS",
+		"MIN_AMOUNT",
+		"MAX_AMOUNT",
+		"LOGO",
+	}
 }
