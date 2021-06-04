@@ -1,16 +1,99 @@
 package commands
 
 import (
-	"fmt"
 	"os"
 
-	"github.com/VictorAvelar/mollie-cli/internal/command"
 	"github.com/VictorAvelar/mollie-cli/pkg/utils"
+	"github.com/avocatl/admiral/pkg/commander"
+	"github.com/avocatl/admiral/pkg/display"
 	"github.com/spf13/cobra"
 )
 
-var (
-	urlMap = map[string]map[string]string{
+func browse() *commander.Command {
+	b := commander.Builder(
+		nil,
+		commander.Config{
+			Namespace: "browse [category] [resource]",
+			Aliases:   []string{"resources", "open"},
+			PreHook:   preBrowseHook,
+			Execute:   browseAction,
+			ShortDesc: "Browse through mollie's web resources",
+			LongDesc: `This command will open a browser tab with the target url for the required resource.
+Resources are grouped by category, and valid categories are:
+- auth
+- dashboard
+- developers
+- github
+- settings
+- web
+Use: mollie open -i for listing the complete resource tree.`,
+		},
+		commander.NoCols(),
+	)
+
+	commander.AddFlag(b, commander.FlagConfig{
+		Name:     "info",
+		FlagType: commander.BoolFlag,
+		Default:  false,
+		Usage:    "prints the resources available to the output writer",
+	})
+
+	return b
+}
+
+func preBrowseHook(cmd *cobra.Command, args []string) {
+	b, err := cmd.Flags().GetBool("info")
+	if err != nil {
+		logger.Fatal(err)
+	}
+
+	if b {
+		PrintJsonP(getURLMap())
+	}
+}
+
+func browseAction(cmd *cobra.Command, args []string) {
+	resources := getURLMap()
+
+	if len(args) != 2 {
+		display.Text("X", "invalid number of arguments provided")
+		os.Exit(1)
+	}
+
+	cat, open := args[0], args[1]
+
+	utils.Browse(resources[cat][open])
+}
+
+// func validateBrowseArgs(cmd *cobra.Command, args []string) error {
+// 	in, err := cmd.Flags().GetBool("info")
+// 	if err != nil {
+// 		logger.Fatal(err)
+// 	}
+
+// 	if len(args) == 0 && in {
+// 		return nil
+// 	}
+
+// 	var cat, page string
+// 	{
+// 		cat = args[0]
+// 		page = args[1]
+// 	}
+
+// 	if _, ok := urlMap[cat]; !ok {
+// 		return fmt.Errorf("invalid category name %s", cat)
+// 	}
+
+// 	if _, ok := urlMap[cat][page]; !ok {
+// 		return fmt.Errorf("invalid page name %s", page)
+// 	}
+
+// 	return nil
+// }
+
+func getURLMap() map[string]map[string]string {
+	return map[string]map[string]string{
 		"web": {
 			"home":       "https://www.mollie.com",
 			"developers": "https://www.mollie.com/en/developers",
@@ -51,96 +134,4 @@ var (
 			"issues": "https://github.com/VictorAvelar/mollie-cli/issues",
 		},
 	}
-)
-
-// Browse creates the browse commands tree
-func Browse() *command.Command {
-	b := &command.Command{
-		Command: &cobra.Command{
-			Use:     "browse",
-			Args:    validateBrowseArgs,
-			Example: "mollie browse web help-desk",
-			Short:   "Browse through mollie's web resources",
-			Long: `This command will open a browser tab with the target url for the required resource.
-			Resources are grouped by category, and valid categories are:
-			- auth
-			- dashboard
-			- developers
-			- github
-			- settings
-			- web
-			Use: mollie open -i for listing the complete resource tree.`,
-			Run: RunOpenAction,
-		},
-	}
-
-	command.AddFlag(b, command.FlagConfig{
-		Name:      "info",
-		Shorthand: "i",
-		Usage:     "prints extended info about the available resources",
-		FlagType:  command.BoolFlag,
-		Default:   false,
-	})
-
-	return b
-}
-
-func openNames() []string {
-	names := make([]string, 0, len(urlMap))
-	for k, v := range urlMap {
-		names = append(names, fmt.Sprintf("--> %s", k))
-		for x := range v {
-			names = append(names, fmt.Sprintf("\t=> %s", x))
-		}
-	}
-	return names
-}
-
-// RunOpenAction executes the open command
-func RunOpenAction(cmd *cobra.Command, args []string) {
-	in, err := cmd.Flags().GetBool("info")
-	if err != nil {
-		logger.Fatal(err)
-	}
-
-	if in {
-		for _, n := range openNames() {
-			fmt.Println(n)
-		}
-		os.Exit(0)
-	}
-	var cat, page string
-	{
-		cat = args[0]
-		page = args[1]
-	}
-
-	utils.Browse(urlMap[cat][page])
-}
-
-func validateBrowseArgs(cmd *cobra.Command, args []string) error {
-	in, err := cmd.Flags().GetBool("info")
-	if err != nil {
-		logger.Fatal(err)
-	}
-
-	if len(args) == 0 && in {
-		return nil
-	}
-
-	var cat, page string
-	{
-		cat = args[0]
-		page = args[1]
-	}
-
-	if _, ok := urlMap[cat]; !ok {
-		return fmt.Errorf("invalid category name %s", cat)
-	}
-
-	if _, ok := urlMap[cat][page]; !ok {
-		return fmt.Errorf("invalid page name %s", page)
-	}
-
-	return nil
 }
