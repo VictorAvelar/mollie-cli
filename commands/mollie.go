@@ -198,6 +198,8 @@ func addPersistentFlags() {
 
 func addCommands() {
 	MollieCmd.AddCommand(
+		docs(),
+		browse(),
 		methods(),
 	)
 	// MollieCmd.AddCommand(Profile())
