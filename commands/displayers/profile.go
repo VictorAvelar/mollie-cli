@@ -36,6 +36,52 @@ func (mp *MollieProfile) KV() []map[string]interface{} {
 	return out
 }
 
+// Cols returns an array of columns available for displaying.
+func (mp *MollieProfile) Cols() []string {
+	return []string{
+		"RESOURCE",
+		"ID",
+		"MODE",
+		"NAME",
+		"WEBSITE",
+		"EMAIL",
+		"PHONE",
+		"CATEGORY_CODE",
+		"STATUS",
+		"REVIEW",
+		"CREATED_AT",
+	}
+}
+
+// ColMap returns a list of columns and its description.
+func (mp *MollieProfile) ColMap() map[string]string {
+	return map[string]string{
+		"RESOURCE":      "the resource name",
+		"ID":            "the resource id",
+		"MODE":          "the profile mode (live/test)",
+		"NAME":          "the profile name",
+		"WEBSITE":       "the profile website",
+		"EMAIL":         "the profile registered email",
+		"PHONE":         "the profile registered phone number",
+		"CATEGORY_CODE": "the profile category code (see mollie categories)",
+		"STATUS":        "the profile status",
+		"REVIEW":        "the profile review status",
+		"CREATED_AT":    "the profile creation date",
+	}
+}
+
+// NoHeaders returns a boolean indicating if headers should be displayed
+// or not to the provided output.
+func (mp *MollieProfile) NoHeaders() bool {
+	return false
+}
+
+// Filterable indicates if the displayable output can be filtered
+// using the fields flag.
+func (mp *MollieProfile) Filterable() bool {
+	return true
+}
+
 func buildXProfile(p *mollie.Profile) map[string]interface{} {
 	return map[string]interface{}{
 		"RESOURCE":      p.Resource,
