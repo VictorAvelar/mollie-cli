@@ -202,6 +202,7 @@ func addCommands() {
 		browse(),
 		methods(),
 		permissions(),
+		profile(),
 	)
 	// MollieCmd.AddCommand(Profile())
 	// MollieCmd.AddCommand(Methods())
