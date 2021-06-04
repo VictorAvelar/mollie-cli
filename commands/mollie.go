@@ -201,9 +201,9 @@ func addCommands() {
 		docs(),
 		browse(),
 		methods(),
+		permissions(),
 	)
 	// MollieCmd.AddCommand(Profile())
-	// MollieCmd.AddCommand(Browse())
 	// MollieCmd.AddCommand(Methods())
 	// MollieCmd.AddCommand(Payments())
 	// MollieCmd.AddCommand(Chargebacks())
