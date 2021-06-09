@@ -81,6 +81,32 @@ func AddIDFlag(cmd *commander.Command, req bool) {
 	})
 }
 
+// AddFromFlag attaches the --from flag to the given command.
+func AddFromFlag(cmd *commander.Command) {
+	commander.AddFlag(cmd, commander.FlagConfig{
+		Name:  FromArg,
+		Usage: "offset the result to the resource whith the given id",
+	})
+}
+
+// AddLimitFlag attaches the --limit flag to the given command.
+func AddLimitFlag(cmd *commander.Command) {
+	commander.AddFlag(cmd, commander.FlagConfig{
+		FlagType: commander.IntFlag,
+		Name:     LimitArg,
+		Usage:    "limits the number of rows to retrieve",
+		Default:  250,
+	})
+}
+
+// AddEmbedFlag attaches the --embed flag to the given command.
+func AddEmbedFlag(cmd *commander.Command) {
+	commander.AddFlag(cmd, commander.FlagConfig{
+		Name:  EmbedArg,
+		Usage: "embedding additional information (when supported)",
+	})
+}
+
 // AddIncludeFlag attaches the --include flag to the given command.
 // It accepts a boolean to indicate if this flag should be a persistent
 // field for the command.
@@ -88,7 +114,7 @@ func AddIncludeFlag(cmd *commander.Command, p bool) {
 	commander.AddFlag(cmd, commander.FlagConfig{
 		Name:       IncludeArg,
 		Shorthand:  "i",
-		Usage:      "this resource allows to enrich the request by including other objects",
+		Usage:      "this resource allows to enrich the response by including other objects",
 		Persistent: p,
 	})
 }
