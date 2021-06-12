@@ -56,8 +56,9 @@ func TestMollieMethod_KV(t *testing.T) {
 		"DESCRIPTION": "iDeal payments",
 		"ID":          "ideal",
 		"LOGO":        "https://victoravelar.com/logo-example/1.png",
-		"MAX_AMOUNT":  "100.00 EUR",
-		"MIN_AMOUNT":  "10.00 EUR",
+		"ISSUERS":     "N/A",
+		"MAX_AMOUNT":  "€100.00",
+		"MIN_AMOUNT":  "€10.00",
 		"RESOURCE":    "methods",
 	}
 
@@ -114,16 +115,18 @@ func TestMollieListMethods(t *testing.T) {
 		"DESCRIPTION": "iDeal payments",
 		"ID":          "ideal",
 		"LOGO":        "https://victoravelar.com/logo-example/1.png",
-		"MAX_AMOUNT":  "100.00 EUR",
-		"MIN_AMOUNT":  "10.00 EUR",
+		"ISSUERS":     "N/A",
+		"MAX_AMOUNT":  "€100.00",
+		"MIN_AMOUNT":  "€10.00",
 		"RESOURCE":    "methods",
 	}
 	w2 := map[string]interface{}{
 		"DESCRIPTION": "Paypal",
 		"ID":          "paypal",
 		"LOGO":        "https://victoravelar.com/logo-example/1.png",
+		"ISSUERS":     "N/A",
 		"MAX_AMOUNT":  "--- ---",
-		"MIN_AMOUNT":  "10.00 EUR",
+		"MIN_AMOUNT":  "€10.00",
 		"RESOURCE":    "methods",
 	}
 

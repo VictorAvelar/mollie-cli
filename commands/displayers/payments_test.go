@@ -30,7 +30,7 @@ func TestMolliePayment_KV(t *testing.T) {
 	}
 
 	w := map[string]interface{}{
-		"AMOUNT":          "1.00 EUR",
+		"AMOUNT":          "€1.00",
 		"APP_FEE":         "none",
 		"AUTHORIZED_AT":   "----------",
 		"CANCELABLE":      false,
@@ -115,9 +115,9 @@ func TestMollieListPayments_KV(t *testing.T) {
 		},
 	}
 
-	w := map[string]interface{}{"AMOUNT": "1.00 EUR", "APP_FEE": "none", "AUTHORIZED_AT": "----------", "CANCELABLE": false, "CANCELED_AT": "----------", "CAPTURED": "--- ---", "COUNTRY": "", "CREATED_AT": "04-11-2020", "CUSTOMER_ID": "", "DESCRIPTION": "testing KV", "EXPIRES": "06-11-2020", "FAILED_AT": "----------", "ID": "tr_test", "LOCALE": "", "MANDATE_ID": "", "METHOD": "paypal", "MODE": "test", "ORDER_ID": "", "PAID_AT": "----------", "REDIRECT": "", "REFUNDED": "--- ---", "REMAINING": "--- ---", "RESOURCE": "", "SEQUENCE": "", "SETTLEMENT": "--- ---", "SETTLEMENT_ID": "", "STATUS": "paid", "SUBSCRIPTION_ID": "", "WEBHOOK": ""}
+	w := map[string]interface{}{"AMOUNT": "€1.00", "APP_FEE": "none", "AUTHORIZED_AT": "----------", "CANCELABLE": false, "CANCELED_AT": "----------", "CAPTURED": "--- ---", "COUNTRY": "", "CREATED_AT": "04-11-2020", "CUSTOMER_ID": "", "DESCRIPTION": "testing KV", "EXPIRES": "06-11-2020", "FAILED_AT": "----------", "ID": "tr_test", "LOCALE": "", "MANDATE_ID": "", "METHOD": "paypal", "MODE": "test", "ORDER_ID": "", "PAID_AT": "----------", "REDIRECT": "", "REFUNDED": "--- ---", "REMAINING": "--- ---", "RESOURCE": "", "SEQUENCE": "", "SETTLEMENT": "--- ---", "SETTLEMENT_ID": "", "STATUS": "paid", "SUBSCRIPTION_ID": "", "WEBHOOK": ""}
 
-	w1 := map[string]interface{}{"AMOUNT": "2.00 USD", "APP_FEE": "none", "AUTHORIZED_AT": "----------", "CANCELABLE": false, "CANCELED_AT": "----------", "CAPTURED": "--- ---", "COUNTRY": "", "CREATED_AT": "04-11-2020", "CUSTOMER_ID": "", "DESCRIPTION": "testing KV list payments", "EXPIRES": "06-11-2020", "FAILED_AT": "----------", "ID": "tr_test_2", "LOCALE": "", "MANDATE_ID": "", "METHOD": "banktransfer", "MODE": "test", "ORDER_ID": "", "PAID_AT": "----------", "REDIRECT": "", "REFUNDED": "--- ---", "REMAINING": "--- ---", "RESOURCE": "", "SEQUENCE": "", "SETTLEMENT": "--- ---", "SETTLEMENT_ID": "", "STATUS": "expired", "SUBSCRIPTION_ID": "", "WEBHOOK": ""}
+	w1 := map[string]interface{}{"AMOUNT": "$2.00", "APP_FEE": "none", "AUTHORIZED_AT": "----------", "CANCELABLE": false, "CANCELED_AT": "----------", "CAPTURED": "--- ---", "COUNTRY": "", "CREATED_AT": "04-11-2020", "CUSTOMER_ID": "", "DESCRIPTION": "testing KV list payments", "EXPIRES": "06-11-2020", "FAILED_AT": "----------", "ID": "tr_test_2", "LOCALE": "", "MANDATE_ID": "", "METHOD": "banktransfer", "MODE": "test", "ORDER_ID": "", "PAID_AT": "----------", "REDIRECT": "", "REFUNDED": "--- ---", "REMAINING": "--- ---", "RESOURCE": "", "SEQUENCE": "", "SETTLEMENT": "--- ---", "SETTLEMENT_ID": "", "STATUS": "expired", "SUBSCRIPTION_ID": "", "WEBHOOK": ""}
 
 	want := []map[string]interface{}{}
 	want = append(want, w, w1)

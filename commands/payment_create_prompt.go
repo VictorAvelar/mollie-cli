@@ -38,10 +38,6 @@ func promptPaymentAction(cmd *cobra.Command, args []string) {
 		attachAccessTokenParams(&payment)
 	}
 
-	if verbose {
-		logger.Info("Collected payment from prompter: %v", payment)
-	}
-
 	res, err := API.Payments.Create(payment)
 	if err != nil {
 		logger.Fatal(err)

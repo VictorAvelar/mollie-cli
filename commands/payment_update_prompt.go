@@ -36,10 +36,6 @@ func promptUpdatePaymentAction(cmd *cobra.Command, args []string) {
 		attachPaymentMethodSpecificValues(&payment)
 	}
 
-	if verbose {
-		logger.Info("Collected payment from prompter: %v", payment)
-	}
-
 	res, err := API.Payments.Update(payment.ID, payment)
 	if err != nil {
 		logger.Fatal(err)
