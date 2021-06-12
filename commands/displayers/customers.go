@@ -18,6 +18,28 @@ func (mc *MollieCustomer) KV() []map[string]interface{} {
 	return out
 }
 
+// Cols returns an array of columns available for displaying.
+func (mc *MollieCustomer) Cols() []string {
+	return customersCols()
+}
+
+// ColMap returns a list of columns and its description.
+func (mc *MollieCustomer) ColMap() map[string]string {
+	return customersColMap()
+}
+
+// NoHeaders returns a boolean indicating if headers should be displayed
+// or not to the provided output.
+func (mc *MollieCustomer) NoHeaders() bool {
+	return false
+}
+
+// Filterable indicates if the displayable output can be filtered
+// using the fields flag.
+func (mc *MollieCustomer) Filterable() bool {
+	return true
+}
+
 // MollieCustomerList wrapper for displaying.
 type MollieCustomerList struct {
 	*mollie.CustomersList
@@ -34,6 +56,54 @@ func (mcl *MollieCustomerList) KV() []map[string]interface{} {
 	}
 
 	return out
+}
+
+// Cols returns an array of columns available for displaying.
+func (mcl *MollieCustomerList) Cols() []string {
+	return customersCols()
+}
+
+// ColMap returns a list of columns and its description.
+func (mcl *MollieCustomerList) ColMap() map[string]string {
+	return customersColMap()
+}
+
+// NoHeaders returns a boolean indicating if headers should be displayed
+// or not to the provided output.
+func (mcl *MollieCustomerList) NoHeaders() bool {
+	return false
+}
+
+// Filterable indicates if the displayable output can be filtered
+// using the fields flag.
+func (mcl *MollieCustomerList) Filterable() bool {
+	return true
+}
+
+func customersCols() []string {
+	return []string{
+		"RESOURCE",
+		"ID",
+		"MODE",
+		"NAME",
+		"EMAIL",
+		"LOCALE",
+		"METADATA",
+		"CREATED_AT",
+	}
+}
+
+func customersColMap() map[string]string {
+	return map[string]string{
+		"RESOURCE":   "the resource name",
+		"ID":         "the resource id",
+		"MODE":       "the mode used to create this customer.",
+		"NAME":       "the full name of the customer",
+		"EMAIL":      "the email address of the customer",
+		"LOCALE":     "language to be used in the hosted payment pages shown to the consumer",
+		"METADATA":   "any data you like to attach to the customer",
+		"CREATED_AT": "the customer’s date and time of creation",
+	}
 }
 
 func buildXCustomer(c *mollie.Customer) map[string]interface{} {
