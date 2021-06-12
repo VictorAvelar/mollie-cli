@@ -38,8 +38,8 @@ github.com/BurntSushi/xgb v0.0.0-20160522181843-27f122750802/go.mod h1:IVnqGOEym
 github.com/OneOfOne/xxhash v1.2.2/go.mod h1:HSdplMjZKSmBqAxg5vPj2TmRDmfkzw+cTzAElWljhcU=
 github.com/Rhymond/go-money v1.0.2 h1:KklB66H3VlpNMkm8T5BH/MROK88o7q9CCn1hl853TzI=
 github.com/Rhymond/go-money v1.0.2/go.mod h1:iHvCuIvitxu2JIlAlhF0g9jHqjRSr+rpdOs7Omqlupg=
-github.com/VictorAvelar/mollie-api-go/v2 v2.11.0 h1:JN+1cYtAbiJlEKtUU36PbAzJABqVCh9WKDWJEYFNMYs=
-github.com/VictorAvelar/mollie-api-go/v2 v2.11.0/go.mod h1:WszdNL8dpxmxIBcDVpGwxmNrWDhgBjeYiZK3QKR7CM8=
+github.com/VictorAvelar/mollie-api-go/v2 v2.11.2 h1:MRjtrjGd3At5YcABO+0laaIRU2bCrW/dp9q+L+a/NB0=
+github.com/VictorAvelar/mollie-api-go/v2 v2.11.2/go.mod h1:WszdNL8dpxmxIBcDVpGwxmNrWDhgBjeYiZK3QKR7CM8=
 github.com/alecthomas/template v0.0.0-20160405071501-a0175ee3bccc/go.mod h1:LOuyumcjzFXgccqObfd/Ljyb9UuFJ6TxHnclSeseNhc=
 github.com/alecthomas/units v0.0.0-20151022065526-2efee857e7cf/go.mod h1:ybxpYRFXyAe+OPACYpWeL0wqObRcbAqCMya13uyzqw0=
 github.com/armon/circbuf v0.0.0-20150827004946-bbbad097214e/go.mod h1:3U/XgcO3hCbHZ8TKRvWD2dDTCfh9M9ya+I9JpbB7O8o=

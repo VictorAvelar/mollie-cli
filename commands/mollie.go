@@ -206,9 +206,8 @@ func addCommands() {
 		payments(),
 		captures(),
 		chargebacks(),
+		refunds(),
 	)
-	// MollieCmd.AddCommand(Chargebacks())
-	// MollieCmd.AddCommand(Refunds())
 	// MollieCmd.AddCommand(Customers())
 	// MollieCmd.AddCommand(Invoices())
 }
