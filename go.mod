@@ -5,7 +5,7 @@ go 1.15
 require (
 	github.com/Rhymond/go-money v1.0.2
 	github.com/VictorAvelar/mollie-api-go/v2 v2.11.0
-	github.com/avocatl/admiral v0.3.0
+	github.com/avocatl/admiral v0.4.0
 	github.com/mitchellh/go-homedir v1.1.0
 	github.com/sirupsen/logrus v1.8.1
 	github.com/spf13/cobra v1.1.3
