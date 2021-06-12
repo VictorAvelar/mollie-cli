@@ -203,18 +203,11 @@ func addCommands() {
 		methods(),
 		permissions(),
 		profile(),
+		payments(),
 	)
-	// MollieCmd.AddCommand(Profile())
-	// MollieCmd.AddCommand(Methods())
-	// MollieCmd.AddCommand(Payments())
 	// MollieCmd.AddCommand(Chargebacks())
 	// MollieCmd.AddCommand(Refunds())
 	// MollieCmd.AddCommand(Customers())
 	// MollieCmd.AddCommand(Captures())
-	// MollieCmd.AddCommand(Permissions())
 	// MollieCmd.AddCommand(Invoices())
-
-	// // Tooling
-	// MollieCmd.AddCommand(Version())
-	// MollieCmd.AddCommand(Docs())
 }
