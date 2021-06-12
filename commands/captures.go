@@ -11,7 +11,7 @@ func captures() *commander.Command {
 			Namespace: "captures",
 			ShortDesc: "Operations with Captures API.",
 		},
-		commander.NoCols(),
+		getCapturesCols(),
 	)
 
 	listCapturesCmd(c)
