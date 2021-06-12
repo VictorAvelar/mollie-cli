@@ -204,6 +204,7 @@ func addCommands() {
 		permissions(),
 		profile(),
 		payments(),
+		captures(),
 	)
 	// MollieCmd.AddCommand(Chargebacks())
 	// MollieCmd.AddCommand(Refunds())

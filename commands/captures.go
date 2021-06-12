@@ -4,8 +4,7 @@ import (
 	"github.com/avocatl/admiral/pkg/commander"
 )
 
-// Captures creates the captures commands tree.
-func Captures() *commander.Command {
+func captures() *commander.Command {
 	c := commander.Builder(
 		nil,
 		commander.Config{
