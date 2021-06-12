@@ -49,7 +49,7 @@ func listPaymentsAction(cmd *cobra.Command, args []string) {
 	}
 
 	if json {
-		PrintJsonP(ps)
+		printJSONP(ps)
 	}
 
 	disp := displayers.MollieListPayments{

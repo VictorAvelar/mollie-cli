@@ -44,7 +44,7 @@ func cancelPaymentAction(cmd *cobra.Command, args []string) {
 	}
 
 	if json {
-		PrintJsonP(p)
+		printJSONP(p)
 	}
 
 	disp := displayers.MolliePayment{Payment: &p}

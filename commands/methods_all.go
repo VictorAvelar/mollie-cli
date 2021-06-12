@@ -48,7 +48,7 @@ func getAllMethodsAction(cmd *cobra.Command, args []string) {
 	}
 
 	if json {
-		PrintJsonP(m)
+		printJSONP(m)
 	}
 
 	if verbose {

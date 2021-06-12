@@ -49,7 +49,7 @@ func promptUpdatePaymentAction(cmd *cobra.Command, args []string) {
 	}
 
 	if json {
-		PrintJsonP(res)
+		printJSONP(res)
 	}
 
 	err = printer.Display(

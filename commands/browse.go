@@ -48,7 +48,7 @@ func preBrowseHook(cmd *cobra.Command, args []string) {
 	}
 
 	if b {
-		PrintJsonP(getURLMap())
+		printJSONP(getURLMap())
 	}
 }
 

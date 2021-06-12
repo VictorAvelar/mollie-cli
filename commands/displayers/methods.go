@@ -77,7 +77,7 @@ func (pm *MollieMethod) KV() []map[string]interface{} {
 }
 
 // Cols returns an array of columns available for displaying.
-func (mlm *MollieMethod) Cols() []string {
+func (pm *MollieMethod) Cols() []string {
 	return []string{
 		"RESOURCE",
 		"ID",
@@ -90,7 +90,7 @@ func (mlm *MollieMethod) Cols() []string {
 }
 
 // ColMap returns a list of columns and its description.
-func (mlm *MollieMethod) ColMap() map[string]string {
+func (pm *MollieMethod) ColMap() map[string]string {
 	return map[string]string{
 		"RESOURCE":    "the resource name as specified by mollie",
 		"ID":          "the payment method id",
@@ -104,13 +104,13 @@ func (mlm *MollieMethod) ColMap() map[string]string {
 
 // NoHeaders returns a boolean indicating if headers should be displayed
 // or not to the provided output.
-func (mlm *MollieMethod) NoHeaders() bool {
+func (pm *MollieMethod) NoHeaders() bool {
 	return false
 }
 
 // Filterable indicates if the displayable output can be filtered
 // using the fields flag.
-func (mlm *MollieMethod) Filterable() bool {
+func (pm *MollieMethod) Filterable() bool {
 	return true
 }
 

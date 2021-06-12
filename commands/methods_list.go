@@ -65,7 +65,7 @@ func listPaymentMethodsAction(cmd *cobra.Command, args []string) {
 	}
 
 	if json {
-		PrintJsonP(ms)
+		printJSONP(ms)
 	}
 
 	if verbose {

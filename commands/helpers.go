@@ -58,18 +58,9 @@ func printFlagValues(f *pflag.Flag) {
 	logger.Infof("using %s with value %s", f.Name, f.Value)
 }
 
-// PrintJson dumps the given data as json and then it exits
-// gracefully from the execution.
-func PrintJson(d interface{}) {
-	disp := display.JSON(d, false)
-
-	printer.Display(disp, commander.NoCols())
-	os.Exit(0)
-}
-
 // PrintJsonP dumps the given data as pretty json and then it exits
 // gracefully from the execution.
-func PrintJsonP(d interface{}) {
+func printJSONP(d interface{}) {
 	disp := display.JSON(d, true)
 
 	printer.Display(disp, commander.NoCols())

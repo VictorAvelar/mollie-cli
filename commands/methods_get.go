@@ -72,7 +72,7 @@ func getPaymentMethodAction(cmd *cobra.Command, args []string) {
 	}
 
 	if json {
-		PrintJsonP(m)
+		printJSONP(m)
 	}
 
 	err = printer.DisplayMany(getMethodsDisplayables(m), display.FilterColumns(

@@ -50,7 +50,7 @@ func getRefundAction(cmd *cobra.Command, args []string) {
 	}
 
 	if json {
-		PrintJsonP(r)
+		printJSONP(r)
 	}
 
 	disp := displayers.MollieRefund{
