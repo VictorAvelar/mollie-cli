@@ -37,11 +37,11 @@ func AddSequenceTypeFlag(cmd *commander.Command) {
 func AddCurrencyFlags(cmd *commander.Command) {
 	commander.AddFlag(cmd, commander.FlagConfig{
 		Name:  AmountCurrencyArg,
-		Usage: "get only payment methods that support the amount and currency (linked to amount-value)",
+		Usage: "the amount and currency (linked to amount-value)",
 	})
 	commander.AddFlag(cmd, commander.FlagConfig{
 		Name:  AmountValueArg,
-		Usage: "get only payment methods that support the amount and currency (linked to amount-currency)",
+		Usage: "the amount and currency (linked to amount-currency)",
 	})
 }
 
@@ -104,6 +104,14 @@ func AddEmbedFlag(cmd *commander.Command) {
 	commander.AddFlag(cmd, commander.FlagConfig{
 		Name:  EmbedArg,
 		Usage: "embedding additional information (when supported)",
+	})
+}
+
+// AddPaymentFlag attaches the --payment flag to the given command.
+func AddPaymentFlag(cmd *commander.Command) {
+	commander.AddFlag(cmd, commander.FlagConfig{
+		Name:  PaymentArg,
+		Usage: "only Refunds for the specific Payment are returned",
 	})
 }
 
