@@ -61,7 +61,7 @@ func printFlagValues(f *pflag.Flag) {
 // PrintJson dumps the given data as json and then it exits
 // gracefully from the execution.
 func PrintJson(d interface{}) {
-	disp := display.Json(d, false)
+	disp := display.JSON(d, false)
 
 	printer.Display(disp, commander.NoCols())
 	os.Exit(0)
@@ -70,7 +70,7 @@ func PrintJson(d interface{}) {
 // PrintJsonP dumps the given data as pretty json and then it exits
 // gracefully from the execution.
 func PrintJsonP(d interface{}) {
-	disp := display.Json(d, true)
+	disp := display.JSON(d, true)
 
 	printer.Display(disp, commander.NoCols())
 	os.Exit(0)
