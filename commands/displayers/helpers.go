@@ -82,12 +82,3 @@ func fallbackSafeIssuers(i []*mollie.PaymentMethodIssuer) string {
 
 	return fmt.Sprintf("%v", len(i))
 }
-
-func stringCombinator(s string, parts ...string) string {
-	for i, v := range parts {
-		if v == "" {
-			parts[i] = "-"
-		}
-	}
-	return strings.Join(parts, s)
-}

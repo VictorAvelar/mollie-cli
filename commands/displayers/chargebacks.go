@@ -49,10 +49,8 @@ type MollieChargebackList struct {
 func (lp *MollieChargebackList) KV() []map[string]interface{} {
 	var out []map[string]interface{}
 
-	for _, p := range lp.Embedded.Chargebacks {
-		x := buildXChargeback(&p)
-
-		out = append(out, x)
+	for i := range lp.Embedded.Chargebacks {
+		out = append(out, buildXChargeback(&lp.Embedded.Chargebacks[i]))
 	}
 
 	return out

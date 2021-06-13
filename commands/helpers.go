@@ -63,6 +63,9 @@ func printFlagValues(f *pflag.Flag) {
 func printJSONP(d interface{}) {
 	disp := display.JSON(d, true)
 
-	printer.Display(disp, commander.NoCols())
+	err := printer.Display(disp, commander.NoCols())
+	if err != nil {
+		logger.Fatal(err)
+	}
 	os.Exit(0)
 }

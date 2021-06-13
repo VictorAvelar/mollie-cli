@@ -13,10 +13,8 @@ type MollieListPayments struct {
 func (lp *MollieListPayments) KV() []map[string]interface{} {
 	var out []map[string]interface{}
 
-	for _, p := range lp.Embedded.Payments {
-		x := buildXPayment(&p)
-
-		out = append(out, x)
+	for i := range lp.Embedded.Payments {
+		out = append(out, buildXPayment(&lp.Embedded.Payments[i]))
 	}
 
 	return out
@@ -231,19 +229,4 @@ func buildXPayment(p *mollie.Payment) map[string]interface{} {
 		"LOCALE":          fallbackSafeLocale(p.Locale),
 		"COUNTRY":         p.CountryCode,
 	}
-}
-
-func getSafeExpiration(p mollie.Payment) string {
-	if p.ExpiresAt == nil {
-		return "----------"
-	}
-
-	return p.ExpiresAt.Format("02-01-2006")
-}
-
-func getSafePaymentMethod(p mollie.Payment) string {
-	if p.Method == mollie.PaymentMethod("") {
-		return "none"
-	}
-	return string(p.Method)
 }

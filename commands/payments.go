@@ -60,7 +60,7 @@ func getPaymentCols() []string {
 	}
 }
 
-func attachPaymentMethodSpecificValues(p *mollie.Payment) *mollie.Payment {
+func attachPaymentMethodSpecificValues(p *mollie.Payment) {
 	switch p.Method {
 	case mollie.BankTransfer:
 		p.BillingEmail = promptStringClean("billing email address", "")
@@ -92,9 +92,11 @@ func attachPaymentMethodSpecificValues(p *mollie.Payment) *mollie.Payment {
 	case mollie.DirectDebit:
 		p.ConsumerName = promptStringClean("consumer name", "")
 		p.ConsumerAccount = promptStringClean("consumer account", "")
+	case mollie.Bancontact, mollie.Belfius, mollie.EPS, mollie.GiroPay, mollie.MyBank, mollie.Sofort:
+		if verbose {
+			logger.Info("there are no payment method specific fields for your selection")
+		}
 	}
-
-	return p
 }
 
 func attachAccessTokenParams(p *mollie.Payment) *mollie.Payment {

@@ -49,10 +49,8 @@ type MollieCustomerList struct {
 func (mcl *MollieCustomerList) KV() []map[string]interface{} {
 	var out []map[string]interface{}
 
-	for _, c := range mcl.Embedded.Customers {
-		x := buildXCustomer(&c)
-
-		out = append(out, x)
+	for i := range mcl.Embedded.Customers {
+		out = append(out, buildXCustomer(&mcl.Embedded.Customers[i]))
 	}
 
 	return out

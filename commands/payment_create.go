@@ -16,7 +16,6 @@ func createPaymentCmd(p *commander.Command) *commander.Command {
 			ShortDesc: "Create a new payment",
 			LongDesc: `Creates a new payment.
 Description, value, currency and redirect-url are required values.`,
-			PreHook: preCreatePayment,
 			Execute: createPaymentAction,
 			Aliases: []string{"new", "start"},
 			Example: "mollie payments create --amount-value=200.00 --amount-currency=USD --redirect-to=https://victoravelar.com --description='custom example payment'",
@@ -90,13 +89,6 @@ func addCreatePaymentFlags(cpp *commander.Command) {
 		Name:  MandateIDArg,
 		Usage: "when creating recurring payments, the ID of a specific Mandate may be supplied",
 	})
-}
-
-func preCreatePayment(cmd *cobra.Command, args []string) {
-	if ParsePromptBool(cmd) {
-		cmd.Flags().Set(DescriptionArg, "")
-		cmd.Flags().Set(RedirectURLArg, "")
-	}
 }
 
 func createPaymentAction(cmd *cobra.Command, args []string) {

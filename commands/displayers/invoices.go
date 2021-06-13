@@ -46,10 +46,8 @@ type MollieInvoiceList struct {
 func (mil *MollieInvoiceList) KV() []map[string]interface{} {
 	var out []map[string]interface{}
 
-	for _, i := range mil.Embedded.Invoices {
-		x := buildXInvoice(&i)
-
-		out = append(out, x)
+	for i := range mil.Embedded.Invoices {
+		out = append(out, buildXInvoice(&mil.Embedded.Invoices[i]))
 	}
 
 	return out
