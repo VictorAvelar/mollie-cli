@@ -22,4 +22,4 @@ jobs:
         name: golangci-lint
       - uses: golangci/golangci-lint-action@v2
         with:
-          args: --issues-exit-code=0 --new=true --sort-results --skip-dirs-use-default --tests=false --presets=bugs,complexity,format,performance,style,unused
+          args: --issues-exit-code=0 --new=true --sort-results --skip-dirs-use-default --tests=false
