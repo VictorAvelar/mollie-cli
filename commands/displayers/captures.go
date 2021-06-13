@@ -2,7 +2,7 @@ package displayers
 
 import "github.com/VictorAvelar/mollie-api-go/v2/mollie"
 
-// MollieCapturesList wrapper for displaying
+// MollieCapturesList wrapper for displaying.
 type MollieCapturesList struct {
 	*mollie.CapturesList
 }

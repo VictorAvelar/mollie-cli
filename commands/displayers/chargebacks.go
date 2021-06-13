@@ -2,12 +2,12 @@ package displayers
 
 import "github.com/VictorAvelar/mollie-api-go/v2/mollie"
 
-// MollieChargeback wrapper for displaying
+// MollieChargeback wrapper for displaying.
 type MollieChargeback struct {
 	*mollie.Chargeback
 }
 
-// KV is a displayable group of key value
+// KV is a displayable group of key value.
 func (cb *MollieChargeback) KV() []map[string]interface{} {
 	var out []map[string]interface{}
 
@@ -28,7 +28,7 @@ func (cb *MollieChargeback) ColMap() map[string]string {
 	return chargebackColMap()
 }
 
-// NoHeaders returns a boolean indicating if headers should be displayed
+// NoHeaders returns a boolean indicating if headers should be displayed.
 // or not to the provided output.
 func (cb *MollieChargeback) NoHeaders() bool {
 	return false
@@ -40,12 +40,12 @@ func (cb *MollieChargeback) Filterable() bool {
 	return true
 }
 
-// MollieChargebackList wrapper for displaying
+// MollieChargebackList wrapper for displaying.
 type MollieChargebackList struct {
 	*mollie.ChargebackList
 }
 
-// KV is a displayable group of key value
+// KV is a displayable group of key value.
 func (lp *MollieChargebackList) KV() []map[string]interface{} {
 	var out []map[string]interface{}
 
@@ -66,7 +66,7 @@ func (lp *MollieChargebackList) ColMap() map[string]string {
 	return chargebackColMap()
 }
 
-// NoHeaders returns a boolean indicating if headers should be displayed
+// NoHeaders returns a boolean indicating if headers should be displayed.
 // or not to the provided output.
 func (lp *MollieChargebackList) NoHeaders() bool {
 	return false

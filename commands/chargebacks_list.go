@@ -23,7 +23,7 @@ for that specific payment are returned.`,
 	)
 	commander.AddFlag(lcb, commander.FlagConfig{
 		Name:  EmbedArg,
-		Usage: "a comma separated list of embeded resources",
+		Usage: "a comma separated list of embedded resources",
 	})
 
 	return lcb

@@ -18,7 +18,7 @@ func allPaymentMethodsCmd(p *commander.Command) {
 The results are not paginated. New payment methods can be activated via the Enable payment method
 endpoint in the Profiles API.
 
-To check the payment method embeded resources use the get payment methods command.`,
+To check the payment method embedded resources use the get payment methods command.`,
 			Execute: getAllMethodsAction,
 			Example: "mollie methods all --locale=nl_NL",
 		},

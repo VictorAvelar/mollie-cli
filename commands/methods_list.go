@@ -17,7 +17,7 @@ func listPaymentMethodsCmd(p *commander.Command) {
 			ShortDesc: "Retrieves all enabled payment methods",
 			LongDesc: `Retrieves all enabled payment methods.
 
-To check the payment method embeded resources use the get payment methods command.`,
+To check the payment method embedded resources use the get payment methods command.`,
 			Example: "mollie methods list --locale=de_DE --sequence-type=recurring",
 			Execute: listPaymentMethodsAction,
 		},

@@ -96,7 +96,7 @@ func getMethodsDisplayables(m *mollie.PaymentMethodInfo) []display.Displayable {
 			if verbose {
 				dp = append(dp, display.Text(
 					"=",
-					fmt.Sprintf("Embeded issuers for method %s", m.Description),
+					fmt.Sprintf("Embedded issuers for method %s", m.Description),
 				))
 			}
 			dp = append(dp, &displayers.MollieListPaymentMethodsIssuers{

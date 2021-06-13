@@ -7,7 +7,7 @@ type MollieProfileList struct {
 	*mollie.ProfileList
 }
 
-// KV is a displayable group of key value
+// KV is a displayable group of key value.
 func (mpl *MollieProfileList) KV() []map[string]interface{} {
 	var out []map[string]interface{}
 
@@ -20,12 +20,12 @@ func (mpl *MollieProfileList) KV() []map[string]interface{} {
 	return out
 }
 
-// MollieProfile wrapper for displaying
+// MollieProfile wrapper for displaying.
 type MollieProfile struct {
 	*mollie.Profile
 }
 
-// KV is a displayable group of key value
+// KV is a displayable group of key value.
 func (mp *MollieProfile) KV() []map[string]interface{} {
 	var out []map[string]interface{}
 

@@ -33,7 +33,7 @@ A debit to a depositor's account for an item that has been previously credited, 
 	})
 	commander.AddFlag(gcb, commander.FlagConfig{
 		Name:  EmbedArg,
-		Usage: "a comma separated list of embeded resources",
+		Usage: "a comma separated list of embedded resources",
 	})
 
 	return gcb

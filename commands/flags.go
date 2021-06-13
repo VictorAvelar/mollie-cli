@@ -85,7 +85,7 @@ func AddIDFlag(cmd *commander.Command, req bool) {
 func AddFromFlag(cmd *commander.Command) {
 	commander.AddFlag(cmd, commander.FlagConfig{
 		Name:  FromArg,
-		Usage: "offset the result to the resource whith the given id",
+		Usage: "offset the result to the resource with the given id",
 	})
 }
 

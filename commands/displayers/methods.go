@@ -4,7 +4,7 @@ import (
 	"github.com/VictorAvelar/mollie-api-go/v2/mollie"
 )
 
-// MollieListMethods wrapper for displaying
+// MollieListMethods wrapper for displaying.
 type MollieListMethods struct {
 	*mollie.ListMethods
 }

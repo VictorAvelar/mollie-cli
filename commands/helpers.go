@@ -41,7 +41,7 @@ func ParsePromptBool(cmd *cobra.Command) bool {
 // PrintNonemptyFlagValue will log with level info any non empty
 // string value.
 // The key will be used as name indicator.
-// E.g. "using key value: val"
+// E.g. "using key value: val".
 func PrintNonemptyFlagValue(key, val string) {
 	if val != "" {
 		logger.Infof("using %s value: %s", key, val)

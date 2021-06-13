@@ -9,7 +9,7 @@ type MollieListPayments struct {
 	*mollie.PaymentList
 }
 
-// KV is a displayable group of key value
+// KV is a displayable group of key value.
 func (lp *MollieListPayments) KV() []map[string]interface{} {
 	var out []map[string]interface{}
 
@@ -107,7 +107,7 @@ type MolliePayment struct {
 	*mollie.Payment
 }
 
-// KV is a displayable group of key value
+// KV is a displayable group of key value.
 func (p *MolliePayment) KV() []map[string]interface{} {
 	var out []map[string]interface{}
 	x := buildXPayment(p.Payment)

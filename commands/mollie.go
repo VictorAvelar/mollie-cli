@@ -17,7 +17,7 @@ const (
 )
 
 var (
-	// MollieCmd is the root level mollie-cli command that all other commands attach to
+	// MollieCmd is the root level mollie-cli command that all other commands attach to.
 	MollieCmd = commander.Builder(
 		nil,
 		commander.Config{
@@ -31,11 +31,11 @@ var (
 	token, mode, cfgFile string
 	verbose, debug, json bool
 
-	// API client
+	// API client.
 	API     *mollie.Client
 	printer display.Displayer
 
-	// global structured logger
+	// global structured logger.
 	logger *logrus.Entry
 	noCols []string
 )
@@ -114,7 +114,7 @@ func initClient() {
 	API = m
 }
 
-// Execute runs the command entrypoint
+// Execute runs the command entrypoint.
 func Execute() error {
 	return MollieCmd.Execute()
 }
