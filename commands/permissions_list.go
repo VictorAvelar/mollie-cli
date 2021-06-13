@@ -2,8 +2,8 @@ package commands
 
 import (
 	"github.com/VictorAvelar/mollie-cli/commands/displayers"
-	"github.com/VictorAvelar/mollie-cli/internal/command"
 	"github.com/avocatl/admiral/pkg/commander"
+	"github.com/avocatl/admiral/pkg/display"
 	"github.com/spf13/cobra"
 )
 
@@ -31,7 +31,7 @@ func listPermissionsAction(cmd *cobra.Command, args []string) {
 		PermissionsList: p,
 	}
 
-	err = printer.Display(&disp, command.FilterColumns(
+	err = printer.Display(&disp, display.FilterColumns(
 		parseFieldsFromFlag(cmd),
 		getPermissionsCols(),
 	))

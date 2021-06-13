@@ -3,8 +3,8 @@ package commands
 import (
 	"github.com/VictorAvelar/mollie-api-go/v2/mollie"
 	"github.com/VictorAvelar/mollie-cli/commands/displayers"
-	"github.com/VictorAvelar/mollie-cli/internal/command"
 	"github.com/avocatl/admiral/pkg/commander"
+	"github.com/avocatl/admiral/pkg/display"
 	"github.com/spf13/cobra"
 )
 
@@ -69,7 +69,7 @@ func getChargebackAction(cmd *cobra.Command, args []string) {
 
 	err = printer.Display(
 		disp,
-		command.FilterColumns(parseFieldsFromFlag(cmd), getChargebacksCols()),
+		display.FilterColumns(parseFieldsFromFlag(cmd), getChargebacksCols()),
 	)
 	if err != nil {
 		logger.Fatal(err)
