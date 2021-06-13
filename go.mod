@@ -3,7 +3,9 @@ module github.com/VictorAvelar/mollie-cli
 go 1.15
 
 require (
-	github.com/VictorAvelar/mollie-api-go/v2 v2.9.1
+	github.com/Rhymond/go-money v1.0.2
+	github.com/VictorAvelar/mollie-api-go/v2 v2.11.2
+	github.com/avocatl/admiral v0.4.0
 	github.com/mitchellh/go-homedir v1.1.0
 	github.com/sirupsen/logrus v1.8.1
 	github.com/spf13/cobra v1.1.3
@@ -11,6 +13,4 @@ require (
 	github.com/spf13/viper v1.7.1
 	github.com/stretchr/testify v1.7.0
 	golang.org/x/net v0.0.0-20210503060351-7fd8e65b6420 // indirect
-	golang.org/x/sys v0.0.0-20210503173754-0981d6026fa6 // indirect
-	gopkg.in/yaml.v3 v3.0.0-20210107192922-496545a6307b // indirect
 )

@@ -4,12 +4,12 @@ import (
 	"time"
 
 	"github.com/VictorAvelar/mollie-api-go/v2/mollie"
+	"github.com/avocatl/admiral/pkg/commander"
+	"github.com/avocatl/admiral/pkg/display"
 	"github.com/mitchellh/go-homedir"
 	"github.com/sirupsen/logrus"
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
-
-	"github.com/VictorAvelar/mollie-cli/internal/command"
 )
 
 const (
@@ -17,37 +17,32 @@ const (
 )
 
 var (
-	// MollieCmd is the root level mollie-cli command that all other commands attach to
-	MollieCmd = &command.Command{
-		Command: &cobra.Command{
-			Use:   "mollie",
-			Short: "Mollie is a command line interface (CLI) for the Mollie REST API.",
+	// MollieCmd is the root level mollie-cli command that all other commands attach to.
+	MollieCmd = commander.Builder(
+		nil,
+		commander.Config{
+			Namespace: "mollie",
+			ShortDesc: "Mollie is a command line interface (CLI) for the Mollie REST API.",
+			Version:   version,
 		},
-	}
+		commander.NoCols(),
+	)
 
 	token, mode, cfgFile string
-	verbose, debug       bool
+	verbose, debug, json bool
 
-	// API client
-	API *mollie.Client
+	// API client.
+	API     *mollie.Client
+	printer display.Displayer
 
-	// global structured logger
+	// global structured logger.
 	logger *logrus.Entry
 	noCols []string
 )
 
 func init() {
-	MollieCmd.PersistentFlags().StringVarP(&cfgFile, "config", "c", "", "specifies a custom config file to be used")
-	_ = viper.BindPFlag("mollie.config", MollieCmd.PersistentFlags().Lookup("config"))
-	MollieCmd.PersistentFlags().StringVarP(&token, "token", "t", mollie.APITokenEnv, "the type of token to use for auth")
-	_ = viper.BindPFlag("mollie.token", MollieCmd.PersistentFlags().Lookup("token"))
-	MollieCmd.PersistentFlags().BoolVarP(&verbose, "verbose", "v", false, "print verbose logging messages (defaults to false)")
-	_ = viper.BindPFlag("mollie.verbose", MollieCmd.PersistentFlags().Lookup("verbose"))
-	MollieCmd.PersistentFlags().StringVarP(&mode, "mode", "m", string(mollie.TestMode), "indicates the api target from test/live")
-	_ = viper.BindPFlag("mode", MollieCmd.PersistentFlags().Lookup("mode"))
-	MollieCmd.PersistentFlags().BoolVarP(&debug, "debug", "d", false, "enables debug logging information")
-	_ = viper.BindPFlag("debug", MollieCmd.PersistentFlags().Lookup("debug"))
-
+	printer = display.DefaultDisplayer(nil)
+	addPersistentFlags()
 	addCommands()
 	cobra.OnInitialize(func() {
 		initConfig()
@@ -119,52 +114,100 @@ func initClient() {
 	API = m
 }
 
-// Execute runs the command entrypoint
+// Execute runs the command entrypoint.
 func Execute() error {
 	return MollieCmd.Execute()
 }
 
+func addPersistentFlags() {
+	commander.AddFlag(MollieCmd, commander.FlagConfig{
+		Name:       "config",
+		Shorthand:  "c",
+		Usage:      "specifies a custom config file to be used",
+		Persistent: true,
+		Binding: commander.FlagBindOptions{
+			Bound:      true,
+			BindString: &cfgFile,
+		},
+	})
+	_ = viper.BindPFlag("mollie.config", MollieCmd.PersistentFlags().Lookup("config"))
+	commander.AddFlag(MollieCmd, commander.FlagConfig{
+		Name:       "token",
+		Shorthand:  "t",
+		Usage:      "the type of token to use for auth",
+		Default:    mollie.APITokenEnv,
+		Persistent: true,
+		Binding: commander.FlagBindOptions{
+			Bound:      true,
+			BindString: &token,
+		},
+	})
+	_ = viper.BindPFlag("mollie.token", MollieCmd.PersistentFlags().Lookup("token"))
+	commander.AddFlag(MollieCmd, commander.FlagConfig{
+		Name:       "mode",
+		Shorthand:  "m",
+		Usage:      "indicates the api target from test/live",
+		Default:    string(mollie.TestMode),
+		Persistent: true,
+		Binding: commander.FlagBindOptions{
+			Bound:      true,
+			BindString: &mode,
+		},
+	})
+	_ = viper.BindPFlag("mode", MollieCmd.PersistentFlags().Lookup("mode"))
+	commander.AddFlag(MollieCmd, commander.FlagConfig{
+		FlagType:   commander.BoolFlag,
+		Name:       "verbose",
+		Shorthand:  "v",
+		Usage:      "print verbose logging messages (defaults to false)",
+		Default:    false,
+		Persistent: true,
+		Binding: commander.FlagBindOptions{
+			Bound:    true,
+			BindBool: &verbose,
+		},
+	})
+	_ = viper.BindPFlag("mollie.verbose", MollieCmd.PersistentFlags().Lookup("verbose"))
+	commander.AddFlag(MollieCmd, commander.FlagConfig{
+		FlagType:   commander.BoolFlag,
+		Name:       "debug",
+		Shorthand:  "d",
+		Usage:      "enables debug logging information",
+		Default:    false,
+		Persistent: true,
+		Binding: commander.FlagBindOptions{
+			Bound:    true,
+			BindBool: &debug,
+		},
+	})
+	_ = viper.BindPFlag("debug", MollieCmd.PersistentFlags().Lookup("debug"))
+
+	commander.AddFlag(MollieCmd, commander.FlagConfig{
+		FlagType:   commander.BoolFlag,
+		Name:       "json",
+		Usage:      "dumpts the json response instead of the column based output",
+		Default:    false,
+		Persistent: true,
+		Binding: commander.FlagBindOptions{
+			Bound:    true,
+			BindBool: &json,
+		},
+	})
+	_ = viper.BindPFlag("json", MollieCmd.PersistentFlags().Lookup("json"))
+}
+
 func addCommands() {
-	MollieCmd.AddCommand(Profile())
-	MollieCmd.AddCommand(Browse())
-	MollieCmd.AddCommand(Methods())
-	MollieCmd.AddCommand(Payments())
-	MollieCmd.AddCommand(Chargebacks())
-	MollieCmd.AddCommand(Refunds())
-	MollieCmd.AddCommand(Customers())
-	MollieCmd.AddCommand(Captures())
-	MollieCmd.AddCommand(Permissions())
-	MollieCmd.AddCommand(Invoices())
-
-	// Tooling
-	MollieCmd.AddCommand(Version())
-	MollieCmd.AddCommand(Docs())
-}
-
-// ParseStringFromFlags returns the string value of a flag by key.
-func ParseStringFromFlags(cmd *cobra.Command, key string) string {
-	val, err := cmd.Flags().GetString(key)
-	if err != nil {
-		logger.Fatal(err)
-	}
-	return val
-}
-
-// ParseIntFromFlags returns the string value of a flag by key.
-func ParseIntFromFlags(cmd *cobra.Command, key string) int {
-	val, err := cmd.Flags().GetInt(key)
-	if err != nil {
-		logger.Fatal(err)
-	}
-	return val
-}
-
-// PrintNonemptyFlagValue will log with level info any non empty
-// string value.
-// The key will be used as name indicator.
-// E.g. "using key value: val"
-func PrintNonemptyFlagValue(key, val string) {
-	if val != "" {
-		logger.Infof("using %s value: %s", key, val)
-	}
+	MollieCmd.AddCommand(
+		docs(),
+		browse(),
+		methods(),
+		permissions(),
+		profile(),
+		payments(),
+		captures(),
+		chargebacks(),
+		refunds(),
+		customers(),
+		invoices(),
+	)
 }

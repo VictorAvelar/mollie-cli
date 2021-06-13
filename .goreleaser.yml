@@ -15,7 +15,6 @@ checksum:
 snapshot:
   name_template: "{{ .Tag }}-next"
 changelog:
-  sort: desc
   filters:
     exclude:
       - docs
