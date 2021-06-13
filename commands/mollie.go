@@ -208,6 +208,6 @@ func addCommands() {
 		chargebacks(),
 		refunds(),
 		customers(),
+		invoices(),
 	)
-	// MollieCmd.AddCommand(Invoices())
 }
