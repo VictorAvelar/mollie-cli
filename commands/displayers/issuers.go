@@ -55,7 +55,7 @@ type MollieListPaymentMethodsIssuers struct {
 
 // KV is a displayable group of key value.
 func (lpmi *MollieListPaymentMethodsIssuers) KV() []map[string]interface{} {
-	var out []map[string]interface{}
+	out := outPrealloc(len(lpmi.Issuers))
 
 	for _, pm := range lpmi.Issuers {
 		x := buildXIssuer(pm)

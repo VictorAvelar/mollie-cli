@@ -11,7 +11,7 @@ type MollieListMethods struct {
 
 // KV is a displayable group of key value.
 func (mlm *MollieListMethods) KV() []map[string]interface{} {
-	var out []map[string]interface{}
+	out := outPrealloc(len(mlm.Embedded.Methods))
 
 	for _, pm := range mlm.Embedded.Methods {
 		x := buildXMethod(pm)

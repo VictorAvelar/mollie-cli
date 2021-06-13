@@ -47,7 +47,7 @@ type MollieCustomerList struct {
 
 // KV is a displayable group of key value.
 func (mcl *MollieCustomerList) KV() []map[string]interface{} {
-	var out []map[string]interface{}
+	out := outPrealloc(len(mcl.Embedded.Customers))
 
 	for i := range mcl.Embedded.Customers {
 		out = append(out, buildXCustomer(&mcl.Embedded.Customers[i]))

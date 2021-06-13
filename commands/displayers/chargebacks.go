@@ -47,7 +47,7 @@ type MollieChargebackList struct {
 
 // KV is a displayable group of key value.
 func (lp *MollieChargebackList) KV() []map[string]interface{} {
-	var out []map[string]interface{}
+	out := outPrealloc(len(lp.Embedded.Chargebacks))
 
 	for i := range lp.Embedded.Chargebacks {
 		out = append(out, buildXChargeback(&lp.Embedded.Chargebacks[i]))

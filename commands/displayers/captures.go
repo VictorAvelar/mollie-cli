@@ -9,7 +9,7 @@ type MollieCapturesList struct {
 
 // KV is a displayable group of key value.
 func (cl *MollieCapturesList) KV() []map[string]interface{} {
-	var out []map[string]interface{}
+	out := outPrealloc(len(cl.Embedded.Captures))
 
 	for _, c := range cl.Embedded.Captures {
 		x := buildXCapture(c)

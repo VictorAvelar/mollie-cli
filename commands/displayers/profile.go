@@ -9,7 +9,7 @@ type MollieProfileList struct {
 
 // KV is a displayable group of key value.
 func (mpl *MollieProfileList) KV() []map[string]interface{} {
-	var out []map[string]interface{}
+	out := outPrealloc(len(mpl.Embedded.Profiles))
 
 	for _, r := range mpl.Embedded.Profiles {
 		x := buildXProfile(r)

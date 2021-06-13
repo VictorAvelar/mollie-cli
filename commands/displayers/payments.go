@@ -11,7 +11,7 @@ type MollieListPayments struct {
 
 // KV is a displayable group of key value.
 func (lp *MollieListPayments) KV() []map[string]interface{} {
-	var out []map[string]interface{}
+	out := outPrealloc(len(lp.Embedded.Payments))
 
 	for i := range lp.Embedded.Payments {
 		out = append(out, buildXPayment(&lp.Embedded.Payments[i]))

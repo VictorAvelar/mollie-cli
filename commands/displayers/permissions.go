@@ -9,7 +9,7 @@ type MolliePermissionList struct {
 
 // KV is a displayable group of key value.
 func (mp *MolliePermissionList) KV() []map[string]interface{} {
-	var out []map[string]interface{}
+	out := outPrealloc(len(mp.Embedded.Permissions))
 
 	for _, p := range mp.Embedded.Permissions {
 		x := buildXPermission(p)

@@ -82,3 +82,7 @@ func fallbackSafeIssuers(i []*mollie.PaymentMethodIssuer) string {
 
 	return fmt.Sprintf("%v", len(i))
 }
+
+func outPrealloc(size int) []map[string]interface{} {
+	return make([]map[string]interface{}, 0, size)
+}

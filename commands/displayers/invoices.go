@@ -44,7 +44,7 @@ type MollieInvoiceList struct {
 
 // KV is a displayable group of key value.
 func (mil *MollieInvoiceList) KV() []map[string]interface{} {
-	var out []map[string]interface{}
+	out := outPrealloc(len(mil.Embedded.Invoices))
 
 	for i := range mil.Embedded.Invoices {
 		out = append(out, buildXInvoice(&mil.Embedded.Invoices[i]))

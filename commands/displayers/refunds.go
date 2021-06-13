@@ -9,7 +9,7 @@ type MollieRefundList struct {
 
 // KV is a displayable group of key value.
 func (mrl *MollieRefundList) KV() []map[string]interface{} {
-	var out []map[string]interface{}
+	out := outPrealloc(len(mrl.Embedded.Refunds))
 
 	for _, r := range mrl.Embedded.Refunds {
 		x := buildXRefund(r)
