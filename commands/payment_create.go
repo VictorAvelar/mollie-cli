@@ -141,7 +141,7 @@ func createPaymentAction(cmd *cobra.Command, args []string) {
 		Method:                          m,
 	}
 
-	p, err := API.Payments.Create(p)
+	p, err := API.Payments.Create(p, nil)
 	if err != nil {
 		logger.Fatal(err)
 	}
