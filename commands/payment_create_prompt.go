@@ -38,7 +38,7 @@ func promptPaymentAction(cmd *cobra.Command, args []string) {
 		attachAccessTokenParams(&payment)
 	}
 
-	res, err := API.Payments.Create(payment)
+	res, err := API.Payments.Create(payment, nil)
 	if err != nil {
 		logger.Fatal(err)
 	}
