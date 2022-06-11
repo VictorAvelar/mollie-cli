@@ -1,7 +1,9 @@
 package commands
 
 import (
-	"github.com/VictorAvelar/mollie-api-go/v2/mollie"
+	"context"
+
+	"github.com/VictorAvelar/mollie-api-go/v3/mollie"
 	"github.com/VictorAvelar/mollie-cli/commands/displayers"
 	"github.com/avocatl/admiral/pkg/commander"
 	"github.com/avocatl/admiral/pkg/display"
@@ -27,7 +29,7 @@ func listCustomerCmd(p *commander.Command) *commander.Command {
 }
 
 func listCustomerActions(cmd *cobra.Command, args []string) {
-	var opts mollie.ListCustomersOptions
+	var opts mollie.CustomersListOptions
 	{
 		opts.Limit = ParseIntFromFlags(cmd, LimitArg)
 		opts.From = ParseStringFromFlags(cmd, FromArg)
@@ -37,7 +39,7 @@ func listCustomerActions(cmd *cobra.Command, args []string) {
 		PrintNonEmptyFlags(cmd)
 	}
 
-	cl, err := API.Customers.List(&opts)
+	_, cl, err := API.Customers.List(context.Background(), &opts)
 	if err != nil {
 		logger.Fatal(err)
 	}

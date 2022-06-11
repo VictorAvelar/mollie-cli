@@ -1,6 +1,9 @@
 package commands
 
 import (
+	"context"
+
+	"github.com/VictorAvelar/mollie-api-go/v3/mollie"
 	"github.com/VictorAvelar/mollie-cli/commands/displayers"
 	"github.com/avocatl/admiral/pkg/commander"
 	"github.com/avocatl/admiral/pkg/display"
@@ -36,7 +39,10 @@ func getPermissionAction(cmd *cobra.Command, args []string) {
 		PrintNonEmptyFlags(cmd)
 	}
 
-	p, err := API.Permissions.Get(perm)
+	_, p, err := API.Permissions.Get(
+		context.Background(),
+		mollie.PermissionGrant(perm),
+	)
 	if err != nil {
 		logger.Fatal(err)
 	}

@@ -1,6 +1,8 @@
 package commands
 
 import (
+	"context"
+
 	"github.com/VictorAvelar/mollie-cli/commands/displayers"
 	"github.com/avocatl/admiral/pkg/commander"
 	"github.com/avocatl/admiral/pkg/display"
@@ -31,7 +33,7 @@ func cancelPaymentAction(cmd *cobra.Command, args []string) {
 		logger.Infof("canceling payment with id (token) %s", id)
 	}
 
-	p, err := API.Payments.Cancel(id)
+	_, p, err := API.Payments.Cancel(context.Background(), id)
 	if err != nil {
 		logger.Fatal(err)
 	}
@@ -47,7 +49,7 @@ func cancelPaymentAction(cmd *cobra.Command, args []string) {
 		printJSONP(p)
 	}
 
-	disp := displayers.MolliePayment{Payment: &p}
+	disp := displayers.MolliePayment{Payment: p}
 
 	err = printer.Display(
 		&disp,

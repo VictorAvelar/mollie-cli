@@ -7,7 +7,7 @@ import (
 	"time"
 
 	"github.com/Rhymond/go-money"
-	"github.com/VictorAvelar/mollie-api-go/v2/mollie"
+	"github.com/VictorAvelar/mollie-api-go/v3/mollie"
 )
 
 const (

@@ -1,6 +1,6 @@
 package displayers
 
-import "github.com/VictorAvelar/mollie-api-go/v2/mollie"
+import "github.com/VictorAvelar/mollie-api-go/v3/mollie"
 
 // MolliePermissionList is wrapper for displaying.
 type MolliePermissionList struct {

@@ -1,7 +1,9 @@
 package commands
 
 import (
-	"github.com/VictorAvelar/mollie-api-go/v2/mollie"
+	"context"
+
+	"github.com/VictorAvelar/mollie-api-go/v3/mollie"
 	"github.com/VictorAvelar/mollie-cli/commands/displayers"
 	"github.com/avocatl/admiral/pkg/commander"
 	"github.com/avocatl/admiral/pkg/display"
@@ -32,7 +34,7 @@ To check the payment method embedded resources use the get payment methods comma
 }
 
 func listPaymentMethodsAction(cmd *cobra.Command, args []string) {
-	var opts mollie.MethodsOptions
+	var opts mollie.PaymentMethodsListOptions
 	{
 		if ParsePromptBool(cmd) {
 			oi, err := prompter.Struct(&opts)
@@ -40,7 +42,7 @@ func listPaymentMethodsAction(cmd *cobra.Command, args []string) {
 				logger.Fatal(err)
 			}
 
-			optsi := oi.(*mollie.MethodsOptions)
+			optsi := oi.(*mollie.PaymentMethodsListOptions)
 			opts = *optsi
 		} else {
 			opts.SequenceType = mollie.SequenceType(ParseStringFromFlags(cmd, SequenceTypeArg))
@@ -59,7 +61,7 @@ func listPaymentMethodsAction(cmd *cobra.Command, args []string) {
 		PrintNonEmptyFlags(cmd)
 	}
 
-	ms, err := API.Methods.List(&opts)
+	_, ms, err := API.PaymentMethods.List(context.Background(), &opts)
 	if err != nil {
 		logger.Fatal(err)
 	}
@@ -75,7 +77,7 @@ func listPaymentMethodsAction(cmd *cobra.Command, args []string) {
 	}
 
 	disp := displayers.MollieListMethods{
-		ListMethods: ms,
+		PaymentMethodsList: ms,
 	}
 
 	err = printer.Display(&disp, display.FilterColumns(

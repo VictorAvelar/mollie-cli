@@ -4,7 +4,7 @@ import (
 	"testing"
 	"time"
 
-	"github.com/VictorAvelar/mollie-api-go/v2/mollie"
+	"github.com/VictorAvelar/mollie-api-go/v3/mollie"
 	"github.com/stretchr/testify/assert"
 )
 
@@ -31,7 +31,7 @@ func TestMollieCustomers_KV(t *testing.T) {
 			"EMAIL":      "test@example.com",
 			"ID":         "cs_test",
 			"LOCALE":     "de_DE",
-			"METADATA":   map[string]interface{}(nil),
+			"METADATA":   interface{}(nil),
 			"MODE":       "test",
 			"NAME":       "test customer",
 			"RESOURCE":   "customer",
@@ -82,8 +82,8 @@ func TestMollieCustomersList_KV(t *testing.T) {
 				Customers: customers,
 			},
 			Links: mollie.PaginationLinks{
-				Documentation: mollie.URL{Href: "https://example.com", Type: "text/html"},
-				Self:          mollie.URL{Href: "https://example.com", Type: "text/html"},
+				Documentation: &mollie.URL{Href: "https://example.com", Type: "text/html"},
+				Self:          &mollie.URL{Href: "https://example.com", Type: "text/html"},
 			},
 		},
 	}
@@ -94,7 +94,7 @@ func TestMollieCustomersList_KV(t *testing.T) {
 			"EMAIL":      "test@example.com",
 			"ID":         "cs_test",
 			"LOCALE":     "de_DE",
-			"METADATA":   map[string]interface{}(nil),
+			"METADATA":   interface{}(nil),
 			"MODE":       "test",
 			"NAME":       "test customer",
 			"RESOURCE":   "customer",
@@ -104,7 +104,7 @@ func TestMollieCustomersList_KV(t *testing.T) {
 			"EMAIL":      "test2@example.com",
 			"ID":         "cs_test_2",
 			"LOCALE":     "es_ES",
-			"METADATA":   map[string]interface{}(nil),
+			"METADATA":   interface{}(nil),
 			"MODE":       "test",
 			"NAME":       "test customer 2",
 			"RESOURCE":   "customer",

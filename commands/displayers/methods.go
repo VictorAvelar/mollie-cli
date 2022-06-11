@@ -1,12 +1,12 @@
 package displayers
 
 import (
-	"github.com/VictorAvelar/mollie-api-go/v2/mollie"
+	"github.com/VictorAvelar/mollie-api-go/v3/mollie"
 )
 
 // MollieListMethods wrapper for displaying.
 type MollieListMethods struct {
-	*mollie.ListMethods
+	*mollie.PaymentMethodsList
 }
 
 // KV is a displayable group of key value.
@@ -62,14 +62,14 @@ func (mlm *MollieListMethods) Filterable() bool {
 
 // MollieMethod wrapper for displaying.
 type MollieMethod struct {
-	*mollie.PaymentMethodInfo
+	*mollie.PaymentMethodDetails
 }
 
 // KV is a displayable group of key value.
 func (pm *MollieMethod) KV() []map[string]interface{} {
 	var out []map[string]interface{}
 
-	x := buildXMethod(pm.PaymentMethodInfo)
+	x := buildXMethod(pm.PaymentMethodDetails)
 
 	out = append(out, x)
 
@@ -114,7 +114,7 @@ func (pm *MollieMethod) Filterable() bool {
 	return true
 }
 
-func buildXMethod(m *mollie.PaymentMethodInfo) map[string]interface{} {
+func buildXMethod(m *mollie.PaymentMethodDetails) map[string]interface{} {
 	return map[string]interface{}{
 		"RESOURCE":    m.Resource,
 		"ID":          m.ID,

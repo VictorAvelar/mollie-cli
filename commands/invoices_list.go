@@ -1,7 +1,9 @@
 package commands
 
 import (
-	"github.com/VictorAvelar/mollie-api-go/v2/mollie"
+	"context"
+
+	"github.com/VictorAvelar/mollie-api-go/v3/mollie"
 	"github.com/VictorAvelar/mollie-cli/commands/displayers"
 	"github.com/avocatl/admiral/pkg/commander"
 	"github.com/avocatl/admiral/pkg/display"
@@ -46,14 +48,14 @@ func listInvoicesAction(cmd *cobra.Command, args []string) {
 		PrintNonEmptyFlags(cmd)
 	}
 
-	opts := &mollie.ListInvoiceOptions{
+	opts := &mollie.InvoicesListOptions{
 		Reference: ref,
 		Year:      year,
 		From:      from,
 		Limit:     int64(limit),
 	}
 
-	is, err := API.Invoices.List(opts)
+	_, is, err := API.Invoices.List(context.Background(), opts)
 	if err != nil {
 		logger.Fatal(err)
 	}
@@ -65,7 +67,7 @@ func listInvoicesAction(cmd *cobra.Command, args []string) {
 	}
 
 	disp := displayers.MollieInvoiceList{
-		InvoiceList: &is,
+		InvoicesList: is,
 	}
 
 	err = printer.Display(

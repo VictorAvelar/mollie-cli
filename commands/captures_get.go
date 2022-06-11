@@ -1,6 +1,8 @@
 package commands
 
 import (
+	"context"
+
 	"github.com/VictorAvelar/mollie-cli/commands/displayers"
 	"github.com/avocatl/admiral/pkg/commander"
 	"github.com/avocatl/admiral/pkg/display"
@@ -47,7 +49,7 @@ func getCapturesAction(cmd *cobra.Command, args []string) {
 		PrintNonemptyFlagValue(IDArg, id)
 	}
 
-	capture, err := API.Captures.Get(payment, id)
+	_, capture, err := API.Captures.Get(context.Background(), payment, id)
 	if err != nil {
 		logger.Fatal(err)
 	}

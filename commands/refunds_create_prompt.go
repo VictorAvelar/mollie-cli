@@ -1,7 +1,9 @@
 package commands
 
 import (
-	"github.com/VictorAvelar/mollie-api-go/v2/mollie"
+	"context"
+
+	"github.com/VictorAvelar/mollie-api-go/v3/mollie"
 	"github.com/VictorAvelar/mollie-cli/commands/displayers"
 	"github.com/avocatl/admiral/pkg/commander"
 	"github.com/avocatl/admiral/pkg/display"
@@ -36,7 +38,7 @@ func promptCreateRefundAction(cmd *cobra.Command, args []string) {
 		}
 	}
 
-	rs, err := API.Refunds.Create(payment, r, nil)
+	_, rs, err := API.Refunds.Create(context.Background(), payment, r, nil)
 	if err != nil {
 		logger.Errorf("%+v", rs)
 		logger.Errorf("%+v", r)
@@ -53,7 +55,7 @@ func promptCreateRefundAction(cmd *cobra.Command, args []string) {
 		printJSONP(rs)
 	}
 
-	disp := displayers.MollieRefund{Refund: &rs}
+	disp := displayers.MollieRefund{Refund: rs}
 
 	err = printer.Display(
 		&disp,

@@ -1,7 +1,9 @@
 package commands
 
 import (
-	"github.com/VictorAvelar/mollie-api-go/v2/mollie"
+	"context"
+
+	"github.com/VictorAvelar/mollie-api-go/v3/mollie"
 	"github.com/VictorAvelar/mollie-cli/commands/displayers"
 	"github.com/avocatl/admiral/pkg/commander"
 	"github.com/avocatl/admiral/pkg/display"
@@ -55,7 +57,7 @@ func getChargebackAction(cmd *cobra.Command, args []string) {
 		}
 	}
 
-	cb, err := API.Chargebacks.Get(payment, chargeback, &opts)
+	_, cb, err := API.Chargebacks.Get(context.Background(), payment, chargeback, &opts)
 	if err != nil {
 		logger.Fatal(err)
 	}
@@ -65,7 +67,7 @@ func getChargebackAction(cmd *cobra.Command, args []string) {
 		logger.Infof("request docs: %s", cb.Links.Documentation.Href)
 	}
 
-	disp := &displayers.MollieChargeback{Chargeback: &cb}
+	disp := &displayers.MollieChargeback{Chargeback: cb}
 
 	err = printer.Display(
 		disp,

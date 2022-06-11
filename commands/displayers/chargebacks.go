@@ -1,6 +1,6 @@
 package displayers
 
-import "github.com/VictorAvelar/mollie-api-go/v2/mollie"
+import "github.com/VictorAvelar/mollie-api-go/v3/mollie"
 
 // MollieChargeback wrapper for displaying.
 type MollieChargeback struct {
@@ -42,7 +42,7 @@ func (cb *MollieChargeback) Filterable() bool {
 
 // MollieChargebackList wrapper for displaying.
 type MollieChargebackList struct {
-	*mollie.ChargebackList
+	*mollie.ChargebacksList
 }
 
 // KV is a displayable group of key value.

@@ -1,7 +1,9 @@
 package commands
 
 import (
-	"github.com/VictorAvelar/mollie-api-go/v2/mollie"
+	"context"
+
+	"github.com/VictorAvelar/mollie-api-go/v3/mollie"
 	"github.com/VictorAvelar/mollie-cli/commands/displayers"
 	"github.com/avocatl/admiral/pkg/commander"
 	"github.com/avocatl/admiral/pkg/display"
@@ -141,23 +143,23 @@ func createPaymentAction(cmd *cobra.Command, args []string) {
 		Method:                          m,
 	}
 
-	p, err := API.Payments.Create(p, nil)
+	_, payment, err := API.Payments.Create(context.Background(), p, nil)
 	if err != nil {
 		logger.Fatal(err)
 	}
 
 	if verbose {
-		logger.Infof("request target: %s", p.Links.Self.Href)
-		logger.Infof("request docs: %s", p.Links.Documentation.Href)
+		logger.Infof("request target: %s", payment.Links.Self.Href)
+		logger.Infof("request docs: %s", payment.Links.Documentation.Href)
 		logger.Infof("payment successfully created")
-		logger.Infof("Payment created at %s", p.CreatedAt)
+		logger.Infof("Payment created at %s", payment.CreatedAt)
 	}
 
 	if json {
-		printJSONP(p)
+		printJSONP(payment)
 	}
 
-	disp := displayers.MolliePayment{Payment: &p}
+	disp := displayers.MolliePayment{Payment: payment}
 
 	err = printer.Display(
 		&disp,

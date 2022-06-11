@@ -1,7 +1,9 @@
 package commands
 
 import (
-	"github.com/VictorAvelar/mollie-api-go/v2/mollie"
+	"context"
+
+	"github.com/VictorAvelar/mollie-api-go/v3/mollie"
 	"github.com/VictorAvelar/mollie-cli/commands/displayers"
 	"github.com/avocatl/admiral/pkg/commander"
 	"github.com/avocatl/admiral/pkg/display"
@@ -37,7 +39,7 @@ func listPaymentsAction(cmd *cobra.Command, args []string) {
 		opts.From = ParseStringFromFlags(cmd, FromArg)
 		opts.Embed = ParseStringFromFlags(cmd, EmbedArg)
 	}
-	ps, err := API.Payments.List(&opts)
+	_, ps, err := API.Payments.List(context.Background(), &opts)
 	if err != nil {
 		logger.Fatal(err)
 	}
@@ -53,7 +55,7 @@ func listPaymentsAction(cmd *cobra.Command, args []string) {
 	}
 
 	disp := displayers.MollieListPayments{
-		PaymentList: &ps,
+		PaymentList: ps,
 	}
 
 	err = printer.Display(

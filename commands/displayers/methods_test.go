@@ -5,7 +5,7 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/VictorAvelar/mollie-api-go/v2/mollie"
+	"github.com/VictorAvelar/mollie-api-go/v3/mollie"
 	"github.com/stretchr/testify/assert"
 )
 
@@ -38,7 +38,7 @@ func TestStringCombinator(t *testing.T) {
 
 func TestMollieMethod_KV(t *testing.T) {
 	disp := MollieMethod{
-		&mollie.PaymentMethodInfo{
+		&mollie.PaymentMethodDetails{
 			Resource:      "methods",
 			ID:            "ideal",
 			Description:   "iDeal payments",
@@ -69,10 +69,10 @@ func TestMollieMethod_KV(t *testing.T) {
 }
 
 func TestMollieListMethods(t *testing.T) {
-	var meths []*mollie.PaymentMethodInfo
+	var meths []*mollie.PaymentMethodDetails
 	meths = append(
 		meths,
-		&mollie.PaymentMethodInfo{
+		&mollie.PaymentMethodDetails{
 			Resource:      "methods",
 			ID:            "ideal",
 			Description:   "iDeal payments",
@@ -84,7 +84,7 @@ func TestMollieListMethods(t *testing.T) {
 				Svg:    "https://victoravelar.com/logo-example/logo.svg",
 			},
 		},
-		&mollie.PaymentMethodInfo{
+		&mollie.PaymentMethodDetails{
 			Resource:      "methods",
 			ID:            "paypal",
 			Description:   "Paypal",
@@ -97,13 +97,15 @@ func TestMollieListMethods(t *testing.T) {
 			},
 		})
 	disp := MollieListMethods{
-		ListMethods: &mollie.ListMethods{
+		PaymentMethodsList: &mollie.PaymentMethodsList{
 			Count: 2,
 			Links: mollie.PaginationLinks{
-				Documentation: mollie.URL{Href: "https://example.com", Type: "text/html"},
-				Self:          mollie.URL{Href: "https://example.com", Type: "text/html"},
+				Documentation: &mollie.URL{Href: "https://example.com", Type: "text/html"},
+				Self:          &mollie.URL{Href: "https://example.com", Type: "text/html"},
 			},
-			Embedded: struct{ Methods []*mollie.PaymentMethodInfo }{
+			Embedded: struct {
+				Methods []*mollie.PaymentMethodDetails
+			}{
 				Methods: meths,
 			},
 		},

@@ -1,9 +1,10 @@
 package commands
 
 import (
+	"context"
 	"fmt"
 
-	"github.com/VictorAvelar/mollie-api-go/v2/mollie"
+	"github.com/VictorAvelar/mollie-api-go/v3/mollie"
 	"github.com/VictorAvelar/mollie-cli/commands/displayers"
 	"github.com/avocatl/admiral/pkg/commander"
 	"github.com/avocatl/admiral/pkg/display"
@@ -43,7 +44,7 @@ func getPaymentMethodAction(cmd *cobra.Command, args []string) {
 		logger.Fatal(err)
 	}
 
-	var opts mollie.MethodsOptions
+	var opts mollie.PaymentMethodOptions
 	{
 		if ParsePromptBool(cmd) {
 			v, err := prompter.Struct(&getMethodPropmter{})
@@ -66,7 +67,11 @@ func getPaymentMethodAction(cmd *cobra.Command, args []string) {
 		PrintNonEmptyFlags(cmd)
 	}
 
-	m, err := API.Methods.Get(id, &opts)
+	_, m, err := API.PaymentMethods.Get(
+		context.Background(),
+		mollie.PaymentMethod(id),
+		&opts,
+	)
 	if err != nil {
 		logger.Fatal(err)
 	}
@@ -83,9 +88,9 @@ func getPaymentMethodAction(cmd *cobra.Command, args []string) {
 	}
 }
 
-func getMethodsDisplayables(m *mollie.PaymentMethodInfo) []display.Displayable {
+func getMethodsDisplayables(m *mollie.PaymentMethodDetails) []display.Displayable {
 	method := &displayers.MollieMethod{
-		PaymentMethodInfo: m,
+		PaymentMethodDetails: m,
 	}
 
 	var dp []display.Displayable

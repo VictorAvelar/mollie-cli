@@ -3,7 +3,7 @@ package displayers
 import (
 	"strings"
 
-	"github.com/VictorAvelar/mollie-api-go/v2/mollie"
+	"github.com/VictorAvelar/mollie-api-go/v3/mollie"
 )
 
 func stringCombinator(s string, parts ...string) string {

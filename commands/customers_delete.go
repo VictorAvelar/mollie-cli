@@ -1,6 +1,8 @@
 package commands
 
 import (
+	"context"
+
 	"github.com/avocatl/admiral/pkg/commander"
 	"github.com/avocatl/admiral/pkg/display"
 	"github.com/spf13/cobra"
@@ -32,7 +34,7 @@ func deleteCustomerAction(cmd *cobra.Command, args []string) {
 		PrintNonEmptyFlags(cmd)
 	}
 
-	err := API.Customers.Delete(id)
+	_, err := API.Customers.Delete(context.Background(), id)
 	if err != nil {
 		logger.Fatal(err)
 	}
