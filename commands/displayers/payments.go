@@ -1,7 +1,7 @@
 package displayers
 
 import (
-	"github.com/VictorAvelar/mollie-api-go/v2/mollie"
+	"github.com/VictorAvelar/mollie-api-go/v3/mollie"
 )
 
 // MollieListPayments wrapper for displaying.

@@ -1,7 +1,9 @@
 package commands
 
 import (
-	"github.com/VictorAvelar/mollie-api-go/v2/mollie"
+	"context"
+
+	"github.com/VictorAvelar/mollie-api-go/v3/mollie"
 	"github.com/VictorAvelar/mollie-cli/commands/displayers"
 	"github.com/avocatl/admiral/pkg/commander"
 	"github.com/avocatl/admiral/pkg/display"
@@ -83,7 +85,7 @@ func updatePaymentAction(cmd *cobra.Command, args []string) {
 	c := mollie.Locale(rpmCountry)
 	m := mollie.PaymentMethod(method)
 
-	p, err := API.Payments.Update(id, mollie.Payment{
+	_, p, err := API.Payments.Update(context.Background(), id, mollie.Payment{
 		RedirectURL:                     rURL,
 		Description:                     desc,
 		WebhookURL:                      whURL,
@@ -102,7 +104,7 @@ func updatePaymentAction(cmd *cobra.Command, args []string) {
 		logger.Infof("payment successfully updated")
 	}
 
-	disp := displayers.MolliePayment{Payment: &p}
+	disp := displayers.MolliePayment{Payment: p}
 
 	err = printer.Display(
 		&disp,

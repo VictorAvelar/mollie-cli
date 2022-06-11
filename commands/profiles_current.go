@@ -1,6 +1,8 @@
 package commands
 
 import (
+	"context"
+
 	"github.com/VictorAvelar/mollie-cli/commands/displayers"
 	"github.com/avocatl/admiral/pkg/commander"
 	"github.com/avocatl/admiral/pkg/display"
@@ -24,7 +26,7 @@ or application.`,
 }
 
 func currentProfileAction(cmd *cobra.Command, args []string) {
-	p, err := API.Profiles.Current()
+	_, p, err := API.Profiles.Current(context.Background())
 	if err != nil {
 		logger.Fatal(err)
 	}

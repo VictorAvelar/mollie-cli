@@ -1,7 +1,9 @@
 package commands
 
 import (
-	"github.com/VictorAvelar/mollie-api-go/v2/mollie"
+	"context"
+
+	"github.com/VictorAvelar/mollie-api-go/v3/mollie"
 	"github.com/VictorAvelar/mollie-cli/commands/displayers"
 	"github.com/avocatl/admiral/pkg/commander"
 	"github.com/avocatl/admiral/pkg/display"
@@ -36,12 +38,12 @@ func listChargebackAction(cmd *cobra.Command, args []string) {
 		PrintNonEmptyFlags(cmd)
 	}
 
-	var opt mollie.ListChargebackOptions
+	var opt mollie.ChargebacksListOptions
 	{
 		opt.Embed = embed
 	}
 
-	cbs, err := API.Chargebacks.List(&opt)
+	_, cbs, err := API.Chargebacks.List(context.Background(), &opt)
 	if err != nil {
 		logger.Fatal(err)
 	}
@@ -52,7 +54,7 @@ func listChargebackAction(cmd *cobra.Command, args []string) {
 		logger.Infof("request docs: %s", cbs.Links.Documentation.Href)
 	}
 
-	disp := displayers.MollieChargebackList{ChargebackList: cbs}
+	disp := displayers.MollieChargebackList{ChargebacksList: cbs}
 
 	err = printer.Display(
 		&disp,

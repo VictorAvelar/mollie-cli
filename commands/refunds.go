@@ -1,7 +1,9 @@
 package commands
 
 import (
-	"github.com/VictorAvelar/mollie-api-go/v2/mollie"
+	"context"
+
+	"github.com/VictorAvelar/mollie-api-go/v3/mollie"
 	"github.com/avocatl/admiral/pkg/commander"
 )
 
@@ -43,8 +45,13 @@ func refundsCols() []string {
 
 func getRefundList(opts *mollie.ListRefundOptions, payment string) (*mollie.RefundList, error) {
 	if payment != "" {
-		return API.Refunds.ListRefundPayment(payment, opts)
+		_, rl, err := API.Refunds.ListRefundPayment(
+			context.Background(), payment, opts,
+		)
+		return rl, err
 	}
 
-	return API.Refunds.ListRefund(opts)
+	_, rl, err := API.Refunds.ListRefund(context.Background(), opts)
+
+	return rl, err
 }

@@ -1,7 +1,9 @@
 package commands
 
 import (
-	"github.com/VictorAvelar/mollie-api-go/v2/mollie"
+	"context"
+
+	"github.com/VictorAvelar/mollie-api-go/v3/mollie"
 	"github.com/VictorAvelar/mollie-cli/commands/displayers"
 	"github.com/avocatl/admiral/pkg/commander"
 	"github.com/avocatl/admiral/pkg/display"
@@ -61,7 +63,7 @@ func createCustomerAction(cmd *cobra.Command, args []string) {
 		}
 	}
 
-	nc, err := API.Customers.Create(c)
+	_, nc, err := API.Customers.Create(context.Background(), c)
 	if err != nil {
 		logger.Fatal(err)
 	}

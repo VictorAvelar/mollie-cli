@@ -1,6 +1,6 @@
 package displayers
 
-import "github.com/VictorAvelar/mollie-api-go/v2/mollie"
+import "github.com/VictorAvelar/mollie-api-go/v3/mollie"
 
 // MolliePaymentMethodIssuer wrapper for displaying.
 type MolliePaymentMethodIssuer struct {

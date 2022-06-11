@@ -1,6 +1,6 @@
 package displayers
 
-import "github.com/VictorAvelar/mollie-api-go/v2/mollie"
+import "github.com/VictorAvelar/mollie-api-go/v3/mollie"
 
 // MollieInvoice wrapper for displaying.
 type MollieInvoice struct {
@@ -39,7 +39,7 @@ func (mi *MollieInvoice) Filterable() bool {
 
 // MollieInvoiceList wrapper for displaying.
 type MollieInvoiceList struct {
-	*mollie.InvoiceList
+	*mollie.InvoicesList
 }
 
 // KV is a displayable group of key value.

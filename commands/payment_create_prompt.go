@@ -1,7 +1,9 @@
 package commands
 
 import (
-	"github.com/VictorAvelar/mollie-api-go/v2/mollie"
+	"context"
+
+	"github.com/VictorAvelar/mollie-api-go/v3/mollie"
 	"github.com/VictorAvelar/mollie-cli/commands/displayers"
 	"github.com/avocatl/admiral/pkg/commander"
 	"github.com/avocatl/admiral/pkg/display"
@@ -38,7 +40,7 @@ func promptPaymentAction(cmd *cobra.Command, args []string) {
 		attachAccessTokenParams(&payment)
 	}
 
-	res, err := API.Payments.Create(payment, nil)
+	_, res, err := API.Payments.Create(context.Background(), payment, nil)
 	if err != nil {
 		logger.Fatal(err)
 	}

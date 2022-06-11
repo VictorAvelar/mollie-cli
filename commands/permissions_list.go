@@ -1,6 +1,8 @@
 package commands
 
 import (
+	"context"
+
 	"github.com/VictorAvelar/mollie-cli/commands/displayers"
 	"github.com/avocatl/admiral/pkg/commander"
 	"github.com/avocatl/admiral/pkg/display"
@@ -22,7 +24,7 @@ func listPermissionsCmd(p *commander.Command) *commander.Command {
 
 // RunListPermissions list all permissions for the current token.
 func listPermissionsAction(cmd *cobra.Command, args []string) {
-	p, err := API.Permissions.List()
+	_, p, err := API.Permissions.List(context.Background())
 	if err != nil {
 		logger.Fatal(err)
 	}

@@ -4,7 +4,7 @@ import (
 	"testing"
 	"time"
 
-	"github.com/VictorAvelar/mollie-api-go/v2/mollie"
+	"github.com/VictorAvelar/mollie-api-go/v3/mollie"
 	"github.com/stretchr/testify/assert"
 )
 
@@ -53,21 +53,21 @@ func TestMollieListChargebacks(t *testing.T) {
 	}
 
 	disp := MollieChargebackList{
-		ChargebackList: &mollie.ChargebackList{
+		ChargebacksList: &mollie.ChargebacksList{
 			Count: 2,
 			Embedded: struct{ Chargebacks []mollie.Chargeback }{
 				Chargebacks: cbs,
 			},
 			Links: mollie.PaginationLinks{
-				Documentation: mollie.URL{Href: "https://example.com", Type: "text/html"},
-				Self:          mollie.URL{Href: "https://example.com", Type: "text/html"},
+				Documentation: &mollie.URL{Href: "https://example.com", Type: "text/html"},
+				Self:          &mollie.URL{Href: "https://example.com", Type: "text/html"},
 			},
 		},
 	}
 
-	out := expectedChargebackSlice(disp.Embedded.Chargebacks...)
+	out := expectedChargebackSlice(disp.ChargebacksList.Embedded.Chargebacks...)
 	assert.Len(t, out, 2)
-	assert.Equal(t, disp.ChargebackList.Count, 2)
+	assert.Equal(t, disp.ChargebacksList.Count, 2)
 	assert.Equal(t, out, disp.KV())
 }
 

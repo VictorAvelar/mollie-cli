@@ -1,14 +1,15 @@
 package commands
 
 import (
+	"context"
 	"time"
 
-	"github.com/VictorAvelar/mollie-api-go/v2/mollie"
+	"github.com/VictorAvelar/mollie-api-go/v3/mollie"
 	"github.com/avocatl/admiral/pkg/prompter"
 )
 
 func promptPaymentMethod() mollie.PaymentMethod {
-	methods, err := API.Methods.List(nil)
+	_, methods, err := API.PaymentMethods.List(context.Background(), nil)
 	if err != nil {
 		logger.Fatal(err)
 	}

@@ -1,6 +1,8 @@
 package commands
 
 import (
+	"context"
+
 	"github.com/VictorAvelar/mollie-cli/commands/displayers"
 	"github.com/avocatl/admiral/pkg/commander"
 	"github.com/avocatl/admiral/pkg/display"
@@ -31,7 +33,7 @@ func getProfileAction(cmd *cobra.Command, args []string) {
 		logger.Infof("fetching profile with id %s", id)
 	}
 
-	p, err := API.Profiles.Get(id)
+	_, p, err := API.Profiles.Get(context.Background(), id)
 	if err != nil {
 		logger.Fatal(err)
 	}

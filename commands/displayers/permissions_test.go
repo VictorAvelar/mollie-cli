@@ -3,7 +3,7 @@ package displayers
 import (
 	"testing"
 
-	"github.com/VictorAvelar/mollie-api-go/v2/mollie"
+	"github.com/VictorAvelar/mollie-api-go/v3/mollie"
 	"github.com/stretchr/testify/assert"
 )
 

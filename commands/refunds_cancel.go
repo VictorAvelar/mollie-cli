@@ -1,6 +1,8 @@
 package commands
 
 import (
+	"context"
+
 	"github.com/avocatl/admiral/pkg/commander"
 	"github.com/avocatl/admiral/pkg/display"
 	"github.com/spf13/cobra"
@@ -38,7 +40,7 @@ func cancelRefundAction(cmd *cobra.Command, args []string) {
 		PrintNonEmptyFlags(cmd)
 	}
 
-	err := API.Refunds.Cancel(payment, id, nil)
+	_, err := API.Refunds.Cancel(context.Background(), payment, id)
 	if err != nil {
 		logger.Fatal(err)
 	}

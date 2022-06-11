@@ -4,7 +4,7 @@ import (
 	"testing"
 	"time"
 
-	"github.com/VictorAvelar/mollie-api-go/v2/mollie"
+	"github.com/VictorAvelar/mollie-api-go/v3/mollie"
 	"github.com/stretchr/testify/assert"
 )
 
@@ -76,8 +76,8 @@ func TestMollieRefundList_KV(t *testing.T) {
 				Refunds: refunds,
 			},
 			Links: mollie.PaginationLinks{
-				Documentation: mollie.URL{Href: "https://example.com", Type: "text/html"},
-				Self:          mollie.URL{Href: "https://example.com", Type: "text/html"},
+				Documentation: &mollie.URL{Href: "https://example.com", Type: "text/html"},
+				Self:          &mollie.URL{Href: "https://example.com", Type: "text/html"},
 			},
 		},
 	}
