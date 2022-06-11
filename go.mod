@@ -3,7 +3,7 @@ module github.com/VictorAvelar/mollie-cli
 go 1.15
 
 require (
-	github.com/Rhymond/go-money v1.0.3
+	github.com/Rhymond/go-money v1.0.7
 	github.com/VictorAvelar/mollie-api-go/v2 v2.14.1
 	github.com/avocatl/admiral v0.4.0
 	github.com/mitchellh/go-homedir v1.1.0
