@@ -1,12 +1,38 @@
 # mollie-cli
 
-### :warning: WIP
+### :warning: This is a work in progress
 
-The Mollie CLI helps you build, test, and manage your Mollie integration right from the terminal.
+mollie-cli provides a developer friendly way to interact with [Mollie's REST API](https://docs.mollie.com/reference/v2).
 
-It is based on the [mollie-api-go](https://github.com/VictorAvelar/mollie-api-go) wrapper and attempts to ease the integration process with Mollie.
+It also works as a good example of how to use the [mollie-api-go](https://github.com/VictorAvelar/mollie-api-go) sdk.
 
-##### This project is inspired by the doctl implementation.
+## Installation
+
+You can install this cli using the go toolchain.
+
+```
+go install github.com/VictorAvelar/mollie-cli/cmd/mollie@latest
+```
+
+### Building from source
+
+```
+git clone git@github.com:VictorAvelar/mollie-cli.git
+```
+
+The compile the library yourself, there are a couple of make commands to support this:
+
+If you want to compile your current branch:
+
+```
+make compile-current
+```
+
+If you want to compile master:
+
+```
+make compile-master
+```
 
 # Roadmap
 
