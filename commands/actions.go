@@ -25,10 +25,7 @@ func printCurl(cmd *cobra.Command, args []string) {
 			app.Logger.Error(err)
 		}
 
-		app.Logger.Infof(`
-Your cURL:
-%s
-`, curl)
+		app.Logger.Infof(curl.String())
 	}
 }
 

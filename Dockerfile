@@ -2,12 +2,12 @@ FROM golang:1.18-alpine
 
 ENV CGO_ENABLED=0
 
-WORKDIR /testing
+RUN apk add wget
 
-COPY go.* ./
+RUN go install github.com/VictorAvelar/mollie-cli/cmd/mollie@latest
 
-RUN go mod download
+RUN wget https://raw.githubusercontent.com/VictorAvelar/mollie-cli/master/.mollie.yaml
 
-COPY . .
+ENTRYPOINT ["mollie"]
 
-ENTRYPOINT [ "go", "test", "./...", "-v"]
+CMD ["-h"]
