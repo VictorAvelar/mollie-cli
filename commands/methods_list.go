@@ -2,7 +2,6 @@ package commands
 
 import (
 	"context"
-	"fmt"
 
 	"github.com/VictorAvelar/mollie-api-go/v3/mollie"
 	"github.com/VictorAvelar/mollie-cli/commands/displayers"
@@ -10,7 +9,6 @@ import (
 	"github.com/avocatl/admiral/pkg/display"
 	"github.com/avocatl/admiral/pkg/prompter"
 	"github.com/spf13/cobra"
-	"moul.io/http2curl"
 )
 
 func listPaymentMethodsCmd(p *commander.Command) {
@@ -62,11 +60,6 @@ func listPaymentMethodsAction(cmd *cobra.Command, args []string) {
 
 	res, ms, err := app.API.PaymentMethods.List(context.Background(), &opts)
 	if err != nil {
-		curl, err2 := http2curl.GetCurlCommand(res.Request)
-		if err2 != nil {
-			app.Logger.Error(err2)
-		}
-		fmt.Printf("%s\n", curl)
 		app.Logger.Fatal(err)
 	}
 
