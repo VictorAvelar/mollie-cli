@@ -1,29 +1,13 @@
 mollie:
   core:
-    # Print JSON instead of the standard tab formatted format.
     json: false
-    # Enables verbose logging during the command execution.
     verbose: false
-    # Enables printing the curl representation for the request
-    # performed, useful for importing to other tools like postman,
-    # insomnia, etc...
     curl: false
-    # For some features it is necessary to specify the type of
-    # actions being performed especially when using organization
-    # tokens. Accepted values are test/live.
     mode: test
-    # Debug prints the report caller on log entries.
     debug: true
-    # Set a custom path to parse config, by default the CLI will
-    # attempt to parse from ~, ~/.config, and the current working
-    # directory (pwd).
     config:
       default: true
       custom_path: "."
-  # Fields are each of the data points returned as part of a response
-  # all contains all the possible printable values and printable must
-  # contain the values you want to print by default, printable can be
-  # overwritten by using the persistent `-f` flag.
   fields:
     payments:
       all:
