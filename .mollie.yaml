@@ -1,8 +1,5 @@
 mollie:
   core:
-    # Speficy the environment variable that you want to use to
-    # insert your API key.
-    key: ${MOLLIE_API_TOKEN}
     # Print JSON instead of the standard tab formatted format.
     json: false
     # Enables verbose logging during the command execution.

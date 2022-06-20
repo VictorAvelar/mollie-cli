@@ -7,8 +7,7 @@ import (
 )
 
 func main() {
-	app := commands.New()
-	if err := app.Execute(); err != nil {
+	if err := commands.Execute(); err != nil {
 		log.Fatal(err)
 	}
 }
