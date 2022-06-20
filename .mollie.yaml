@@ -94,4 +94,22 @@ mollie:
       printable:
     invoices:
       all:
+        - "RESOURCE"
+        - "ID"
+        - "REFERENCE"
+        - "VAT_NUMBER"
+        - "STATUS"
+        - "ISSUED_AT"
+        - "PAID_AT"
+        - "DUE_AT"
+        - "NET_AMOUNT"
+        - "VAT_AMOUNT"
+        - "GROSS_AMOUNT"
       printable:
+        - "ID"
+        - "REFERENCE"
+        - "VAT_NUMBER"
+        - "STATUS"
+        - "NET_AMOUNT"
+        - "VAT_AMOUNT"
+        - "GROSS_AMOUNT"

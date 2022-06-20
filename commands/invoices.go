@@ -8,9 +8,11 @@ func invoices() *commander.Command {
 	i := commander.Builder(
 		nil,
 		commander.Config{
-			Namespace: "invoices",
-			Example:   "mollie invoices",
-			ShortDesc: "Operations over Mollie's Invoices API.",
+			Namespace:          "invoices",
+			Example:            "mollie invoices",
+			ShortDesc:          "Operations over Mollie's Invoices API.",
+			PostHook:           printJson,
+			PersistentPostHook: printCurl,
 		},
 		invoicesCols(),
 	)
@@ -22,17 +24,11 @@ func invoices() *commander.Command {
 }
 
 func invoicesCols() []string {
-	return []string{
-		"RESOURCE",
-		"ID",
-		"REFERENCE",
-		"VAT_NUMBER",
-		"STATUS",
-		"ISSUED_AT",
-		"PAID_AT",
-		"DUE_AT",
-		"NET_AMOUNT",
-		"VAT_AMOUNT",
-		"GROSS_AMOUNT",
+	cols := app.Config.GetStringSlice("mollie.fields.invoices.all")
+
+	if verbose {
+		app.Logger.Info("parsed fields %v", cols)
 	}
+
+	return cols
 }
