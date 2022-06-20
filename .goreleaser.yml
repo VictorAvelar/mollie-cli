@@ -2,22 +2,46 @@
 project_name: mollie-cli
 builds:
   - main: ./cmd/mollie/main.go
+    binary: mollie
     goos:
       - linux
       - darwin
       - windows
     flags:
       - -v
+    env:
+      - CGO_ENABLED=0
+    ignore:
+      - goos: darwin
+        goarch: 386
 archives:
   - name_template: "mollie-{{ .Version }}-{{ .Os }}-{{ .Arch }}"
 checksum:
   name_template: "mollie-{{ .Version }}-checksums.sha256"
 snapshot:
   name_template: "{{ .Tag }}-next"
+dockers:
+  - image_templates:
+      - "gcr.io/VictorAvelar/{{.ProjectName}}:{{ .Tag }}"
+      - "gcr.io/VictorAvelar/{{.ProjectName}}:v{{ .Major }}"
+      - "gcr.io/VictorAvelar/{{.ProjectName}}:v{{ .Major }}.{{ .Minor }}"
+      - "gcr.io/VictorAvelar/{{.ProjectName}}:latest"
 changelog:
+  use: github
+  sort: asc
+  groups:
+    - title: Features
+      regexp: "^.*feat[(\\w)]*:+.*$"
+      order: 0
+    - title: "Bug fixes"
+      regexp: "^.*fix[(\\w)]*:+.*$"
+      order: 1
+    - title: Others
+      order: 999
   filters:
     exclude:
       - docs
       - changelog
+      - typo
       - Readme
       - ^Merge pull request
