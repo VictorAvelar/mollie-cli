@@ -30,6 +30,7 @@ mollie invoices get --id inv_test
 ```
   -c, --config string   specifies a custom config file to be used
       --curl            print the curl representation of a request
+  -d, --debug           enables debug logging information
   -f, --fields string   select displayable fields to filter the console output, possible values are RESOURCE,ID,REFERENCE,VAT_NUMBER,STATUS,ISSUED_AT,PAID_AT,DUE_AT,NET_AMOUNT,VAT_AMOUNT,GROSS_AMOUNT
       --json            dumpts the json response instead of the column based output
   -m, --mode string     indicates the api target from test/live (default "test")

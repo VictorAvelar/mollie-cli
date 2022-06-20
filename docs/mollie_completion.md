@@ -19,6 +19,7 @@ See each sub-command's help for details on how to use the generated script.
 ```
   -c, --config string   specifies a custom config file to be used
       --curl            print the curl representation of a request
+  -d, --debug           enables debug logging information
       --json            dumpts the json response instead of the column based output
   -m, --mode string     indicates the api target from test/live (default "test")
   -t, --token string    the type of token to use for auth (default "MOLLIE_API_TOKEN")

@@ -34,6 +34,7 @@ mollie methods all --locale=nl_NL
 ```
   -c, --config string    specifies a custom config file to be used
       --curl             print the curl representation of a request
+  -d, --debug            enables debug logging information
   -f, --fields string    select displayable fields to filter the console output, possible values are RESOURCE,ID,DESCRIPTION,ISSUERS,MIN_AMOUNT,MAX_AMOUNT,LOGO
   -i, --include string   this resource allows to enrich the response by including other objects
       --json             dumpts the json response instead of the column based output

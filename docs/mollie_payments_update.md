@@ -36,6 +36,7 @@ mollie payments update --id=test_token --description=updated
 ```
   -c, --config string   specifies a custom config file to be used
       --curl            print the curl representation of a request
+  -d, --debug           enables debug logging information
   -f, --fields string   select displayable fields to filter the console output, possible values are RESOURCE,ID,MODE,STATUS,CANCELABLE,AMOUNT,METHOD,DESCRIPTION,SEQUENCE,REMAINING,REFUNDED,CAPTURED,SETTLEMENT,APP_FEE,CREATED_AT,AUTHORIZED_AT,EXPIRES,PAID_AT,FAILED_AT,CANCELED_AT,CUSTOMER_ID,SETTLEMENT_ID,MANDATE_ID,SUBSCRIPTION_ID,ORDER_ID,REDIRECT,WEBHOOK,LOCALE,COUNTRY
       --json            dumpts the json response instead of the column based output
   -m, --mode string     indicates the api target from test/live (default "test")

@@ -24,6 +24,7 @@ mollie profiles get --id=pfl_token
 ```
   -c, --config string   specifies a custom config file to be used
       --curl            print the curl representation of a request
+  -d, --debug           enables debug logging information
   -f, --fields string   select displayable fields to filter the console output, possible values are RESOURCE,ID,MODE,NAME,WEBSITE,EMAIL,PHONE,CATEGORY_CODE,STATUS,REVIEW,CREATED_AT
       --json            dumpts the json response instead of the column based output
   -m, --mode string     indicates the api target from test/live (default "test")

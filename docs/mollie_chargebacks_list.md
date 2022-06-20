@@ -29,6 +29,7 @@ mollie chargebacks list --embed=payments
 ```
   -c, --config string   specifies a custom config file to be used
       --curl            print the curl representation of a request
+  -d, --debug           enables debug logging information
   -f, --fields string   select displayable fields to filter the console output, possible values are RESOURCE,ID,AMOUNT,SETTLEMENT_AMOUNT,CREATED_AT,REVERSED_AT,PAYMENT_ID
       --json            dumpts the json response instead of the column based output
   -m, --mode string     indicates the api target from test/live (default "test")
