@@ -26,15 +26,6 @@ const (
 	Invoices    = "invoices"
 )
 
-type cli struct {
-	App     *commander.Command
-	API     *mollie.Client
-	Printer display.Displayer
-	Store   map[string]interface{}
-	Logger  *logrus.Logger
-	Config  *viper.Viper
-}
-
 var (
 	app *cli
 
@@ -44,6 +35,25 @@ var (
 	// global structured logger.
 	logger *logrus.Entry
 )
+
+type cli struct {
+	App     *commander.Command
+	API     *mollie.Client
+	Printer display.Displayer
+	Store   map[string]interface{}
+	Logger  *logrus.Logger
+	Config  *viper.Viper
+}
+
+// Application describes an executable CLI app.
+type Application interface {
+	Execute() error
+}
+
+// New creates a new application.
+func New() Application {
+	return &cli{}
+}
 
 func init() {
 	app := &cli{}
