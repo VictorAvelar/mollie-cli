@@ -8,13 +8,9 @@ import (
 )
 
 func printJsonAction(cmd *cobra.Command, args []string) {
-	println("called json")
 	if json {
 		ns := app.Store["ns"].(string)
-
 		data := app.Store[ns]
-
-		app.Logger.Info(data)
 
 		printJSONP(data)
 	}
