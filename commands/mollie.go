@@ -252,7 +252,7 @@ func addPersistentFlags() {
 			BindBool: &debug,
 		},
 	})
-	_ = viper.BindPFlag("debug", app.App.PersistentFlags().Lookup("debug"))
+	_ = viper.BindPFlag("mollie.core.debug", app.App.PersistentFlags().Lookup("debug"))
 }
 
 func addCommands() {
