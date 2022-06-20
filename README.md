@@ -34,6 +34,10 @@ If you want to compile master:
 make compile-master
 ```
 
+## Configuration
+
+Copy the config file [`.mollie.yaml`](.mollie.yaml) to your home folder or your home folder config. If you are using this during development you can also create a copy in the directory where you execute mollie commands or specify a custom location using the `--config` flag.
+
 # Roadmap
 
 ## Authentication
