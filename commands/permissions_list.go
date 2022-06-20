@@ -24,21 +24,22 @@ func listPermissionsCmd(p *commander.Command) *commander.Command {
 
 // RunListPermissions list all permissions for the current token.
 func listPermissionsAction(cmd *cobra.Command, args []string) {
-	_, p, err := API.Permissions.List(context.Background())
+	res, p, err := app.API.Permissions.List(context.Background())
 	if err != nil {
-		logger.Fatal(err)
+		app.Logger.Fatal(err)
 	}
+
+	addStoreValues(Permissions, p, res)
 
 	disp := displayers.MolliePermissionList{
 		PermissionsList: p,
 	}
 
-	err = printer.Display(&disp, display.FilterColumns(
-		parseFieldsFromFlag(cmd),
+	err = app.Printer.Display(&disp, display.FilterColumns(
+		parseFieldsFromFlag(cmd, Permissions),
 		getPermissionsCols(),
 	))
-
 	if err != nil {
-		logger.Fatal(err)
+		app.Logger.Fatal(err)
 	}
 }

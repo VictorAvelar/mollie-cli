@@ -8,8 +8,10 @@ func permissions() *commander.Command {
 	p := commander.Builder(
 		nil,
 		commander.Config{
-			Namespace: "permissions",
-			Aliases:   []string{"perm", "scopes"},
+			Namespace:          "permissions",
+			Aliases:            []string{"perm", "scopes"},
+			PostHook:           printJson,
+			PersistentPostHook: printCurl,
 		},
 		getPermissionsCols(),
 	)
@@ -21,10 +23,11 @@ func permissions() *commander.Command {
 }
 
 func getPermissionsCols() []string {
-	return []string{
-		"RESOURCE",
-		"ID",
-		"DESCRIPTION",
-		"GRANTED",
+	cols := app.Config.GetStringSlice("mollie.fields.permissions.all")
+
+	if verbose {
+		app.Logger.Info("parsed fields %v", cols)
 	}
+
+	return cols
 }

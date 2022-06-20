@@ -35,28 +35,26 @@ allowed by the authorization.`,
 
 func getPermissionAction(cmd *cobra.Command, args []string) {
 	perm := ParseStringFromFlags(cmd, IDArg)
-	if verbose {
-		PrintNonEmptyFlags(cmd)
-	}
 
-	_, p, err := API.Permissions.Get(
+	res, p, err := app.API.Permissions.Get(
 		context.Background(),
 		mollie.PermissionGrant(perm),
 	)
 	if err != nil {
-		logger.Fatal(err)
+		app.Logger.Fatal(err)
 	}
+
+	addStoreValues(Permissions, p, res)
 
 	disp := displayers.MolliePermission{
 		Permission: p,
 	}
 
-	err = printer.Display(&disp, display.FilterColumns(
-		parseFieldsFromFlag(cmd),
+	err = app.Printer.Display(&disp, display.FilterColumns(
+		parseFieldsFromFlag(cmd, Permissions),
 		getPermissionsCols(),
 	))
-
 	if err != nil {
-		logger.Fatal(err)
+		app.Logger.Fatal(err)
 	}
 }

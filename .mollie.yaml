@@ -101,7 +101,14 @@ mollie:
         - "MAX_AMOUNT"
     permissions:
       all:
+        - "RESOURCE"
+        - "ID"
+        - "DESCRIPTION"
+        - "GRANTED"
       printable:
+        - "ID"
+        - "DESCRIPTION"
+        - "GRANTED"
     profiles:
       all:
       printable:
