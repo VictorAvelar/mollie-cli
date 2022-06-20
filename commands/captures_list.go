@@ -37,30 +37,31 @@ later and Klarna Slice it.`,
 func listCapturesActions(cmd *cobra.Command, args []string) {
 	payment := ParseStringFromFlags(cmd, PaymentArg)
 
-	if verbose {
-		PrintNonEmptyFlags(cmd)
-	}
-
-	_, captures, err := API.Captures.List(context.Background(), payment)
+	res, captures, err := app.API.Captures.List(context.Background(), payment)
 	if err != nil {
-		logger.Fatal(err)
+		app.Logger.Fatal(err)
 	}
 
+	addStoreValues(Captures, captures, res)
+
 	if verbose {
-		logger.Infof("request target: %s", captures.Links.Self.Href)
-		logger.Infof("request docs: %s", captures.Links.Documentation.Href)
+		app.Logger.Infof("request target: %s", captures.Links.Self.Href)
+		app.Logger.Infof("request docs: %s", captures.Links.Documentation.Href)
 	}
 
 	disp := &displayers.MollieCapturesList{
 		CapturesList: captures,
 	}
 
-	err = printer.Display(
+	err = app.Printer.Display(
 		disp,
-		display.FilterColumns(parseFieldsFromFlag(cmd), getCapturesCols()),
+		display.FilterColumns(
+			parseFieldsFromFlag(cmd, Payments),
+			getCapturesCols(),
+		),
 	)
 
 	if err != nil {
-		logger.Fatal(err)
+		app.Logger.Fatal(err)
 	}
 }

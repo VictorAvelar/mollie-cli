@@ -44,26 +44,26 @@ func getCapturesAction(cmd *cobra.Command, args []string) {
 	payment := ParseStringFromFlags(cmd, PaymentArg)
 	id := ParseStringFromFlags(cmd, IDArg)
 
-	if verbose {
-		PrintNonemptyFlagValue(PaymentArg, payment)
-		PrintNonemptyFlagValue(IDArg, id)
+	res, capture, err := app.API.Captures.Get(context.Background(), payment, id)
+	if err != nil {
+		app.Logger.Fatal(err)
 	}
 
-	_, capture, err := API.Captures.Get(context.Background(), payment, id)
-	if err != nil {
-		logger.Fatal(err)
-	}
+	addStoreValues(Captures, capture, res)
 
 	disp := &displayers.MollieCapture{
 		Capture: capture,
 	}
 
-	err = printer.Display(
+	err = app.Printer.Display(
 		disp,
-		display.FilterColumns(parseFieldsFromFlag(cmd), getCapturesCols()),
+		display.FilterColumns(
+			parseFieldsFromFlag(cmd, Captures),
+			getCapturesCols(),
+		),
 	)
 
 	if err != nil {
-		logger.Fatal(err)
+		app.Logger.Fatal(err)
 	}
 }
