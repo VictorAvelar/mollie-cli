@@ -20,8 +20,9 @@ func listPaymentMethodsCmd(p *commander.Command) {
 			LongDesc: `Retrieves all enabled payment methods.
 
 To check the payment method embedded resources use the get payment methods command.`,
-			Example: "mollie methods list --locale=de_DE --sequence-type=recurring",
-			Execute: listPaymentMethodsAction,
+			Example:  "mollie methods list --locale=de_DE --sequence-type=recurring",
+			Execute:  listPaymentMethodsAction,
+			PostHook: printJsonAction,
 		},
 		getMethodsCols(),
 	)
@@ -57,34 +58,28 @@ func listPaymentMethodsAction(cmd *cobra.Command, args []string) {
 
 	}
 
-	if verbose {
-		PrintNonEmptyFlags(cmd)
-	}
-
-	_, ms, err := API.PaymentMethods.List(context.Background(), &opts)
+	res, ms, err := app.API.PaymentMethods.List(context.Background(), &opts)
 	if err != nil {
-		logger.Fatal(err)
+		app.Logger.Fatal(err)
 	}
 
-	if json {
-		printJSONP(ms)
-	}
+	addStoreValues(Methods, ms, res)
 
 	if verbose {
-		logger.Infof("received %d payment methods", ms.Count)
-		logger.Infof("request performed: %s", ms.Links.Self.Href)
-		logger.Infof("documentation: %s", ms.Links.Documentation.Href)
+		app.Logger.Infof("received %d payment methods", ms.Count)
+		app.Logger.Infof("request performed: %s", ms.Links.Self.Href)
+		app.Logger.Infof("documentation: %s", ms.Links.Documentation.Href)
 	}
 
 	disp := displayers.MollieListMethods{
 		PaymentMethodsList: ms,
 	}
 
-	err = printer.Display(&disp, display.FilterColumns(
-		parseFieldsFromFlag(cmd), getMethodsCols(),
+	err = app.Printer.Display(&disp, display.FilterColumns(
+		parseFieldsFromFlag(cmd, Methods),
+		getMethodsCols(),
 	))
-
 	if err != nil {
-		logger.Fatal(err)
+		app.Logger.Fatal(err)
 	}
 }

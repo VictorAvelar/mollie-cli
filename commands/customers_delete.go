@@ -18,6 +18,7 @@ func deleteCustomerCmd(p *commander.Command) *commander.Command {
 			LongDesc:  "Deletes a customer. WARNING! All mandates and subscriptions created for this customer will be canceled as well.",
 			Example:   "mollie customers delete --id cs_test",
 			Execute:   deleteCustomerAction,
+			PostHook:  printJsonAction,
 		},
 		customersCols(),
 	)
@@ -30,17 +31,15 @@ func deleteCustomerCmd(p *commander.Command) *commander.Command {
 func deleteCustomerAction(cmd *cobra.Command, args []string) {
 	id := ParseStringFromFlags(cmd, IDArg)
 
-	if verbose {
-		PrintNonEmptyFlags(cmd)
-	}
-
-	_, err := API.Customers.Delete(context.Background(), id)
+	res, err := app.API.Customers.Delete(context.Background(), id)
 	if err != nil {
-		logger.Fatal(err)
+		app.Logger.Fatal(err)
 	}
 
+	addStoreValues(Customers, id, res)
+
 	if verbose {
-		logger.Infof("removed customer with id/token: %s", id)
+		app.Logger.Infof("removed customer with id/token: %s", id)
 	}
 
 	display.Text("*", "Customer deleted successfully")

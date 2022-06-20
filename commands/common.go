@@ -1,8 +1,13 @@
 package commands
 
-import "github.com/spf13/cobra"
+import (
+	"fmt"
+	"strings"
 
-func parseFieldsFromFlag(cmd *cobra.Command) string {
+	"github.com/spf13/cobra"
+)
+
+func parseFieldsFromFlag(cmd *cobra.Command, r string) string {
 	fields := ParseStringFromFlags(cmd, FieldsArg)
 
 	if fields != "" {
@@ -12,9 +17,24 @@ func parseFieldsFromFlag(cmd *cobra.Command) string {
 		return fields
 	}
 
+	cfgFields := strings.Join(
+		app.Config.GetStringSlice(
+			fmt.Sprintf("mollie.fields.%s.printable", r)),
+		",",
+	)
+
+	if cfgFields != "" {
+		if verbose {
+			app.Logger.Info("using fields from config file")
+		}
+
+		return cfgFields
+	}
+
 	if verbose {
-		logger.Info("using all columns (unfiltered)")
+		app.Logger.Info("using all columns (unfiltered)")
 	}
 
 	return ""
+
 }

@@ -18,6 +18,7 @@ func promptCreateRefundCmd(p *commander.Command) *commander.Command {
 			ShortDesc: "prompts the user the information necessary to create a refund.",
 			Example:   "mollie refunds create prompt",
 			Execute:   promptCreateRefundAction,
+			PostHook:  printJsonAction,
 		},
 		refundsCols(),
 	)
@@ -26,7 +27,7 @@ func promptCreateRefundCmd(p *commander.Command) *commander.Command {
 func promptCreateRefundAction(cmd *cobra.Command, args []string) {
 	payment := promptStringClean("payment id", "")
 	if payment == "" {
-		logger.Fatal("a payment id is required to create a refund")
+		app.Logger.Fatal("a payment id is required to create a refund")
 	}
 
 	var r mollie.Refund
@@ -38,30 +39,26 @@ func promptCreateRefundAction(cmd *cobra.Command, args []string) {
 		}
 	}
 
-	_, rs, err := API.Refunds.Create(context.Background(), payment, r, nil)
+	res, rs, err := app.API.Refunds.Create(context.Background(), payment, r, nil)
 	if err != nil {
-		logger.Errorf("%+v", rs)
-		logger.Errorf("%+v", r)
-		logger.Fatal(err)
+		app.Logger.Fatal(err)
 	}
+
+	addStoreValues(Refunds, rs, res)
 
 	if verbose {
-		logger.Infof("refund for payment %s created", payment)
-		logger.Infof("request target: %s", rs.Links.Self.Href)
-		logger.Infof("request docs: %s", rs.Links.Documentation.Href)
-	}
-
-	if json {
-		printJSONP(rs)
+		app.Logger.Infof("refund for payment %s created", payment)
+		app.Logger.Infof("request target: %s", rs.Links.Self.Href)
+		app.Logger.Infof("request docs: %s", rs.Links.Documentation.Href)
 	}
 
 	disp := displayers.MollieRefund{Refund: rs}
 
-	err = printer.Display(
+	err = app.Printer.Display(
 		&disp,
-		display.FilterColumns(parseFieldsFromFlag(cmd), refundsCols()),
+		display.FilterColumns(parseFieldsFromFlag(cmd, Refunds), refundsCols()),
 	)
 	if err != nil {
-		logger.Fatal(err)
+		app.Logger.Fatal(err)
 	}
 }

@@ -18,6 +18,7 @@ func listCustomerCmd(p *commander.Command) *commander.Command {
 			ShortDesc: "Retrieves all customers created.",
 			Example:   "mollie customers list",
 			Execute:   listCustomerActions,
+			PostHook:  printJsonAction,
 		},
 		customersCols(),
 	)
@@ -35,32 +36,30 @@ func listCustomerActions(cmd *cobra.Command, args []string) {
 		opts.From = ParseStringFromFlags(cmd, FromArg)
 	}
 
-	if verbose {
-		PrintNonEmptyFlags(cmd)
-	}
-
-	_, cl, err := API.Customers.List(context.Background(), &opts)
+	res, cl, err := app.API.Customers.List(context.Background(), &opts)
 	if err != nil {
-		logger.Fatal(err)
+		app.Logger.Fatal(err)
 	}
 
+	addStoreValues(Customers, cl, res)
+
 	if verbose {
-		logger.Infof("request target: %s", cl.Links.Self.Href)
-		logger.Infof("request docs: %s", cl.Links.Documentation.Href)
+		app.Logger.Infof("request target: %s", cl.Links.Self.Href)
+		app.Logger.Infof("request docs: %s", cl.Links.Documentation.Href)
 	}
 
 	disp := displayers.MollieCustomerList{
 		CustomersList: cl,
 	}
 
-	err = printer.Display(
+	err = app.Printer.Display(
 		&disp,
 		display.FilterColumns(
-			parseFieldsFromFlag(cmd),
+			parseFieldsFromFlag(cmd, Customers),
 			customersCols(),
 		),
 	)
 	if err != nil {
-		logger.Fatal(err)
+		app.Logger.Fatal(err)
 	}
 }

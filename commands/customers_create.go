@@ -19,6 +19,7 @@ func createCustomerCmd(p *commander.Command) *commander.Command {
 			ShortDesc: "Creates a simple minimal representation of a customer.",
 			Example:   "mollie customers create --name 'test customer' --email test@example.com",
 			Execute:   createCustomerAction,
+			PostHook:  printJsonAction,
 		},
 		customersCols(),
 	)
@@ -51,10 +52,6 @@ func createCustomerAction(cmd *cobra.Command, args []string) {
 		locale := ParseStringFromFlags(cmd, LocaleArg)
 		meta := ParseStringFromFlags(cmd, MetadataArg)
 
-		if verbose {
-			PrintNonEmptyFlags(cmd)
-		}
-
 		c = mollie.Customer{
 			Email:    email,
 			Name:     name,
@@ -63,28 +60,30 @@ func createCustomerAction(cmd *cobra.Command, args []string) {
 		}
 	}
 
-	_, nc, err := API.Customers.Create(context.Background(), c)
+	res, nc, err := app.API.Customers.Create(context.Background(), c)
 	if err != nil {
-		logger.Fatal(err)
+		app.Logger.Fatal(err)
 	}
 
+	addStoreValues(Customers, nc, res)
+
 	if verbose {
-		logger.Infof("request target: %s", nc.Links.Self.Href)
-		logger.Infof("request docs: %s", nc.Links.Documentation.Href)
+		app.Logger.Infof("request target: %s", nc.Links.Self.Href)
+		app.Logger.Infof("request docs: %s", nc.Links.Documentation.Href)
 	}
 
 	disp := displayers.MollieCustomer{
 		Customer: nc,
 	}
 
-	err = printer.Display(
+	err = app.Printer.Display(
 		&disp,
 		display.FilterColumns(
-			parseFieldsFromFlag(cmd),
+			parseFieldsFromFlag(cmd, Customers),
 			customersCols(),
 		),
 	)
 	if err != nil {
-		logger.Fatal(err)
+		app.Logger.Fatal(err)
 	}
 }

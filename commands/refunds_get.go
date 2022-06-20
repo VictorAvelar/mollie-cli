@@ -19,6 +19,7 @@ func refundsGetCmd(p *commander.Command) *commander.Command {
 			LongDesc:  "Retrieve a single Refund by its ID. Note the Payment’s ID is needed as well",
 			Example:   "mollie refunds get --id=rf_test --payment=tr_test",
 			Execute:   getRefundAction,
+			PostHook:  printJsonAction,
 		},
 		refundsCols(),
 	)
@@ -35,10 +36,6 @@ func getRefundAction(cmd *cobra.Command, args []string) {
 	payment := ParseStringFromFlags(cmd, PaymentArg)
 	embed := mollie.EmbedValue(ParseStringFromFlags(cmd, EmbedArg))
 
-	if verbose {
-		PrintNonEmptyFlags(cmd)
-	}
-
 	var opts *mollie.RefundOptions
 	{
 		if embed != "" {
@@ -46,24 +43,22 @@ func getRefundAction(cmd *cobra.Command, args []string) {
 		}
 	}
 
-	_, r, err := API.Refunds.Get(context.Background(), payment, id, opts)
+	res, r, err := app.API.Refunds.Get(context.Background(), payment, id, opts)
 	if err != nil {
-		logger.Fatal(err)
+		app.Logger.Fatal(err)
 	}
 
-	if json {
-		printJSONP(r)
-	}
+	addStoreValues(Refunds, r, res)
 
 	disp := displayers.MollieRefund{
 		Refund: r,
 	}
 
-	err = printer.Display(
+	err = app.Printer.Display(
 		&disp,
-		display.FilterColumns(parseFieldsFromFlag(cmd), refundsCols()),
+		display.FilterColumns(parseFieldsFromFlag(cmd, Refunds), refundsCols()),
 	)
 	if err != nil {
-		logger.Fatal(err)
+		app.Logger.Fatal(err)
 	}
 }

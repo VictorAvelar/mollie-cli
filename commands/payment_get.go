@@ -17,6 +17,7 @@ func getPaymentCmd(p *commander.Command) *commander.Command {
 			ShortDesc: "Retrieve a single payment object by its payment token.",
 			Execute:   getPaymentAction,
 			Example:   "mollie payments get --id=tr_token",
+			PostHook:  printJsonAction,
 		},
 		getPaymentCols(),
 	)
@@ -29,35 +30,28 @@ func getPaymentCmd(p *commander.Command) *commander.Command {
 func getPaymentAction(cmd *cobra.Command, args []string) {
 	id := ParseStringFromFlags(cmd, IDArg)
 
-	if verbose {
-		logger.Infof("retrieving payment with id (token) %s", id)
-	}
-
-	_, p, err := API.Payments.Get(context.Background(), id, nil)
+	res, p, err := app.API.Payments.Get(context.Background(), id, nil)
 	if err != nil {
-		logger.Fatal(err)
+		app.Logger.Fatal(err)
 	}
+
+	addStoreValues(Payments, p, res)
 
 	if verbose {
-		logger.Infof("request target: %s", p.Links.Self.Href)
-		logger.Infof("request docs: %s", p.Links.Documentation.Href)
-	}
-
-	if json {
-		printJSONP(p)
+		app.Logger.Infof("request target: %s", p.Links.Self.Href)
+		app.Logger.Infof("request docs: %s", p.Links.Documentation.Href)
 	}
 
 	disp := displayers.MolliePayment{Payment: p}
 
-	err = printer.Display(
+	err = app.Printer.Display(
 		&disp,
 		display.FilterColumns(
-			parseFieldsFromFlag(cmd),
+			parseFieldsFromFlag(cmd, Payments),
 			getPaymentCols(),
 		),
 	)
-
 	if err != nil {
-		logger.Fatal(err)
+		app.Logger.Fatal(err)
 	}
 }

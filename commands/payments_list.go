@@ -18,8 +18,9 @@ func listPaymentsCmd(p *commander.Command) *commander.Command {
 			ShortDesc: "Retrieve all payments created",
 			LongDesc: `Retrieve all payments created with the current website profile, 
 ordered from newest to oldest. The results are paginated.`,
-			Execute: listPaymentsAction,
-			Example: "mollie payments list --limit=3",
+			Execute:  listPaymentsAction,
+			Example:  "mollie payments list --limit=3",
+			PostHook: printJsonAction,
 		},
 		getPaymentCols(),
 	)
@@ -39,33 +40,32 @@ func listPaymentsAction(cmd *cobra.Command, args []string) {
 		opts.From = ParseStringFromFlags(cmd, FromArg)
 		opts.Embed = ParseStringFromFlags(cmd, EmbedArg)
 	}
-	_, ps, err := API.Payments.List(context.Background(), &opts)
+
+	res, ps, err := app.API.Payments.List(context.Background(), &opts)
 	if err != nil {
-		logger.Fatal(err)
+		app.Logger.Fatal(err)
 	}
+
+	addStoreValues(Payments, ps, res)
 
 	if verbose {
-		logger.Infof("retrieved %d payments", ps.Count)
-		logger.Infof("request target: %s", ps.Links.Self.Href)
-		logger.Infof("request docs: %s", ps.Links.Documentation.Href)
-	}
-
-	if json {
-		printJSONP(ps)
+		app.Logger.Infof("retrieved %d payments", ps.Count)
+		app.Logger.Infof("request target: %s", ps.Links.Self.Href)
+		app.Logger.Infof("request docs: %s", ps.Links.Documentation.Href)
 	}
 
 	disp := displayers.MollieListPayments{
 		PaymentList: ps,
 	}
 
-	err = printer.Display(
+	err = app.Printer.Display(
 		&disp,
 		display.FilterColumns(
-			parseFieldsFromFlag(cmd),
+			parseFieldsFromFlag(cmd, Payments),
 			getPaymentCols(),
 		),
 	)
 	if err != nil {
-		logger.Fatal(err)
+		app.Logger.Fatal(err)
 	}
 }

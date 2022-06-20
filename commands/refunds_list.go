@@ -16,8 +16,9 @@ func listRefundCmd(p *commander.Command) *commander.Command {
 			ShortDesc: "Retrieves refunds for the provided API token, or payment token",
 			Example:   "mollie refunds list --payment=tr_test",
 			Execute:   listRefundsAction,
+			PostHook:  printJsonAction,
 		},
-		noCols,
+		commander.NoCols(),
 	)
 
 	AddPaymentFlag(lr)
@@ -38,28 +39,24 @@ func listRefundsAction(cmd *cobra.Command, args []string) {
 
 	payment := ParseStringFromFlags(cmd, PaymentArg)
 
-	if verbose {
-		PrintNonEmptyFlags(cmd)
-	}
-
 	refunds, err := getRefundList(&opts, payment)
 	if err != nil {
-		logger.Fatal(err)
+		app.Logger.Fatal(err)
 	}
 
 	if verbose {
-		logger.Infof("retrieved %d refunds", refunds.Count)
-		logger.Infof("request target: %s", refunds.Links.Self.Href)
-		logger.Infof("request docs: %s", refunds.Links.Documentation.Href)
+		app.Logger.Infof("retrieved %d refunds", refunds.Count)
+		app.Logger.Infof("request target: %s", refunds.Links.Self.Href)
+		app.Logger.Infof("request docs: %s", refunds.Links.Documentation.Href)
 	}
 
 	disp := &displayers.MollieRefundList{RefundList: refunds}
 
-	err = printer.Display(
+	err = app.Printer.Display(
 		disp,
-		display.FilterColumns(parseFieldsFromFlag(cmd), refundsCols()),
+		display.FilterColumns(parseFieldsFromFlag(cmd, Refunds), refundsCols()),
 	)
 	if err != nil {
-		logger.Fatal(err)
+		app.Logger.Fatal(err)
 	}
 }

@@ -13,9 +13,9 @@ func docs() *commander.Command {
 			Namespace: "docs",
 			ShortDesc: "Generates markdown documentation",
 			Execute: func(cmd *cobra.Command, args []string) {
-				err := doc.GenMarkdownTree(MollieCmd.Command, "./docs")
+				err := doc.GenMarkdownTree(app.App.Command, "./docs")
 				if err != nil {
-					logger.Fatal(err)
+					app.Logger.Fatal(err)
 				}
 			},
 			Hidden:  true,

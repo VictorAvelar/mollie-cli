@@ -10,9 +10,11 @@ func payments() *commander.Command {
 	p := commander.Builder(
 		nil,
 		commander.Config{
-			Namespace: "payments",
-			ShortDesc: "All operations to handle payments",
-			Aliases:   []string{"pay", "p"},
+			Namespace:          "payments",
+			ShortDesc:          "All operations to handle payments",
+			Aliases:            []string{"pay", "p"},
+			PostHook:           printJsonAction,
+			PersistentPostHook: printCurl,
 		},
 		getPaymentCols(),
 	)
@@ -27,37 +29,13 @@ func payments() *commander.Command {
 }
 
 func getPaymentCols() []string {
-	return []string{
-		"RESOURCE",
-		"ID",
-		"MODE",
-		"STATUS",
-		"CANCELABLE",
-		"AMOUNT",
-		"METHOD",
-		"DESCRIPTION",
-		"SEQUENCE",
-		"REMAINING",
-		"REFUNDED",
-		"CAPTURED",
-		"SETTLEMENT",
-		"APP_FEE",
-		"CREATED_AT",
-		"AUTHORIZED_AT",
-		"EXPIRES",
-		"PAID_AT",
-		"FAILED_AT",
-		"CANCELED_AT",
-		"CUSTOMER_ID",
-		"SETTLEMENT_ID",
-		"MANDATE_ID",
-		"SUBSCRIPTION_ID",
-		"ORDER_ID",
-		"REDIRECT",
-		"WEBHOOK",
-		"LOCALE",
-		"COUNTRY",
+	cols := app.Config.GetStringSlice("mollie.fields.payments.all")
+
+	if verbose {
+		app.Logger.Infof("parsed fields %v", cols)
 	}
+
+	return cols
 }
 
 func attachPaymentMethodSpecificValues(p *mollie.Payment) {
@@ -78,7 +56,7 @@ func attachPaymentMethodSpecificValues(p *mollie.Payment) {
 	case mollie.KBC:
 		p.Issuer = promptKbcIssuer()
 	case mollie.KlarnaPayLater, mollie.KlarnaLiceit:
-		logger.Fatal("for the selected payment method you need to use the orders api")
+		app.Logger.Fatal("for the selected payment method you need to use the orders api")
 	case mollie.PayPal:
 		p.ShippingAddress = promptPaymentDetailsAddress()
 		p.SessionID = promptStringClean("session id", "")
@@ -94,13 +72,13 @@ func attachPaymentMethodSpecificValues(p *mollie.Payment) {
 		p.ConsumerAccount = promptStringClean("consumer account", "")
 	case mollie.Bancontact, mollie.Belfius, mollie.EPS, mollie.GiroPay, mollie.MyBank, mollie.Sofort:
 		if verbose {
-			logger.Info("there are no payment method specific fields for your selection")
+			app.Logger.Info("there are no payment method specific fields for your selection")
 		}
 	}
 }
 
 func attachAccessTokenParams(p *mollie.Payment) *mollie.Payment {
-	if API.HasAccessToken() {
+	if app.API.HasAccessToken() {
 		p.ProfileID = promptStringClean("profile id", "")
 	}
 

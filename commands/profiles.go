@@ -8,8 +8,10 @@ func profile() *commander.Command {
 	p := commander.Builder(
 		nil,
 		commander.Config{
-			Namespace: "profiles",
-			ShortDesc: "In order to process payments, you need to create a website profile",
+			Namespace:          "profiles",
+			ShortDesc:          "In order to process payments, you need to create a website profile",
+			PostHook:           printJsonAction,
+			PersistentPostHook: printCurl,
 		},
 		getProfileCols(),
 	)
@@ -21,17 +23,11 @@ func profile() *commander.Command {
 }
 
 func getProfileCols() []string {
-	return []string{
-		"RESOURCE",
-		"ID",
-		"MODE",
-		"NAME",
-		"WEBSITE",
-		"EMAIL",
-		"PHONE",
-		"CATEGORY_CODE",
-		"STATUS",
-		"REVIEW",
-		"CREATED_AT",
+	cols := app.Config.GetStringSlice("mollie.fields.profiles.all")
+
+	if verbose {
+		app.Logger.Infof("parsed fields %v", cols)
 	}
+
+	return cols
 }

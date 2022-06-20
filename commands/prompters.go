@@ -9,9 +9,9 @@ import (
 )
 
 func promptPaymentMethod() mollie.PaymentMethod {
-	_, methods, err := API.PaymentMethods.List(context.Background(), nil)
+	_, methods, err := app.API.PaymentMethods.List(context.Background(), nil)
 	if err != nil {
-		logger.Fatal(err)
+		app.Logger.Fatal(err)
 	}
 
 	var ms []string
@@ -23,7 +23,7 @@ func promptPaymentMethod() mollie.PaymentMethod {
 
 	v, err := prompter.Select("Select a payment method:", ms)
 	if err != nil {
-		logger.Fatal(err)
+		app.Logger.Fatal(err)
 	}
 
 	val := v.(string)
@@ -34,7 +34,7 @@ func promptPaymentMethod() mollie.PaymentMethod {
 func promptAddress() *mollie.Address {
 	v, err := prompter.Struct(&mollie.Address{})
 	if err != nil {
-		logger.Fatal(err)
+		app.Logger.Fatal(err)
 	}
 
 	val := v.(*mollie.Address)
@@ -45,7 +45,7 @@ func promptAddress() *mollie.Address {
 func promptAmount() *mollie.Amount {
 	v, err := prompter.Struct(&mollie.Amount{})
 	if err != nil {
-		logger.Fatal(err)
+		app.Logger.Fatal(err)
 	}
 
 	val := v.(*mollie.Amount)
@@ -61,7 +61,7 @@ func promptSequenceType() mollie.SequenceType {
 	})
 
 	if err != nil {
-		logger.Fatal(err)
+		app.Logger.Fatal(err)
 	}
 
 	val := v.(string)
@@ -74,7 +74,7 @@ func promptShortDate() *mollie.ShortDate {
 
 	t, err := time.Parse("2006-01-02", v)
 	if err != nil {
-		logger.Fatal(err)
+		app.Logger.Fatal(err)
 	}
 
 	return &mollie.ShortDate{
@@ -85,7 +85,7 @@ func promptShortDate() *mollie.ShortDate {
 func promptPaymentDetailsAddress() *mollie.PaymentDetailsAddress {
 	v, err := prompter.Struct(&mollie.PaymentDetailsAddress{})
 	if err != nil {
-		logger.Fatal(err)
+		app.Logger.Fatal(err)
 	}
 
 	val := v.(*mollie.PaymentDetailsAddress)
@@ -122,7 +122,7 @@ func promptGiftCardIssuer() string {
 		string(mollie.Yourgift),
 	})
 	if err != nil {
-		logger.Fatal(err)
+		app.Logger.Fatal(err)
 	}
 
 	val := v.(string)
@@ -133,7 +133,7 @@ func promptGiftCardIssuer() string {
 func promptLocale() mollie.Locale {
 	v, err := prompter.Select("Locale for your payment?", getMollieLocales())
 	if err != nil {
-		logger.Fatal(err)
+		app.Logger.Fatal(err)
 	}
 
 	val := v.(string)
@@ -147,7 +147,7 @@ func promptKbcIssuer() string {
 		"cbc",
 	})
 	if err != nil {
-		logger.Fatal(err)
+		app.Logger.Fatal(err)
 	}
 
 	val := v.(string)

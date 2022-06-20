@@ -8,9 +8,11 @@ func customers() *commander.Command {
 	c := commander.Builder(
 		nil,
 		commander.Config{
-			Namespace: "customers",
-			ShortDesc: "Operations with customers API.",
-			Aliases:   []string{"cust", "cstm"},
+			Namespace:          "customers",
+			ShortDesc:          "Operations with customers API.",
+			Aliases:            []string{"cust", "cstm"},
+			PostHook:           printJsonAction,
+			PersistentPostHook: printCurl,
 		},
 		customersCols(),
 	)
@@ -25,14 +27,11 @@ func customers() *commander.Command {
 }
 
 func customersCols() []string {
-	return []string{
-		"RESOURCE",
-		"ID",
-		"MODE",
-		"NAME",
-		"EMAIL",
-		"LOCALE",
-		"METADATA",
-		"CREATED_AT",
+	cols := app.Config.GetStringSlice("mollie.fields.customers.all")
+
+	if verbose {
+		app.Logger.Infof("parsed fields %v", cols)
 	}
+
+	return cols
 }

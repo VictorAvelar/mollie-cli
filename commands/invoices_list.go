@@ -18,6 +18,7 @@ func listInvoicesCmd(p *commander.Command) *commander.Command {
 			Example:   "mollie invoices list",
 			ShortDesc: "Retrieve all invoices on the account. Optionally filter on year or invoice number.",
 			Execute:   listInvoicesAction,
+			PostHook:  printJsonAction,
 		},
 		invoicesCols(),
 	)
@@ -44,10 +45,6 @@ func listInvoicesAction(cmd *cobra.Command, args []string) {
 	from := ParseStringFromFlags(cmd, FromArg)
 	limit := ParseIntFromFlags(cmd, LimitArg)
 
-	if verbose {
-		PrintNonEmptyFlags(cmd)
-	}
-
 	opts := &mollie.InvoicesListOptions{
 		Reference: ref,
 		Year:      year,
@@ -55,27 +52,31 @@ func listInvoicesAction(cmd *cobra.Command, args []string) {
 		Limit:     int64(limit),
 	}
 
-	_, is, err := API.Invoices.List(context.Background(), opts)
+	res, is, err := app.API.Invoices.List(context.Background(), opts)
 	if err != nil {
-		logger.Fatal(err)
+		app.Logger.Fatal(err)
 	}
 
+	addStoreValues(Invoices, is, res)
+
 	if verbose {
-		logger.Infof("retrieved %d invoices", is.Count)
-		logger.Infof("request target: %s", is.Links.Self.Href)
-		logger.Infof("request docs: %s", is.Links.Documentation.Href)
+		app.Logger.Infof("retrieved %d invoices", is.Count)
+		app.Logger.Infof("request target: %s", is.Links.Self.Href)
+		app.Logger.Infof("request docs: %s", is.Links.Documentation.Href)
 	}
 
 	disp := displayers.MollieInvoiceList{
 		InvoicesList: is,
 	}
 
-	err = printer.Display(
+	err = app.Printer.Display(
 		&disp,
-		display.FilterColumns(parseFieldsFromFlag(cmd), invoicesCols()),
+		display.FilterColumns(
+			parseFieldsFromFlag(cmd, Invoices),
+			invoicesCols(),
+		),
 	)
-
 	if err != nil {
-		logger.Fatal(err)
+		app.Logger.Fatal(err)
 	}
 }

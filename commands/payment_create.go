@@ -18,9 +18,10 @@ func createPaymentCmd(p *commander.Command) *commander.Command {
 			ShortDesc: "Create a new payment",
 			LongDesc: `Creates a new payment.
 Description, value, currency and redirect-url are required values.`,
-			Execute: createPaymentAction,
-			Aliases: []string{"new", "start"},
-			Example: "mollie payments create --amount-value=200.00 --amount-currency=USD --redirect-to=https://victoravelar.com --description='custom example payment'",
+			Execute:  createPaymentAction,
+			Aliases:  []string{"new", "start"},
+			Example:  "mollie payments create --amount-value=200.00 --amount-currency=USD --redirect-to=https://victoravelar.com --description='custom example payment'",
+			PostHook: printJsonAction,
 		},
 		getPaymentCols(),
 	)
@@ -107,20 +108,6 @@ func createPaymentAction(cmd *cobra.Command, args []string) {
 	mandate := ParseStringFromFlags(cmd, MandateIDArg)
 	customer := ParseStringFromFlags(cmd, CustomerIDArg)
 
-	if verbose {
-		logger.Infof("creating payment of %s %s", amount, currency)
-		PrintNonemptyFlagValue(RedirectURLArg, rURL)
-		PrintNonemptyFlagValue(DescriptionArg, desc)
-		PrintNonemptyFlagValue(WebhookURLArg, whURL)
-		PrintNonemptyFlagValue(MetadataArg, meta)
-		PrintNonemptyFlagValue(MethodArg, method)
-		PrintNonemptyFlagValue(LocaleArg, locale)
-		PrintNonemptyFlagValue(RPMToCountryArg, rpmCountry)
-		PrintNonemptyFlagValue(CustomerIDArg, customer)
-		PrintNonemptyFlagValue(MandateIDArg, mandate)
-		PrintNonemptyFlagValue(SequenceTypeArg, sequence)
-	}
-
 	l := mollie.Locale(locale)
 	c := mollie.Locale(rpmCountry)
 	s := mollie.SequenceType(sequence)
@@ -143,32 +130,30 @@ func createPaymentAction(cmd *cobra.Command, args []string) {
 		Method:                          m,
 	}
 
-	_, payment, err := API.Payments.Create(context.Background(), p, nil)
+	res, payment, err := app.API.Payments.Create(context.Background(), p, nil)
 	if err != nil {
-		logger.Fatal(err)
+		app.Logger.Fatal(err)
 	}
+
+	addStoreValues(Payments, payment, res)
 
 	if verbose {
-		logger.Infof("request target: %s", payment.Links.Self.Href)
-		logger.Infof("request docs: %s", payment.Links.Documentation.Href)
-		logger.Infof("payment successfully created")
-		logger.Infof("Payment created at %s", payment.CreatedAt)
-	}
-
-	if json {
-		printJSONP(payment)
+		app.Logger.Infof("request target: %s", payment.Links.Self.Href)
+		app.Logger.Infof("request docs: %s", payment.Links.Documentation.Href)
+		app.Logger.Infof("payment successfully created")
+		app.Logger.Infof("Payment created at %s", payment.CreatedAt)
 	}
 
 	disp := displayers.MolliePayment{Payment: payment}
 
-	err = printer.Display(
+	err = app.Printer.Display(
 		&disp,
 		display.FilterColumns(
-			parseFieldsFromFlag(cmd),
+			parseFieldsFromFlag(cmd, Payments),
 			getPaymentCols(),
 		),
 	)
 	if err != nil {
-		logger.Fatal(err)
+		app.Logger.Fatal(err)
 	}
 }

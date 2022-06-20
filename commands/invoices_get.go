@@ -19,6 +19,7 @@ func getInvoicesCmd(p *commander.Command) *commander.Command {
 			LongDesc: `Retrieve details of an invoice, using the invoice’s identifier.
 If you want to retrieve the details of an invoice by its invoice number, 
 use the list endpoint with the reference parameter.`,
+			PostHook: printJsonAction,
 		},
 		invoicesCols(),
 	)
@@ -31,30 +32,31 @@ use the list endpoint with the reference parameter.`,
 func getInvoicesAction(cmd *cobra.Command, args []string) {
 	id := ParseStringFromFlags(cmd, IDArg)
 
-	if verbose {
-		PrintNonemptyFlagValue(IDArg, id)
-	}
-
-	_, i, err := API.Invoices.Get(context.Background(), id)
+	res, i, err := app.API.Invoices.Get(context.Background(), id)
 	if err != nil {
-		logger.Fatal(err)
+		app.Logger.Fatal(err)
 	}
 
+	addStoreValues(Invoices, i, res)
+
 	if verbose {
-		logger.Infof("request target: %s", i.Links.Self.Href)
-		logger.Infof("request docs: %s", i.Links.Documentation.Href)
+		app.Logger.Infof("request target: %s", i.Links.Self.Href)
+		app.Logger.Infof("request docs: %s", i.Links.Documentation.Href)
 	}
 
 	disp := &displayers.MollieInvoice{
 		Invoice: i,
 	}
 
-	err = printer.Display(
+	err = app.Printer.Display(
 		disp,
-		display.FilterColumns(parseFieldsFromFlag(cmd), invoicesCols()),
+		display.FilterColumns(
+			parseFieldsFromFlag(cmd, Invoices),
+			invoicesCols(),
+		),
 	)
 
 	if err != nil {
-		logger.Fatal(err)
+		app.Logger.Fatal(err)
 	}
 }

@@ -1,12 +1,13 @@
 package main
 
 import (
+	"log"
+
 	"github.com/VictorAvelar/mollie-cli/commands"
-	"github.com/sirupsen/logrus"
 )
 
 func main() {
 	if err := commands.Execute(); err != nil {
-		logrus.Fatal(err)
+		log.Fatal(err)
 	}
 }

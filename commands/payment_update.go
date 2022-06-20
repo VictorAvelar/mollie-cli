@@ -19,8 +19,9 @@ func updatePaymentCmd(p *commander.Command) *commander.Command {
 			ShortDesc: "Update some details of a created payment",
 			LongDesc: `Updates basic payment information, for a more advanced
 and complete update workflow check the prompt subcommand.`,
-			Execute: updatePaymentAction,
-			Example: "mollie payments update --id=test_token --description=updated",
+			Execute:  updatePaymentAction,
+			Example:  "mollie payments update --id=test_token --description=updated",
+			PostHook: printJsonAction,
 		},
 		getPaymentCols(),
 	)
@@ -77,15 +78,11 @@ func updatePaymentAction(cmd *cobra.Command, args []string) {
 	locale := ParseStringFromFlags(cmd, LocaleArg)
 	rpmCountry := ParseStringFromFlags(cmd, RPMToCountryArg)
 
-	if verbose {
-		PrintNonEmptyFlags(cmd)
-	}
-
 	l := mollie.Locale(locale)
 	c := mollie.Locale(rpmCountry)
 	m := mollie.PaymentMethod(method)
 
-	_, p, err := API.Payments.Update(context.Background(), id, mollie.Payment{
+	res, p, err := app.API.Payments.Update(context.Background(), id, mollie.Payment{
 		RedirectURL:                     rURL,
 		Description:                     desc,
 		WebhookURL:                      whURL,
@@ -95,25 +92,27 @@ func updatePaymentAction(cmd *cobra.Command, args []string) {
 		Method:                          m,
 	})
 	if err != nil {
-		logger.Fatal(err)
+		app.Logger.Fatal(err)
 	}
 
+	addStoreValues(Payments, p, res)
+
 	if verbose {
-		logger.Infof("request target: %s", p.Links.Self.Href)
-		logger.Infof("request docs: %s", p.Links.Documentation.Href)
-		logger.Infof("payment successfully updated")
+		app.Logger.Infof("request target: %s", p.Links.Self.Href)
+		app.Logger.Infof("request docs: %s", p.Links.Documentation.Href)
+		app.Logger.Infof("payment successfully updated")
 	}
 
 	disp := displayers.MolliePayment{Payment: p}
 
-	err = printer.Display(
+	err = app.Printer.Display(
 		&disp,
 		display.FilterColumns(
-			parseFieldsFromFlag(cmd),
+			parseFieldsFromFlag(cmd, Payments),
 			getPaymentCols(),
 		),
 	)
 	if err != nil {
-		logger.Fatal(err)
+		app.Logger.Fatal(err)
 	}
 }

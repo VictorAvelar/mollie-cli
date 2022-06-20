@@ -18,8 +18,9 @@ func listChargebacksCmd(p *commander.Command) *commander.Command {
 			ShortDesc: "Retrieve all received chargebacks",
 			LongDesc: `Retrieve all received chargebacks. If the payment-specific endpoint is used, only chargebacks 
 for that specific payment are returned.`,
-			Execute: listChargebackAction,
-			Example: "mollie chargebacks list --embed=payments",
+			Execute:  listChargebackAction,
+			Example:  "mollie chargebacks list --embed=payments",
+			PostHook: printJsonAction,
 		},
 		getChargebacksCols(),
 	)
@@ -34,33 +35,34 @@ for that specific payment are returned.`,
 func listChargebackAction(cmd *cobra.Command, args []string) {
 	embed := ParseStringFromFlags(cmd, EmbedArg)
 
-	if verbose {
-		PrintNonEmptyFlags(cmd)
-	}
-
 	var opt mollie.ChargebacksListOptions
 	{
 		opt.Embed = embed
 	}
 
-	_, cbs, err := API.Chargebacks.List(context.Background(), &opt)
+	res, cbs, err := app.API.Chargebacks.List(context.Background(), &opt)
 	if err != nil {
-		logger.Fatal(err)
+		app.Logger.Fatal(err)
 	}
 
+	addStoreValues(Chargebacks, cbs, res)
+
 	if verbose {
-		logger.Infof("response with %d chargebacks", cbs.Count)
-		logger.Infof("request target: %s", cbs.Links.Self.Href)
-		logger.Infof("request docs: %s", cbs.Links.Documentation.Href)
+		app.Logger.Infof("response with %d chargebacks", cbs.Count)
+		app.Logger.Infof("request target: %s", cbs.Links.Self.Href)
+		app.Logger.Infof("request docs: %s", cbs.Links.Documentation.Href)
 	}
 
 	disp := displayers.MollieChargebackList{ChargebacksList: cbs}
 
-	err = printer.Display(
+	err = app.Printer.Display(
 		&disp,
-		display.FilterColumns(parseFieldsFromFlag(cmd), getChargebacksCols()),
+		display.FilterColumns(
+			parseFieldsFromFlag(cmd, Chargebacks),
+			getChargebacksCols(),
+		),
 	)
 	if err != nil {
-		logger.Fatal(err)
+		app.Logger.Fatal(err)
 	}
 }

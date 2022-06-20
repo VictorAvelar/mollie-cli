@@ -17,6 +17,7 @@ func cancelPaymentCmd(p *commander.Command) *commander.Command {
 			ShortDesc: "Cancel a payment by its payment token.",
 			Execute:   cancelPaymentAction,
 			Example:   "mollie payments cancel --id=tr_token",
+			PostHook:  printJsonAction,
 		},
 		getPaymentCols(),
 	)
@@ -29,36 +30,30 @@ func cancelPaymentCmd(p *commander.Command) *commander.Command {
 func cancelPaymentAction(cmd *cobra.Command, args []string) {
 	id := ParseStringFromFlags(cmd, IDArg)
 
-	if verbose {
-		logger.Infof("canceling payment with id (token) %s", id)
-	}
-
-	_, p, err := API.Payments.Cancel(context.Background(), id)
+	res, p, err := app.API.Payments.Cancel(context.Background(), id)
 	if err != nil {
-		logger.Fatal(err)
+		app.Logger.Fatal(err)
 	}
+
+	addStoreValues(Payments, id, res)
 
 	if verbose {
-		logger.Infof("request target: %s", p.Links.Self.Href)
-		logger.Infof("request docs: %s", p.Links.Documentation.Href)
-		logger.Infof("payment successfully cancelled")
-		logger.Infof("cancellation processed at %s", p.CanceledAt)
-	}
-
-	if json {
-		printJSONP(p)
+		app.Logger.Infof("request target: %s", p.Links.Self.Href)
+		app.Logger.Infof("request docs: %s", p.Links.Documentation.Href)
+		app.Logger.Infof("payment successfully cancelled")
+		app.Logger.Infof("cancellation processed at %s", p.CanceledAt)
 	}
 
 	disp := displayers.MolliePayment{Payment: p}
 
-	err = printer.Display(
+	err = app.Printer.Display(
 		&disp,
 		display.FilterColumns(
-			parseFieldsFromFlag(cmd),
+			parseFieldsFromFlag(cmd, Payments),
 			getPaymentCols(),
 		),
 	)
 	if err != nil {
-		logger.Fatal(err)
+		app.Logger.Fatal(err)
 	}
 }

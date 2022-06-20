@@ -20,8 +20,9 @@ until the next day. Until that time, refunds may be canceled manually in the Mol
 or programmatically by using this endpoint.
 
 A Refund can only be canceled while its status field is either queued or pending.`,
-			Example: "mollie refunds cancel --id=rf_test --payment=tr_test",
-			Execute: cancelRefundAction,
+			Example:  "mollie refunds cancel --id=rf_test --payment=tr_test",
+			Execute:  cancelRefundAction,
+			PostHook: printJsonAction,
 		},
 		refundsCols(),
 	)
@@ -36,13 +37,9 @@ func cancelRefundAction(cmd *cobra.Command, args []string) {
 	payment := ParseStringFromFlags(cmd, PaymentArg)
 	id := ParseStringFromFlags(cmd, IDArg)
 
-	if verbose {
-		PrintNonEmptyFlags(cmd)
-	}
-
-	_, err := API.Refunds.Cancel(context.Background(), payment, id)
+	_, err := app.API.Refunds.Cancel(context.Background(), payment, id)
 	if err != nil {
-		logger.Fatal(err)
+		app.Logger.Fatal(err)
 	}
 
 	display.Text("*", "Refund successfully cancelled")

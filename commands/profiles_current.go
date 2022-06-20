@@ -20,31 +20,34 @@ func currentProfileCmd(p *commander.Command) *commander.Command {
 			LongDesc: `Use this API if you are creating a plugin or SaaS application that allows users to enter a Mollie API key, 
 and you want to give a confirmation of the website profile that will be used in your plugin 
 or application.`,
+			PostHook: printJsonAction,
 		},
 		getProfileCols(),
 	)
 }
 
 func currentProfileAction(cmd *cobra.Command, args []string) {
-	_, p, err := API.Profiles.Current(context.Background())
+	res, p, err := app.API.Profiles.Current(context.Background())
 	if err != nil {
-		logger.Fatal(err)
+		app.Logger.Fatal(err)
 	}
 
+	addStoreValues(Profiles, p, res)
+
 	if verbose {
-		logger.Infof("request target: %s", p.Links.Self.Href)
+		app.Logger.Infof("request target: %s", p.Links.Self.Href)
 	}
 
 	disp := displayers.MollieProfile{Profile: p}
 
-	err = printer.Display(
+	err = app.Printer.Display(
 		&disp,
 		display.FilterColumns(
-			parseFieldsFromFlag(cmd),
+			parseFieldsFromFlag(cmd, Profiles),
 			getProfileCols(),
 		),
 	)
 	if err != nil {
-		logger.Error(err)
+		app.Logger.Error(err)
 	}
 }

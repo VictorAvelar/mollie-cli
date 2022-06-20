@@ -8,8 +8,9 @@ func captures() *commander.Command {
 	c := commander.Builder(
 		nil,
 		commander.Config{
-			Namespace: "captures",
-			ShortDesc: "Operations with Captures API.",
+			Namespace:          "captures",
+			ShortDesc:          "Operations with Captures API.",
+			PersistentPostHook: printCurl,
 		},
 		getCapturesCols(),
 	)
@@ -21,15 +22,11 @@ func captures() *commander.Command {
 }
 
 func getCapturesCols() []string {
-	return []string{
-		"RESOURCE",
-		"ID",
-		"MODE",
-		"AMOUNT",
-		"SETTLEMENT_AMOUNT",
-		"PAYMENT_ID",
-		"SHIPMENT_ID",
-		"SETTLEMENT_ID",
-		"CREATED_AT",
+	cols := app.Config.GetStringSlice("mollie.fields.captures.all")
+
+	if verbose {
+		app.Logger.Infof("parsed fields %v", cols)
 	}
+
+	return cols
 }

@@ -24,6 +24,7 @@ privacy and/or money related reasons and therefore require specific permissions.
 These permissions can be requested by apps during the OAuth authorization flow.
 The Permissions resource allows the app to check whether an API action is (still)
 allowed by the authorization.`,
+			PostHook: printJsonAction,
 		},
 		getPermissionsCols(),
 	)
@@ -35,28 +36,26 @@ allowed by the authorization.`,
 
 func getPermissionAction(cmd *cobra.Command, args []string) {
 	perm := ParseStringFromFlags(cmd, IDArg)
-	if verbose {
-		PrintNonEmptyFlags(cmd)
-	}
 
-	_, p, err := API.Permissions.Get(
+	res, p, err := app.API.Permissions.Get(
 		context.Background(),
 		mollie.PermissionGrant(perm),
 	)
 	if err != nil {
-		logger.Fatal(err)
+		app.Logger.Fatal(err)
 	}
+
+	addStoreValues(Permissions, p, res)
 
 	disp := displayers.MolliePermission{
 		Permission: p,
 	}
 
-	err = printer.Display(&disp, display.FilterColumns(
-		parseFieldsFromFlag(cmd),
+	err = app.Printer.Display(&disp, display.FilterColumns(
+		parseFieldsFromFlag(cmd, Permissions),
 		getPermissionsCols(),
 	))
-
 	if err != nil {
-		logger.Fatal(err)
+		app.Logger.Fatal(err)
 	}
 }
