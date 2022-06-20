@@ -22,10 +22,10 @@ snapshot:
   name_template: "{{ .Tag }}-next"
 dockers:
   - image_templates:
-      - "gcr.io/VictorAvelar/{{.ProjectName}}:{{ .Tag }}"
-      - "gcr.io/VictorAvelar/{{.ProjectName}}:v{{ .Major }}"
-      - "gcr.io/VictorAvelar/{{.ProjectName}}:v{{ .Major }}.{{ .Minor }}"
-      - "gcr.io/VictorAvelar/{{.ProjectName}}:latest"
+      - "gcr.io/victoravelar/{{.ProjectName}}:{{ .Tag }}"
+      - "gcr.io/victoravelar/{{.ProjectName}}:v{{ .Major }}"
+      - "gcr.io/victoravelar/{{.ProjectName}}:v{{ .Major }}.{{ .Minor }}"
+      - "gcr.io/victoravelar/{{.ProjectName}}:latest"
 changelog:
   use: github
   sort: asc
