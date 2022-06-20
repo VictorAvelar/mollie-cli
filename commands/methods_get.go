@@ -39,17 +39,14 @@ type getMethodPropmter struct {
 }
 
 func getPaymentMethodAction(cmd *cobra.Command, args []string) {
-	id, err := cmd.Flags().GetString(IDArg)
-	if err != nil {
-		logger.Fatal(err)
-	}
+	id := ParseStringFromFlags(cmd, IDArg)
 
 	var opts mollie.PaymentMethodOptions
 	{
 		if ParsePromptBool(cmd) {
 			v, err := prompter.Struct(&getMethodPropmter{})
 			if err != nil {
-				logger.Fatal(err)
+				app.Logger.Fatal(err)
 			}
 			val := v.(*getMethodPropmter)
 
@@ -63,28 +60,26 @@ func getPaymentMethodAction(cmd *cobra.Command, args []string) {
 		}
 	}
 
-	if verbose {
-		PrintNonEmptyFlags(cmd)
-	}
-
-	_, m, err := API.PaymentMethods.Get(
+	res, m, err := app.API.PaymentMethods.Get(
 		context.Background(),
 		mollie.PaymentMethod(id),
 		&opts,
 	)
 	if err != nil {
-		logger.Fatal(err)
+		app.Logger.Fatal(err)
 	}
 
-	if json {
-		printJSONP(m)
-	}
+	addStoreValues(Methods, m, res)
 
-	err = printer.DisplayMany(getMethodsDisplayables(m), display.FilterColumns(
-		parseFieldsFromFlag(cmd), getMethodsCols(),
-	))
+	err = app.Printer.DisplayMany(
+		getMethodsDisplayables(m),
+		display.FilterColumns(
+			parseFieldsFromFlag(cmd, Methods),
+			getMethodsCols(),
+		),
+	)
 	if err != nil {
-		logger.Fatal(err)
+		app.Logger.Fatal(err)
 	}
 }
 

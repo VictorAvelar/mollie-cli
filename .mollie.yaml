@@ -50,7 +50,19 @@ mollie:
         - "CREATED_AT"
     methods:
       all:
+        - "RESOURCE"
+        - "ID"
+        - "DESCRIPTION"
+        - "ISSUERS"
+        - "MIN_AMOUNT"
+        - "MAX_AMOUNT"
+        - "LOGO"
       printable:
+        - "ID"
+        - "DESCRIPTION"
+        - "ISSUERS"
+        - "MIN_AMOUNT"
+        - "MAX_AMOUNT"
     permissions:
       all:
       printable:

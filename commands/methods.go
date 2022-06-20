@@ -6,9 +6,11 @@ import (
 
 func methods() *commander.Command {
 	m := commander.Builder(nil, commander.Config{
-		Namespace: "methods",
-		Aliases:   []string{"vendors", "meths"},
-		ShortDesc: "All payment methods that Mollie offers and can be activated",
+		Namespace:          "methods",
+		Aliases:            []string{"vendors", "meths"},
+		ShortDesc:          "All payment methods that Mollie offers and can be activated",
+		PostHook:           printJson,
+		PersistentPostHook: printCurl,
 	}, getMethodsCols())
 
 	// Add namespace persistent flags.
@@ -24,13 +26,11 @@ func methods() *commander.Command {
 }
 
 func getMethodsCols() []string {
-	return []string{
-		"RESOURCE",
-		"ID",
-		"DESCRIPTION",
-		"ISSUERS",
-		"MIN_AMOUNT",
-		"MAX_AMOUNT",
-		"LOGO",
+	cols := app.Config.GetStringSlice("mollie.fields.methods.all")
+
+	if verbose {
+		app.Logger.Info("parsed fields %v", cols)
 	}
+
+	return cols
 }

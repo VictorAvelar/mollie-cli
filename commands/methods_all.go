@@ -40,31 +40,29 @@ func getAllMethodsAction(cmd *cobra.Command, args []string) {
 		opts.Include = ParseStringFromFlags(cmd, IncludeArg)
 	}
 
-	if verbose {
-		PrintNonEmptyFlags(cmd)
-	}
-
-	_, m, err := API.PaymentMethods.All(context.Background(), &opts)
+	res, m, err := app.API.PaymentMethods.All(context.Background(), &opts)
 	if err != nil {
-		logger.Fatal(err)
+		app.Logger.Fatal(err)
 	}
 
-	if json {
-		printJSONP(m)
-	}
+	addStoreValues(Methods, m, res)
 
 	if verbose {
-		logger.Infof("received %d payment methods", m.Count)
-		logger.Infof("request performed: %s", m.Links.Self.Href)
-		logger.Infof("documentation: %s", m.Links.Documentation.Href)
+		app.Logger.Infof("received %d payment methods", m.Count)
+		app.Logger.Infof("request performed: %s", m.Links.Self.Href)
+		app.Logger.Infof("documentation: %s", m.Links.Documentation.Href)
 	}
 
 	disp := &displayers.MollieListMethods{PaymentMethodsList: m}
 
-	err = printer.Display(disp, display.FilterColumns(
-		parseFieldsFromFlag(cmd), getMethodsCols(),
-	))
+	err = app.Printer.Display(
+		disp,
+		display.FilterColumns(
+			parseFieldsFromFlag(cmd, Methods),
+			getMethodsCols(),
+		),
+	)
 	if err != nil {
-		logger.Fatal(err)
+		app.Logger.Fatal(err)
 	}
 }
