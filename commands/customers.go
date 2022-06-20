@@ -11,7 +11,7 @@ func customers() *commander.Command {
 			Namespace:          "customers",
 			ShortDesc:          "Operations with customers API.",
 			Aliases:            []string{"cust", "cstm"},
-			PostHook:           printJson,
+			PostHook:           printJsonAction,
 			PersistentPostHook: printCurl,
 		},
 		customersCols(),
@@ -30,7 +30,7 @@ func customersCols() []string {
 	cols := app.Config.GetStringSlice("mollie.fields.customers.all")
 
 	if verbose {
-		app.Logger.Info("parsed fields %v", cols)
+		app.Logger.Infof("parsed fields %v", cols)
 	}
 
 	return cols

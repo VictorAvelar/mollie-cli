@@ -24,7 +24,10 @@ func parseFieldsFromFlag(cmd *cobra.Command, r string) string {
 	)
 
 	if cfgFields != "" {
-		app.Logger.Info("using fields from config file")
+		if verbose {
+			app.Logger.Info("using fields from config file")
+		}
+
 		return cfgFields
 	}
 

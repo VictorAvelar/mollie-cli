@@ -17,6 +17,7 @@ func updatePaymentPromptCmd(p *commander.Command) *commander.Command {
 			Namespace: "prompt",
 			ShortDesc: "Updates a payment by prompting the user for information",
 			Execute:   promptUpdatePaymentAction,
+			PostHook:  printJsonAction,
 		},
 		getPaymentCols(),
 	)
@@ -56,10 +57,6 @@ func promptUpdatePaymentAction(cmd *cobra.Command, args []string) {
 		app.Logger.Infof("Payment created at %s", p.CreatedAt)
 	}
 
-	if json {
-		printJSONP(res)
-	}
-
 	err = app.Printer.Display(
 		&displayers.MolliePayment{Payment: p},
 		display.FilterColumns(
@@ -67,7 +64,6 @@ func promptUpdatePaymentAction(cmd *cobra.Command, args []string) {
 			getPaymentCols(),
 		),
 	)
-
 	if err != nil {
 		app.Logger.Fatal(err)
 	}

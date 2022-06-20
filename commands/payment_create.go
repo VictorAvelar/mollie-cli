@@ -18,9 +18,10 @@ func createPaymentCmd(p *commander.Command) *commander.Command {
 			ShortDesc: "Create a new payment",
 			LongDesc: `Creates a new payment.
 Description, value, currency and redirect-url are required values.`,
-			Execute: createPaymentAction,
-			Aliases: []string{"new", "start"},
-			Example: "mollie payments create --amount-value=200.00 --amount-currency=USD --redirect-to=https://victoravelar.com --description='custom example payment'",
+			Execute:  createPaymentAction,
+			Aliases:  []string{"new", "start"},
+			Example:  "mollie payments create --amount-value=200.00 --amount-currency=USD --redirect-to=https://victoravelar.com --description='custom example payment'",
+			PostHook: printJsonAction,
 		},
 		getPaymentCols(),
 	)

@@ -10,7 +10,6 @@ func captures() *commander.Command {
 		commander.Config{
 			Namespace:          "captures",
 			ShortDesc:          "Operations with Captures API.",
-			PostHook:           printJson,
 			PersistentPostHook: printCurl,
 		},
 		getCapturesCols(),
@@ -26,7 +25,7 @@ func getCapturesCols() []string {
 	cols := app.Config.GetStringSlice("mollie.fields.captures.all")
 
 	if verbose {
-		app.Logger.Info("parsed fields %v", cols)
+		app.Logger.Infof("parsed fields %v", cols)
 	}
 
 	return cols

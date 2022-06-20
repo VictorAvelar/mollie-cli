@@ -17,6 +17,7 @@ func getProfileCmd(p *commander.Command) *commander.Command {
 			ShortDesc: "Retrieve details of a profile, using the profile’s identifier.",
 			Execute:   getProfileAction,
 			Example:   "mollie profiles get --id=pfl_token",
+			PostHook:  printJsonAction,
 		},
 		getProfileCols(),
 	)

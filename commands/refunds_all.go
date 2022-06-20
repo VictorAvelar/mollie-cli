@@ -17,6 +17,7 @@ func allRefundsCmd(p *commander.Command) *commander.Command {
 			Aliases:   []string{"all", "complete"},
 			Execute:   allRefundsAction,
 			Example:   "mollie refunds all",
+			PostHook:  printJsonAction,
 		},
 		refundsCols(),
 	)

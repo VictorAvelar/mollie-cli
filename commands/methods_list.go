@@ -2,6 +2,7 @@ package commands
 
 import (
 	"context"
+	"fmt"
 
 	"github.com/VictorAvelar/mollie-api-go/v3/mollie"
 	"github.com/VictorAvelar/mollie-cli/commands/displayers"
@@ -9,6 +10,7 @@ import (
 	"github.com/avocatl/admiral/pkg/display"
 	"github.com/avocatl/admiral/pkg/prompter"
 	"github.com/spf13/cobra"
+	"moul.io/http2curl"
 )
 
 func listPaymentMethodsCmd(p *commander.Command) {
@@ -20,8 +22,9 @@ func listPaymentMethodsCmd(p *commander.Command) {
 			LongDesc: `Retrieves all enabled payment methods.
 
 To check the payment method embedded resources use the get payment methods command.`,
-			Example: "mollie methods list --locale=de_DE --sequence-type=recurring",
-			Execute: listPaymentMethodsAction,
+			Example:  "mollie methods list --locale=de_DE --sequence-type=recurring",
+			Execute:  listPaymentMethodsAction,
+			PostHook: printJsonAction,
 		},
 		getMethodsCols(),
 	)
@@ -59,6 +62,11 @@ func listPaymentMethodsAction(cmd *cobra.Command, args []string) {
 
 	res, ms, err := app.API.PaymentMethods.List(context.Background(), &opts)
 	if err != nil {
+		curl, err2 := http2curl.GetCurlCommand(res.Request)
+		if err2 != nil {
+			app.Logger.Error(err2)
+		}
+		fmt.Printf("%s\n", curl)
 		app.Logger.Fatal(err)
 	}
 
@@ -75,9 +83,9 @@ func listPaymentMethodsAction(cmd *cobra.Command, args []string) {
 	}
 
 	err = app.Printer.Display(&disp, display.FilterColumns(
-		parseFieldsFromFlag(cmd, Methods), getMethodsCols(),
+		parseFieldsFromFlag(cmd, Methods),
+		getMethodsCols(),
 	))
-
 	if err != nil {
 		app.Logger.Fatal(err)
 	}

@@ -17,6 +17,7 @@ func getCustomersCmd(p *commander.Command) *commander.Command {
 			ShortDesc: "Retrieve a single customer by its ID.",
 			Example:   "mollie customers get --id=cs_token",
 			Execute:   getCustomerAction,
+			PostHook:  printJsonAction,
 		},
 		customersCols(),
 	)

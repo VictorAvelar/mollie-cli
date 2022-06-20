@@ -19,6 +19,7 @@ func refundsGetCmd(p *commander.Command) *commander.Command {
 			LongDesc:  "Retrieve a single Refund by its ID. Note the Payment’s ID is needed as well",
 			Example:   "mollie refunds get --id=rf_test --payment=tr_test",
 			Execute:   getRefundAction,
+			PostHook:  printJsonAction,
 		},
 		refundsCols(),
 	)

@@ -7,11 +7,14 @@ import (
 	"moul.io/http2curl"
 )
 
-func printJson(cmd *cobra.Command, args []string) {
+func printJsonAction(cmd *cobra.Command, args []string) {
+	println("called json")
 	if json {
 		ns := app.Store["ns"].(string)
 
 		data := app.Store[ns]
+
+		app.Logger.Info(data)
 
 		printJSONP(data)
 	}
@@ -26,7 +29,10 @@ func printCurl(cmd *cobra.Command, args []string) {
 			app.Logger.Error(err)
 		}
 
-		app.Logger.Printf("%v", curl)
+		app.Logger.Infof(`
+Your cURL:
+%s
+`, curl)
 	}
 }
 

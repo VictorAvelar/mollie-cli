@@ -45,44 +45,37 @@ type cli struct {
 	Config  *viper.Viper
 }
 
-// Application describes an executable CLI app.
-type Application interface {
-	Execute() error
-}
-
-// New creates a new application.
-func New() Application {
-	return &cli{}
-}
-
 func init() {
-	app := &cli{}
+	initApp()
+}
 
-	app.App = commander.Builder(
-		nil,
-		commander.Config{
-			Namespace:         "mollie",
-			ShortDesc:         "Mollie is a command line interface (CLI) for the Mollie REST API.",
-			Version:           version,
-			PersistentPreHook: printVerboseFlags,
-		},
-		commander.NoCols(),
-	)
+func initApp() {
+	app = &cli{
+		App: commander.Builder(
+			nil,
+			commander.Config{
+				Namespace:         "mollie",
+				ShortDesc:         "Mollie is a command line interface (CLI) for the Mollie REST API.",
+				Version:           version,
+				PersistentPreHook: printVerboseFlags,
+			},
+			commander.NoCols(),
+		),
+		Logger:  initLogger(),
+		Printer: display.DefaultDisplayer(nil),
+		Store:   make(map[string]interface{}),
+	}
 
-	app.Printer = display.DefaultDisplayer(nil)
 	app.Config = initConfig()
 	app.API = initClient()
 
-	app.addPersistentFlags()
-	app.addCommands()
-	app.Logger = logrus.WithFields(logrus.Fields{
-		"version": version,
-		"mode":    mode,
-	}).Logger
+	addPersistentFlags()
+	addCommands()
 }
 
-func initConfig() *viper.Viper {
-	app.Logger.SetFormatter(&logrus.TextFormatter{
+func initLogger() *logrus.Logger {
+	logger := logrus.New()
+	logger.SetFormatter(&logrus.TextFormatter{
 		TimestampFormat:        time.RFC822,
 		FullTimestamp:          true,
 		DisableLevelTruncation: true,
@@ -90,9 +83,13 @@ func initConfig() *viper.Viper {
 	})
 
 	if debug {
-		app.Logger.SetReportCaller(debug)
+		logger.SetReportCaller(debug)
 	}
 
+	return logger
+}
+
+func initConfig() *viper.Viper {
 	if cfgFile != "" {
 		viper.SetConfigFile(cfgFile)
 	} else {
@@ -114,8 +111,6 @@ func initConfig() *viper.Viper {
 		app.Logger.Error(err)
 	}
 
-	app.Logger.Printf("%v", viper.AllSettings())
-
 	if verbose {
 		app.Logger.Infof("Using configuration file: %s\n", viper.ConfigFileUsed())
 		app.Logger.Infof("Using api token: %s", viper.GetString("mollie.token"))
@@ -135,6 +130,10 @@ func initClient() *mollie.Client {
 		app.Logger.Infof("connecting in %s mode", mode)
 	}
 
+	if token == "" {
+		token = mollie.APITokenEnv
+	}
+
 	config := mollie.NewConfig(tst, token)
 	m, err := mollie.NewClient(nil, config)
 	if err != nil {
@@ -145,12 +144,12 @@ func initClient() *mollie.Client {
 }
 
 // Execute runs the command entrypoint.
-func (a *cli) Execute() error {
-	return a.App.Execute()
+func Execute() error {
+	return app.App.Execute()
 }
 
-func (a *cli) addPersistentFlags() {
-	commander.AddFlag(a.App, commander.FlagConfig{
+func addPersistentFlags() {
+	commander.AddFlag(app.App, commander.FlagConfig{
 		Name:       "config",
 		Shorthand:  "c",
 		Usage:      "specifies a custom config file to be used",
@@ -162,10 +161,10 @@ func (a *cli) addPersistentFlags() {
 	})
 	_ = viper.BindPFlag(
 		"mollie.core.custom_path",
-		a.App.PersistentFlags().Lookup("config"),
+		app.App.PersistentFlags().Lookup("config"),
 	)
 
-	commander.AddFlag(a.App, commander.FlagConfig{
+	commander.AddFlag(app.App, commander.FlagConfig{
 		Name:       "token",
 		Shorthand:  "t",
 		Usage:      "the type of token to use for auth",
@@ -176,12 +175,8 @@ func (a *cli) addPersistentFlags() {
 			BindString: &token,
 		},
 	})
-	_ = viper.BindPFlag(
-		"mollie.core.key",
-		a.App.PersistentFlags().Lookup("token"),
-	)
 
-	commander.AddFlag(a.App, commander.FlagConfig{
+	commander.AddFlag(app.App, commander.FlagConfig{
 		Name:       "mode",
 		Shorthand:  "m",
 		Usage:      "indicates the api target from test/live",
@@ -194,10 +189,10 @@ func (a *cli) addPersistentFlags() {
 	})
 	_ = viper.BindPFlag(
 		"mollie.core.mode",
-		a.App.PersistentFlags().Lookup("mode"),
+		app.App.PersistentFlags().Lookup("mode"),
 	)
 
-	commander.AddFlag(a.App, commander.FlagConfig{
+	commander.AddFlag(app.App, commander.FlagConfig{
 		FlagType:   commander.BoolFlag,
 		Name:       "verbose",
 		Shorthand:  "v",
@@ -211,10 +206,10 @@ func (a *cli) addPersistentFlags() {
 	})
 	_ = viper.BindPFlag(
 		"mollie.core.verbose",
-		a.App.PersistentFlags().Lookup("verbose"),
+		app.App.PersistentFlags().Lookup("verbose"),
 	)
 
-	commander.AddFlag(a.App, commander.FlagConfig{
+	commander.AddFlag(app.App, commander.FlagConfig{
 		FlagType:   commander.BoolFlag,
 		Name:       "json",
 		Usage:      "dumpts the json response instead of the column based output",
@@ -227,10 +222,10 @@ func (a *cli) addPersistentFlags() {
 	})
 	_ = viper.BindPFlag(
 		"mollie.core.json",
-		a.App.PersistentFlags().Lookup("json"),
+		app.App.PersistentFlags().Lookup("json"),
 	)
 
-	commander.AddFlag(a.App, commander.FlagConfig{
+	commander.AddFlag(app.App, commander.FlagConfig{
 		FlagType:   commander.BoolFlag,
 		Name:       "curl",
 		Usage:      "print the curl representation of a request",
@@ -242,12 +237,12 @@ func (a *cli) addPersistentFlags() {
 		},
 	})
 	_ = viper.BindPFlag("mollie.core.curl",
-		a.App.PersistentFlags().Lookup("curl"),
+		app.App.PersistentFlags().Lookup("curl"),
 	)
 }
 
-func (a *cli) addCommands() {
-	a.App.AddCommand(
+func addCommands() {
+	app.App.AddCommand(
 		docs(),
 		browse(),
 		methods(),

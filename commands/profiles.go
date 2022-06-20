@@ -10,7 +10,7 @@ func profile() *commander.Command {
 		commander.Config{
 			Namespace:          "profiles",
 			ShortDesc:          "In order to process payments, you need to create a website profile",
-			PostHook:           printJson,
+			PostHook:           printJsonAction,
 			PersistentPostHook: printCurl,
 		},
 		getProfileCols(),
@@ -26,7 +26,7 @@ func getProfileCols() []string {
 	cols := app.Config.GetStringSlice("mollie.fields.profiles.all")
 
 	if verbose {
-		app.Logger.Info("parsed fields %v", cols)
+		app.Logger.Infof("parsed fields %v", cols)
 	}
 
 	return cols

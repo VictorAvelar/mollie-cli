@@ -19,8 +19,9 @@ func updatePaymentCmd(p *commander.Command) *commander.Command {
 			ShortDesc: "Update some details of a created payment",
 			LongDesc: `Updates basic payment information, for a more advanced
 and complete update workflow check the prompt subcommand.`,
-			Execute: updatePaymentAction,
-			Example: "mollie payments update --id=test_token --description=updated",
+			Execute:  updatePaymentAction,
+			Example:  "mollie payments update --id=test_token --description=updated",
+			PostHook: printJsonAction,
 		},
 		getPaymentCols(),
 	)

@@ -19,6 +19,7 @@ func updateCustomerCmd(p *commander.Command) *commander.Command {
 			ShortDesc: "Updates an existing customer.",
 			Example:   "mollie customers update --name 'new name'",
 			Execute:   updateCustomerAction,
+			PostHook:  printJsonAction,
 		},
 		customersCols(),
 	)

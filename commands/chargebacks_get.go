@@ -18,8 +18,9 @@ func getChargebacksCmd(p *commander.Command) *commander.Command {
 			ShortDesc: "Retrieve a single chargeback by its ID. Note the original payment’s ID is needed as well.",
 			LongDesc: `Retrieve a single chargeback by its ID. Note the original payment’s ID is needed as well.
 A debit to a depositor's account for an item that has been previously credited, as for a returned bad check.`,
-			Execute: getChargebackAction,
-			Example: "mollie chargebacks get --id=cb_token --embed=payments",
+			Execute:  getChargebackAction,
+			Example:  "mollie chargebacks get --id=cb_token --embed=payments",
+			PostHook: printJsonAction,
 		},
 		getChargebacksCols(),
 	)

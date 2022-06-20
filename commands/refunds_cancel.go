@@ -20,8 +20,9 @@ until the next day. Until that time, refunds may be canceled manually in the Mol
 or programmatically by using this endpoint.
 
 A Refund can only be canceled while its status field is either queued or pending.`,
-			Example: "mollie refunds cancel --id=rf_test --payment=tr_test",
-			Execute: cancelRefundAction,
+			Example:  "mollie refunds cancel --id=rf_test --payment=tr_test",
+			Execute:  cancelRefundAction,
+			PostHook: printJsonAction,
 		},
 		refundsCols(),
 	)

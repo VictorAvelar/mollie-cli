@@ -21,8 +21,9 @@ The results are not paginated. New payment methods can be activated via the Enab
 endpoint in the Profiles API.
 
 To check the payment method embedded resources use the get payment methods command.`,
-			Execute: getAllMethodsAction,
-			Example: "mollie methods all --locale=nl_NL",
+			Execute:  getAllMethodsAction,
+			Example:  "mollie methods all --locale=nl_NL",
+			PostHook: printJsonAction,
 		},
 		getMethodsCols(),
 	)

@@ -17,6 +17,7 @@ func getPaymentCmd(p *commander.Command) *commander.Command {
 			ShortDesc: "Retrieve a single payment object by its payment token.",
 			Execute:   getPaymentAction,
 			Example:   "mollie payments get --id=tr_token",
+			PostHook:  printJsonAction,
 		},
 		getPaymentCols(),
 	)

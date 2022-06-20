@@ -13,7 +13,7 @@ func payments() *commander.Command {
 			Namespace:          "payments",
 			ShortDesc:          "All operations to handle payments",
 			Aliases:            []string{"pay", "p"},
-			PostHook:           printJson,
+			PostHook:           printJsonAction,
 			PersistentPostHook: printCurl,
 		},
 		getPaymentCols(),
@@ -32,7 +32,7 @@ func getPaymentCols() []string {
 	cols := app.Config.GetStringSlice("mollie.fields.payments.all")
 
 	if verbose {
-		app.Logger.Info("parsed fields %v", cols)
+		app.Logger.Infof("parsed fields %v", cols)
 	}
 
 	return cols

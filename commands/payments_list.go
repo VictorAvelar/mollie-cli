@@ -18,8 +18,9 @@ func listPaymentsCmd(p *commander.Command) *commander.Command {
 			ShortDesc: "Retrieve all payments created",
 			LongDesc: `Retrieve all payments created with the current website profile, 
 ordered from newest to oldest. The results are paginated.`,
-			Execute: listPaymentsAction,
-			Example: "mollie payments list --limit=3",
+			Execute:  listPaymentsAction,
+			Example:  "mollie payments list --limit=3",
+			PostHook: printJsonAction,
 		},
 		getPaymentCols(),
 	)

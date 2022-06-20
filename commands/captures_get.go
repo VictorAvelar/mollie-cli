@@ -19,8 +19,9 @@ func getCapturesCmd(p *commander.Command) *commander.Command {
 Captures are used for payments that have the authorize-then-capture flow. 
 The only payment methods at the moment that have this flow are Klarna Pay 
 later and Klarna Slice it.`,
-			Execute: getCapturesAction,
-			Example: "mollie captures get --id ct_example --payment tr_example",
+			Execute:  getCapturesAction,
+			Example:  "mollie captures get --id ct_example --payment tr_example",
+			PostHook: printJsonAction,
 		},
 		getCapturesCols(),
 	)

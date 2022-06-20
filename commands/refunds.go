@@ -14,7 +14,7 @@ func refunds() *commander.Command {
 			Namespace:          "refunds",
 			Aliases:            []string{"refs", "rf"},
 			ShortDesc:          "All operations to handle refunds",
-			PostHook:           printJson,
+			PostHook:           printJsonAction,
 			PersistentPostHook: printCurl,
 		},
 		refundsCols(),
@@ -33,7 +33,7 @@ func refundsCols() []string {
 	cols := app.Config.GetStringSlice("mollie.fields.refunds.all")
 
 	if verbose {
-		app.Logger.Info("parsed fields %v", cols)
+		app.Logger.Infof("parsed fields %v", cols)
 	}
 
 	return cols

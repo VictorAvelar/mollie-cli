@@ -18,6 +18,7 @@ func listCustomerCmd(p *commander.Command) *commander.Command {
 			ShortDesc: "Retrieves all customers created.",
 			Example:   "mollie customers list",
 			Execute:   listCustomerActions,
+			PostHook:  printJsonAction,
 		},
 		customersCols(),
 	)

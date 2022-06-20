@@ -18,6 +18,7 @@ func deleteCustomerCmd(p *commander.Command) *commander.Command {
 			LongDesc:  "Deletes a customer. WARNING! All mandates and subscriptions created for this customer will be canceled as well.",
 			Example:   "mollie customers delete --id cs_test",
 			Execute:   deleteCustomerAction,
+			PostHook:  printJsonAction,
 		},
 		customersCols(),
 	)

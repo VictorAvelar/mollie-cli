@@ -11,7 +11,7 @@ func invoices() *commander.Command {
 			Namespace:          "invoices",
 			Example:            "mollie invoices",
 			ShortDesc:          "Operations over Mollie's Invoices API.",
-			PostHook:           printJson,
+			PostHook:           printJsonAction,
 			PersistentPostHook: printCurl,
 		},
 		invoicesCols(),
@@ -27,7 +27,7 @@ func invoicesCols() []string {
 	cols := app.Config.GetStringSlice("mollie.fields.invoices.all")
 
 	if verbose {
-		app.Logger.Info("parsed fields %v", cols)
+		app.Logger.Infof("parsed fields %v", cols)
 	}
 
 	return cols

@@ -1,8 +1,6 @@
 package commands
 
 import (
-	"os"
-
 	"github.com/VictorAvelar/mollie-api-go/v3/mollie"
 	"github.com/avocatl/admiral/pkg/commander"
 	"github.com/avocatl/admiral/pkg/display"
@@ -56,7 +54,7 @@ func PrintNonEmptyFlags(cmd *cobra.Command) {
 }
 
 func printFlagValues(f *pflag.Flag) {
-	logger.Infof("using %s with value %s", f.Name, f.Value)
+	app.Logger.Infof("using %s with value %s", f.Name, f.Value)
 }
 
 // PrintJsonP dumps the given data as pretty json and then it exits
@@ -66,9 +64,8 @@ func printJSONP(d interface{}) {
 
 	err := app.Printer.Display(disp, commander.NoCols())
 	if err != nil {
-		logger.Fatal(err)
+		app.Logger.Fatal(err)
 	}
-	os.Exit(0)
 }
 
 func addStoreValues(ns string, val interface{}, res *mollie.Response) {

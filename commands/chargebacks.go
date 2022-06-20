@@ -11,7 +11,6 @@ func chargebacks() *commander.Command {
 			Namespace:          "chargebacks",
 			ShortDesc:          "Operations with the Chargebacks API",
 			Aliases:            []string{"cb", "cback"},
-			PostHook:           printJson,
 			PersistentPostHook: printCurl,
 		},
 		getChargebacksCols(),
@@ -27,7 +26,7 @@ func getChargebacksCols() []string {
 	cols := app.Config.GetStringSlice("mollie.fields.chargebacks.all")
 
 	if verbose {
-		app.Logger.Info("parsed fields %v", cols)
+		app.Logger.Infof("parsed fields %v", cols)
 	}
 
 	return cols

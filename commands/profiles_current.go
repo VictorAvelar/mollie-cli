@@ -20,6 +20,7 @@ func currentProfileCmd(p *commander.Command) *commander.Command {
 			LongDesc: `Use this API if you are creating a plugin or SaaS application that allows users to enter a Mollie API key, 
 and you want to give a confirmation of the website profile that will be used in your plugin 
 or application.`,
+			PostHook: printJsonAction,
 		},
 		getProfileCols(),
 	)

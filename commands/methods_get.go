@@ -22,8 +22,9 @@ func getPaymentMethodCmd(p *commander.Command) {
 a status 404 Not found is returned. When the method is not enabled,a status 403 Forbidden
 is returned. You can enable payments methods via the Enable payment method endpoint in the
 Profiles API, or via your Mollie Dashboard.`,
-			Execute: getPaymentMethodAction,
-			Example: "mollie methods get --id=creditcard --locale=pt_PT",
+			Execute:  getPaymentMethodAction,
+			Example:  "mollie methods get --id=creditcard --locale=pt_PT",
+			PostHook: printJsonAction,
 		},
 		getMethodsCols(),
 	)

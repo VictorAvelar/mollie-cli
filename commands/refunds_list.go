@@ -16,6 +16,7 @@ func listRefundCmd(p *commander.Command) *commander.Command {
 			ShortDesc: "Retrieves refunds for the provided API token, or payment token",
 			Example:   "mollie refunds list --payment=tr_test",
 			Execute:   listRefundsAction,
+			PostHook:  printJsonAction,
 		},
 		commander.NoCols(),
 	)

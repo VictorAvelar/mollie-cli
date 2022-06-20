@@ -18,6 +18,7 @@ func promptPaymentCmd(p *commander.Command) *commander.Command {
 			Namespace: "prompt",
 			ShortDesc: "Creates a payment by prompting the user for values",
 			Execute:   promptPaymentAction,
+			PostHook:  printJsonAction,
 		},
 		getPaymentCols(),
 	)

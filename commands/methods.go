@@ -9,7 +9,7 @@ func methods() *commander.Command {
 		Namespace:          "methods",
 		Aliases:            []string{"vendors", "meths"},
 		ShortDesc:          "All payment methods that Mollie offers and can be activated",
-		PostHook:           printJson,
+		PostHook:           printJsonAction,
 		PersistentPostHook: printCurl,
 	}, getMethodsCols())
 
@@ -29,7 +29,7 @@ func getMethodsCols() []string {
 	cols := app.Config.GetStringSlice("mollie.fields.methods.all")
 
 	if verbose {
-		app.Logger.Info("parsed fields %v", cols)
+		app.Logger.Infof("parsed fields %v", cols)
 	}
 
 	return cols
