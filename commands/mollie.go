@@ -12,7 +12,7 @@ import (
 )
 
 const (
-	version string = "v0.12.1"
+	version string = "v0.13.0"
 
 	// Store namespaces
 	Payments    = "payments"
