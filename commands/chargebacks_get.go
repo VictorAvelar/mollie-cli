@@ -46,10 +46,6 @@ func getChargebackAction(cmd *cobra.Command, args []string) {
 	chargeback := ParseStringFromFlags(cmd, IDArg)
 	embed := ParseStringFromFlags(cmd, EmbedArg)
 
-	if verbose {
-		PrintNonEmptyFlags(cmd)
-	}
-
 	var opts mollie.ChargebackOptions
 	if len(embed) > 0 {
 		opts = mollie.ChargebackOptions{
@@ -57,23 +53,28 @@ func getChargebackAction(cmd *cobra.Command, args []string) {
 		}
 	}
 
-	_, cb, err := API.Chargebacks.Get(context.Background(), payment, chargeback, &opts)
+	res, cb, err := app.API.Chargebacks.Get(context.Background(), payment, chargeback, &opts)
 	if err != nil {
-		logger.Fatal(err)
+		app.Logger.Fatal(err)
 	}
 
+	addStoreValues(Chargebacks, cb, res)
+
 	if verbose {
-		logger.Infof("request target: %s", cb.Links.Self.Href)
-		logger.Infof("request docs: %s", cb.Links.Documentation.Href)
+		app.Logger.Infof("request target: %s", cb.Links.Self.Href)
+		app.Logger.Infof("request docs: %s", cb.Links.Documentation.Href)
 	}
 
 	disp := &displayers.MollieChargeback{Chargeback: cb}
 
-	err = printer.Display(
+	err = app.Printer.Display(
 		disp,
-		display.FilterColumns(parseFieldsFromFlag(cmd), getChargebacksCols()),
+		display.FilterColumns(
+			parseFieldsFromFlag(cmd, Chargebacks),
+			getChargebacksCols(),
+		),
 	)
 	if err != nil {
-		logger.Fatal(err)
+		app.Logger.Fatal(err)
 	}
 }

@@ -8,9 +8,11 @@ func chargebacks() *commander.Command {
 	cb := commander.Builder(
 		nil,
 		commander.Config{
-			Namespace: "chargebacks",
-			ShortDesc: "Operations with the Chargebacks API",
-			Aliases:   []string{"cb", "cback"},
+			Namespace:          "chargebacks",
+			ShortDesc:          "Operations with the Chargebacks API",
+			Aliases:            []string{"cb", "cback"},
+			PostHook:           printJson,
+			PersistentPostHook: printCurl,
 		},
 		getChargebacksCols(),
 	)
@@ -22,13 +24,11 @@ func chargebacks() *commander.Command {
 }
 
 func getChargebacksCols() []string {
-	return []string{
-		"RESOURCE",
-		"ID",
-		"AMOUNT",
-		"SETTLEMENT_AMOUNT",
-		"CREATED_AT",
-		"REVERSED_AT",
-		"PAYMENT_ID",
+	cols := app.Config.GetStringSlice("mollie.fields.chargebacks.all")
+
+	if verbose {
+		app.Logger.Info("parsed fields %v", cols)
 	}
+
+	return cols
 }
