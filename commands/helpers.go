@@ -3,6 +3,7 @@ package commands
 import (
 	"os"
 
+	"github.com/VictorAvelar/mollie-api-go/v3/mollie"
 	"github.com/avocatl/admiral/pkg/commander"
 	"github.com/avocatl/admiral/pkg/display"
 	"github.com/spf13/cobra"
@@ -63,9 +64,15 @@ func printFlagValues(f *pflag.Flag) {
 func printJSONP(d interface{}) {
 	disp := display.JSON(d, true)
 
-	err := printer.Display(disp, commander.NoCols())
+	err := app.Printer.Display(disp, commander.NoCols())
 	if err != nil {
 		logger.Fatal(err)
 	}
 	os.Exit(0)
+}
+
+func addStoreValues(ns string, val interface{}, res *mollie.Response) {
+	app.Store["request"] = res.Request
+	app.Store["ns"] = Captures
+	app.Store[Captures] = val
 }
