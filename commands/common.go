@@ -32,7 +32,7 @@ func parseFieldsFromFlag(cmd *cobra.Command, r string) string {
 	}
 
 	if verbose {
-		logger.Info("using all columns (unfiltered)")
+		app.Logger.Info("using all columns (unfiltered)")
 	}
 
 	return ""
