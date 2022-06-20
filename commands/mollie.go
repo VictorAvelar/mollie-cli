@@ -239,6 +239,20 @@ func addPersistentFlags() {
 	_ = viper.BindPFlag("mollie.core.curl",
 		app.App.PersistentFlags().Lookup("curl"),
 	)
+
+	commander.AddFlag(app.App, commander.FlagConfig{
+		FlagType:   commander.BoolFlag,
+		Name:       "debug",
+		Shorthand:  "d",
+		Usage:      "enables debug logging information",
+		Default:    false,
+		Persistent: true,
+		Binding: commander.FlagBindOptions{
+			Bound:    true,
+			BindBool: &debug,
+		},
+	})
+	_ = viper.BindPFlag("debug", app.App.PersistentFlags().Lookup("debug"))
 }
 
 func addCommands() {
