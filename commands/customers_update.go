@@ -54,10 +54,6 @@ func updateCustomerAction(cmd *cobra.Command, args []string) {
 		locale := ParseStringFromFlags(cmd, LocaleArg)
 		meta := ParseStringFromFlags(cmd, LocaleArg)
 
-		if verbose {
-			PrintNonEmptyFlags(cmd)
-		}
-
 		c = mollie.Customer{
 			ID:       id,
 			Email:    email,
@@ -67,28 +63,30 @@ func updateCustomerAction(cmd *cobra.Command, args []string) {
 		}
 	}
 
-	_, uc, err := API.Customers.Update(context.Background(), c.ID, c)
+	res, uc, err := app.API.Customers.Update(context.Background(), c.ID, c)
 	if err != nil {
-		logger.Fatal(err)
+		app.Logger.Fatal(err)
 	}
 
+	addStoreValues(Customers, uc, res)
+
 	if verbose {
-		logger.Infof("request target: %s", uc.Links.Self.Href)
-		logger.Infof("request docs: %s", uc.Links.Documentation.Href)
+		app.Logger.Infof("request target: %s", uc.Links.Self.Href)
+		app.Logger.Infof("request docs: %s", uc.Links.Documentation.Href)
 	}
 
 	disp := displayers.MollieCustomer{
 		Customer: uc,
 	}
 
-	err = printer.Display(
+	err = app.Printer.Display(
 		&disp,
 		display.FilterColumns(
-			parseFieldsFromFlag(cmd),
+			parseFieldsFromFlag(cmd, Customers),
 			customersCols(),
 		),
 	)
 	if err != nil {
-		logger.Fatal(err)
+		app.Logger.Fatal(err)
 	}
 }

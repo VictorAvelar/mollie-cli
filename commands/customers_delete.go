@@ -30,17 +30,15 @@ func deleteCustomerCmd(p *commander.Command) *commander.Command {
 func deleteCustomerAction(cmd *cobra.Command, args []string) {
 	id := ParseStringFromFlags(cmd, IDArg)
 
-	if verbose {
-		PrintNonEmptyFlags(cmd)
-	}
-
-	_, err := API.Customers.Delete(context.Background(), id)
+	res, err := app.API.Customers.Delete(context.Background(), id)
 	if err != nil {
-		logger.Fatal(err)
+		app.Logger.Fatal(err)
 	}
 
+	addStoreValues(Customers, id, res)
+
 	if verbose {
-		logger.Infof("removed customer with id/token: %s", id)
+		app.Logger.Infof("removed customer with id/token: %s", id)
 	}
 
 	display.Text("*", "Customer deleted successfully")

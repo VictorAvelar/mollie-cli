@@ -29,32 +29,30 @@ func getCustomersCmd(p *commander.Command) *commander.Command {
 func getCustomerAction(cmd *cobra.Command, args []string) {
 	id := ParseStringFromFlags(cmd, IDArg)
 
-	if verbose {
-		PrintNonemptyFlagValue(IDArg, id)
-	}
-
-	_, c, err := API.Customers.Get(context.Background(), id)
+	res, c, err := app.API.Customers.Get(context.Background(), id)
 	if err != nil {
-		logger.Fatal(err)
+		app.Logger.Fatal(err)
 	}
 
+	addStoreValues(Customers, c, res)
+
 	if verbose {
-		logger.Infof("request target: %s", c.Links.Self.Href)
-		logger.Infof("request docs: %s", c.Links.Documentation.Href)
+		app.Logger.Infof("request target: %s", c.Links.Self.Href)
+		app.Logger.Infof("request docs: %s", c.Links.Documentation.Href)
 	}
 
 	disp := &displayers.MollieCustomer{
 		Customer: c,
 	}
 
-	err = printer.Display(
+	err = app.Printer.Display(
 		disp,
 		display.FilterColumns(
-			parseFieldsFromFlag(cmd),
+			parseFieldsFromFlag(cmd, Customers),
 			customersCols(),
 		),
 	)
 	if err != nil {
-		logger.Fatal(err)
+		app.Logger.Fatal(err)
 	}
 }
