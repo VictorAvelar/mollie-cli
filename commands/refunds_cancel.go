@@ -36,13 +36,9 @@ func cancelRefundAction(cmd *cobra.Command, args []string) {
 	payment := ParseStringFromFlags(cmd, PaymentArg)
 	id := ParseStringFromFlags(cmd, IDArg)
 
-	if verbose {
-		PrintNonEmptyFlags(cmd)
-	}
-
-	_, err := API.Refunds.Cancel(context.Background(), payment, id)
+	_, err := app.API.Refunds.Cancel(context.Background(), payment, id)
 	if err != nil {
-		logger.Fatal(err)
+		app.Logger.Fatal(err)
 	}
 
 	display.Text("*", "Refund successfully cancelled")

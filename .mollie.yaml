@@ -165,7 +165,23 @@ mollie:
         - "REVERSED_AT"
     refunds:
       all:
+        - "RESOURCE"
+        - "ID"
+        - "AMOUNT"
+        - "SETTLEMENT_ID"
+        - "SETTLEMENT_AMOUNT"
+        - "DESCRIPTION"
+        - "METADATA"
+        - "STATUS"
+        - "PAYMENT_ID"
+        - "ORDER_ID"
+        - "CREATED_AT"
       printable:
+        - "ID"
+        - "AMOUNT"
+        - "SETTLEMENT_AMOUNT"
+        - "DESCRIPTION"
+        - "STATUS"
     invoices:
       all:
         - "RESOURCE"

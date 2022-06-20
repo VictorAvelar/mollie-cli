@@ -53,30 +53,26 @@ func createRefundAction(cmd *cobra.Command, args []string) {
 
 	payment := ParseStringFromFlags(cmd, PaymentArg)
 
-	if verbose {
-		PrintNonEmptyFlags(cmd)
-	}
-
-	_, rs, err := API.Refunds.Create(context.Background(), payment, r, nil)
+	res, rs, err := app.API.Refunds.Create(context.Background(), payment, r, nil)
 	if err != nil {
-		logger.Errorf("%+v", rs)
-		logger.Errorf("%+v", r)
-		logger.Fatal(err)
+		app.Logger.Fatal(err)
 	}
 
+	addStoreValues(Refunds, rs, res)
+
 	if verbose {
-		logger.Infof("refund for payment %s created", payment)
-		logger.Infof("request target: %s", rs.Links.Self.Href)
-		logger.Infof("request docs: %s", rs.Links.Documentation.Href)
+		app.Logger.Infof("refund for payment %s created", payment)
+		app.Logger.Infof("request target: %s", rs.Links.Self.Href)
+		app.Logger.Infof("request docs: %s", rs.Links.Documentation.Href)
 	}
 
 	disp := displayers.MollieRefund{Refund: rs}
 
-	err = printer.Display(
+	err = app.Printer.Display(
 		&disp,
-		display.FilterColumns(parseFieldsFromFlag(cmd), refundsCols()),
+		display.FilterColumns(parseFieldsFromFlag(cmd, Refunds), refundsCols()),
 	)
 	if err != nil {
-		logger.Fatal(err)
+		app.Logger.Fatal(err)
 	}
 }
