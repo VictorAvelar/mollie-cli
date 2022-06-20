@@ -23,17 +23,11 @@ func profile() *commander.Command {
 }
 
 func getProfileCols() []string {
-	return []string{
-		"RESOURCE",
-		"ID",
-		"MODE",
-		"NAME",
-		"WEBSITE",
-		"EMAIL",
-		"PHONE",
-		"CATEGORY_CODE",
-		"STATUS",
-		"REVIEW",
-		"CREATED_AT",
+	cols := app.Config.GetStringSlice("mollie.fields.profiles.all")
+
+	if verbose {
+		app.Logger.Info("parsed fields %v", cols)
 	}
+
+	return cols
 }
