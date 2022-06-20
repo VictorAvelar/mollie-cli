@@ -111,7 +111,26 @@ mollie:
         - "GRANTED"
     profiles:
       all:
+        - "RESOURCE"
+        - "ID"
+        - "MODE"
+        - "NAME"
+        - "WEBSITE"
+        - "EMAIL"
+        - "PHONE"
+        - "CATEGORY_CODE"
+        - "STATUS"
+        - "REVIEW"
+        - "CREATED_AT"
       printable:
+        - "ID"
+        - "NAME"
+        - "WEBSITE"
+        - "EMAIL"
+        - "PHONE"
+        - "CATEGORY_CODE"
+        - "STATUS"
+        - "REVIEW"
     captures:
       all:
         - "RESOURCE"

@@ -8,8 +8,10 @@ func profile() *commander.Command {
 	p := commander.Builder(
 		nil,
 		commander.Config{
-			Namespace: "profiles",
-			ShortDesc: "In order to process payments, you need to create a website profile",
+			Namespace:          "profiles",
+			ShortDesc:          "In order to process payments, you need to create a website profile",
+			PostHook:           printJson,
+			PersistentPostHook: printCurl,
 		},
 		getProfileCols(),
 	)

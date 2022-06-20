@@ -29,29 +29,28 @@ func getProfileCmd(p *commander.Command) *commander.Command {
 func getProfileAction(cmd *cobra.Command, args []string) {
 	id := ParseStringFromFlags(cmd, IDArg)
 
-	if verbose {
-		logger.Infof("fetching profile with id %s", id)
+	res, p, err := app.API.Profiles.Get(context.Background(), id)
+	if err != nil {
+		app.Logger.Fatal(err)
 	}
 
-	_, p, err := API.Profiles.Get(context.Background(), id)
-	if err != nil {
-		logger.Fatal(err)
-	}
+	addStoreValues(Profiles, p, res)
+
 	if verbose {
-		logger.Infof("using profile id: %s", id)
-		logger.Infof("request target: %s", p.Links.Self.Href)
+		app.Logger.Infof("using profile id: %s", id)
+		app.Logger.Infof("request target: %s", p.Links.Self.Href)
 	}
 
 	disp := displayers.MollieProfile{Profile: p}
 
-	err = printer.Display(
+	err = app.Printer.Display(
 		&disp,
 		display.FilterColumns(
-			parseFieldsFromFlag(cmd),
+			parseFieldsFromFlag(cmd, Profiles),
 			getProfileCols(),
 		),
 	)
 	if err != nil {
-		logger.Error(err)
+		app.Logger.Error(err)
 	}
 }
