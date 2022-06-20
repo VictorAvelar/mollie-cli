@@ -40,39 +40,36 @@ func promptPaymentAction(cmd *cobra.Command, args []string) {
 		attachAccessTokenParams(&payment)
 	}
 
-	_, res, err := API.Payments.Create(context.Background(), payment, nil)
+	res, p, err := app.API.Payments.Create(context.Background(), payment, nil)
 	if err != nil {
-		logger.Fatal(err)
+		app.Logger.Fatal(err)
 	}
+
+	addStoreValues(Payments, p, res)
 
 	if verbose {
-		logger.Infof("request target: %s", res.Links.Self.Href)
-		logger.Infof("request docs: %s", res.Links.Documentation.Href)
-		logger.Infof("payment successfully created")
-		logger.Infof("Payment created at %s", res.CreatedAt)
+		app.Logger.Infof("request target: %s", p.Links.Self.Href)
+		app.Logger.Infof("request docs: %s", p.Links.Documentation.Href)
+		app.Logger.Infof("payment successfully created")
+		app.Logger.Infof("Payment created at %s", p.CreatedAt)
 	}
 
-	if json {
-		printJSONP(res)
-	}
-
-	err = printer.Display(
-		&displayers.MolliePayment{Payment: &payment},
+	err = app.Printer.Display(
+		&displayers.MolliePayment{Payment: p},
 		display.FilterColumns(
-			parseFieldsFromFlag(cmd),
+			parseFieldsFromFlag(cmd, Payments),
 			getPaymentCols(),
 		),
 	)
-
 	if err != nil {
-		logger.Fatal(err)
+		app.Logger.Fatal(err)
 	}
 }
 
 func promptStringClean(q, def string) string {
 	v, err := prompter.String(q, def)
 	if err != nil {
-		logger.Fatal(err)
+		app.Logger.Fatal(err)
 	}
 
 	return v
