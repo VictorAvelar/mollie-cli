@@ -2,8 +2,8 @@ name: "PR label assigner"
 
 on:
   - pull_request:
-    branches:
-      - master
+      branches:
+        - master
 
 jobs:
   triage:
