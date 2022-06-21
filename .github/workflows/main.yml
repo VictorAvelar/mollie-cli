@@ -6,12 +6,16 @@ on:
       - "**.md"
       - ".github/**.md"
       - ".github/**/**.md"
+      - ".github/**.yml"
+      - ".github/**/**.yml"
   pull_request:
     paths-ignore:
       - "docs/**"
       - "**.md"
       - ".github/**.md"
       - ".github/**/**.md"
+      - ".github/**.yml"
+      - ".github/**/**.yml"
 jobs:
   testing:
     runs-on: ubuntu-latest
