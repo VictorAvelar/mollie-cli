@@ -17,3 +17,5 @@ vendor/
 
 mollie
 mollie-master
+completions/
+manpages/
