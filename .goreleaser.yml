@@ -1,5 +1,15 @@
-# This is an example goreleaser.yaml file with some sane defaults.
-project_name: mollie-cli
+env:
+  - GO111MODULE=on
+
+before:
+  hooks:
+    - go mod tidy
+    - ./scripts/completions.sh
+    - ./scripts/manpages.sh
+
+snapshot:
+  name_template: "{{ incpatch .Version }}-next"
+
 builds:
   - main: ./cmd/mollie/main.go
     binary: mollie
@@ -7,41 +17,61 @@ builds:
       - linux
       - darwin
       - windows
+    goarch:
+      - "386"
+      - amd64
+      - arm
+      - arm64
+    goarm:
+      - "7"
     flags:
-      - -v
+      - -trimpath
     env:
       - CGO_ENABLED=0
-    ignore:
-      - goos: darwin
-        goarch: 386
+    mod_timestamp: "{{ .CommitTimestamp }}"
+
+universal_binaries:
+  - replace: false
+
 archives:
-  - name_template: "mollie-{{ .Version }}-{{ .Os }}-{{ .Arch }}"
+  - name_template: "{{ .ProjectName }}_{{ .Os }}_{{ .Arch }}{{ if .Arm }}v{{ .Arm }}{{ end }}"
+    replacements:
+      darwin: Darwin
+      linux: Linux
+      windows: Windows
+      386: i386
+      amd64: x86_64
+    format_overrides:
+      - goos: windows
+        format: zip
+    files:
+      - README.md
+      - completions/*
+      - manpages/*
+
 checksum:
-  name_template: "mollie-{{ .Version }}-checksums.sha256"
-snapshot:
-  name_template: "{{ .Tag }}-next"
-dockers:
-  - image_templates:
-      - "gcr.io/victoravelar/{{.ProjectName}}:{{ .Tag }}"
-      - "gcr.io/victoravelar/{{.ProjectName}}:v{{ .Major }}"
-      - "gcr.io/victoravelar/{{.ProjectName}}:v{{ .Major }}.{{ .Minor }}"
-      - "gcr.io/victoravelar/{{.ProjectName}}:latest"
+  name_template: "checksums.txt"
+
 changelog:
   use: github
   sort: asc
   groups:
-    - title: Features
+    - title: "New Features and updates"
       regexp: "^.*feat[(\\w)]*:+.*$"
       order: 0
     - title: "Bug fixes"
       regexp: "^.*fix[(\\w)]*:+.*$"
-      order: 1
-    - title: Others
+      order: 10
+    - title: "Documentation updates"
+      regexp: "^.*docs[(\\w)]*:+.*$"
+      order: 20
+    - title: Other work
       order: 999
   filters:
     exclude:
-      - docs
+      - ^test
       - changelog
       - typo
       - Readme
       - ^Merge pull request
+      - ^Merge branch
