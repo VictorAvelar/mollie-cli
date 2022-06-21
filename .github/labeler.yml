@@ -1,0 +1,23 @@
+tests:
+  - any: ["commands/*_tests.go", "commands/displayers/*_tests.go"]
+
+documentation:
+  - docs/*
+
+docker:
+  - Dockerfile
+
+gh-actions:
+  - .github/
+
+commands:
+  - any: ["commands/*.go", "!commands/*_tests.go"]
+
+displayer:
+  - any: ["commands/displayers/*.go", "!commands/displayers/*_tests.go"]
+
+scripts:
+  - scripts/*
+
+pkg:
+  - pkg/*

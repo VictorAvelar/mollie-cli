@@ -1,0 +1,16 @@
+name: "PR label assigner"
+
+on:
+  - pull_request_target
+
+jobs:
+  triage:
+    permissions:
+      content: read
+      pull-request: write
+  runs-on: ubuntu-latest
+  steps:
+    - uses: actions/labeler@v4
+      with:
+        repo-token: "${{ secrets.GITHUB_TOKEN }}"
+        sync-labels: true
