@@ -8,7 +8,7 @@ docker:
   - Dockerfile
 
 gh-actions:
-  - .github/
+  - .github/**/*.yml
 
 commands:
   - any: ["commands/*.go", "!commands/*_tests.go"]
@@ -21,3 +21,10 @@ scripts:
 
 pkg:
   - pkg/*
+
+meta-files:
+  - any: ["Makefile", "README.md"]
+
+config:
+  - .mollie.yaml
+  - .goreleaser.yaml
