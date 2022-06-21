@@ -9,8 +9,8 @@ on:
 jobs:
   triage:
     permissions:
-      content: read
-      pull-request: write
+      contents: read
+      pull-requests: write
     runs-on: ubuntu-latest
     steps:
       - uses: actions/labeler@v4
