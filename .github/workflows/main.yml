@@ -1,21 +1,19 @@
 name: Golang testing
 on:
   push:
-    paths-ignore:
-      - "docs/**"
-      - "**.md"
-      - ".github/**.md"
-      - ".github/**/**.md"
-      - ".github/**.yml"
-      - ".github/**/**.yml"
+    paths:
+      - "commands/**.go"
+      - "internal/**/*.go"
+      - "pkg/**/*.go"
+      - "cmd/*/*.go"
+      - "go.*"
   pull_request:
-    paths-ignore:
-      - "docs/**"
-      - "**.md"
-      - ".github/**.md"
-      - ".github/**/**.md"
-      - ".github/**.yml"
-      - ".github/**/**.yml"
+    paths:
+      - "commands/**.go"
+      - "internal/**/*.go"
+      - "pkg/**/*.go"
+      - "cmd/*/*.go"
+      - "go.*"
 jobs:
   testing:
     runs-on: ubuntu-latest
@@ -29,3 +27,18 @@ jobs:
         with:
           go-version: ${{ matrix.go }}
       - run: go test -failfast ./...
+  golangci:
+    strategy:
+      matrix:
+        go-version: [1.17.x, 1.18.x]
+    name: Golang linter
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/setup-go@v3
+        with:
+          go-version: ${{matrix.go-version}}
+      - uses: actions/checkout@v3
+      - uses: golangci/golangci-lint-action@v3
+        with:
+          only-new-issues: true
+          args: --issues-exit-code=1 --sort-results --skip-dirs-use-default --tests=false
