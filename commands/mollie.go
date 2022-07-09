@@ -21,6 +21,7 @@ const (
 	Profiles    = "profiles"
 	Customers   = "customers"
 	Permissions = "permissions"
+	Order       = "order"
 	Chargebacks = "chargebacks"
 	Refunds     = "refunds"
 	Invoices    = "invoices"
@@ -266,6 +267,7 @@ func addCommands() {
 		captures(),
 		chargebacks(),
 		refunds(),
+		order(),
 		customers(),
 		invoices(),
 	)
