@@ -4,7 +4,7 @@ go 1.17
 
 require (
 	github.com/Rhymond/go-money v1.0.9
-	github.com/VictorAvelar/mollie-api-go/v3 v3.3.1
+	github.com/VictorAvelar/mollie-api-go/v3 v3.3.2
 	github.com/avocatl/admiral v0.7.0
 	github.com/mitchellh/go-homedir v1.1.0
 	github.com/sirupsen/logrus v1.9.0
