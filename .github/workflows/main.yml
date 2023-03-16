@@ -22,7 +22,7 @@ jobs:
         go: [1.17.x, 1.18.x]
     name: Go ${{ matrix.go }} check
     steps:
-      - uses: actions/setup-go@v3
+      - uses: actions/setup-go@v4
       - uses: actions/checkout@v3
         with:
           go-version: ${{ matrix.go }}
@@ -34,7 +34,7 @@ jobs:
     name: Golang linter
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/setup-go@v3
+      - uses: actions/setup-go@v4
         with:
           go-version: ${{matrix.go-version}}
       - uses: actions/checkout@v3
