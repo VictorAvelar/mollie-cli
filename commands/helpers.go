@@ -14,6 +14,7 @@ func ParseStringFromFlags(cmd *cobra.Command, key string) string {
 	if err != nil {
 		logger.Fatal(err)
 	}
+
 	return val
 }
 
@@ -23,6 +24,7 @@ func ParseIntFromFlags(cmd *cobra.Command, key string) int {
 	if err != nil {
 		logger.Fatal(err)
 	}
+
 	return val
 }
 

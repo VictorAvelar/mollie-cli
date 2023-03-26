@@ -50,6 +50,7 @@ type MollieCapture struct {
 // KV is a displayable group of key value.
 func (c *MollieCapture) KV() []map[string]interface{} {
 	var out []map[string]interface{}
+
 	x := buildXCapture(c.Capture)
 
 	out = append(out, x)

@@ -1,17 +1,37 @@
 {
   "name": "Mollie CLI devcontainer",
   "build": {
-    "dockerfile": "Dockerfile",
-    "args": {
-      "GO_VERSION": "1.18-bullseye"
+    "dockerfile": "Dockerfile"
+  },
+  "features": {
+    "ghcr.io/devcontainers-contrib/features/act-asdf:2": {},
+    "ghcr.io/devcontainers/features/docker-in-docker:2": {
+      "dockerDashComposeVersion": "v2"
     }
   },
-  "runArgs": ["--cap-add=SYS_PTRACE", "--security-opt", "seccomp=unconfined"],
+  "runArgs": [
+    "--cap-add=SYS_PTRACE",
+    "--security-opt",
+    "seccomp=unconfined"
+  ],
   "customizations": {
     "vscode": {
-      "extensions": ["golang.Go", "GitHub.vscode-pull-request-github"],
+      "extensions": [
+        "golang.Go",
+        "GitHub.vscode-pull-request-github",
+        "aaron-bond.better-comments",
+        "pnp.polacode",
+        "eamodio.gitlens",
+        "jasonlhy.hungry-delete",
+        "formulahendry.auto-rename-tag",
+        "DavidAnson.vscode-markdownlint",
+        "streetsidesoftware.code-spell-checker",
+        "PKief.material-icon-theme",
+        "ms-azuretools.vscode-docker"
+      ],
       "settings": {
         "go.toolsManagement.checkForUpdates": "local",
+        "go.toolsManagement.autoUpdate": true,
         "go.gopath": "/go",
         "go.goroot": "/usr/local/go",
         "go.useLanguageServer": true,
@@ -26,26 +46,31 @@
           }
         },
         "gopls": {
-          "build.buildFlags": ["-tags", ""],
+          "build.buildFlags": [
+            "-tags",
+            ""
+          ],
+          "formatting.gofumpt": true,
           "ui.completion.usePlaceholders": false,
-          "ui.diagnostic.staticcheck": true
+          "ui.diagnostic.staticcheck": true,
+          "ui.semanticTokens": true
         },
         "go.lintTool": "golangci-lint",
-        "go.lintFlags": ["--fast"],
         "go.lintOnSave": "package",
-        "editor.formatOnSave": true,
-        "editor.formatOnPaste": true,
-        "go.toolsEnvVars": {
-          "CGO_ENABLED": 1
-        },
-        "go.testEnvVars": {
-          "": ""
-        },
-        "go.testFlags": ["-v", "-race"],
+        "go.toolsEnvVars": {},
+        "go.testFlags": [
+          "-v",
+          "-race"
+        ],
         "go.testTimeout": "30s",
         "go.coverOnSingleTest": true,
         "go.coverOnSingleTestFile": true,
-        "go.coverOnTestPackage": true
+        "go.coverOnTestPackage": true,
+        "editor.formatOnSave": true,
+        "editor.formatOnPaste": true,
+        "editor.bracketPairColorization.enabled": true,
+        "editor.guides.bracketPairs": "active",
+        "files.insertFinalNewline": true
       }
     }
   },
@@ -55,5 +80,13 @@
       "onAutoForward": "notify"
     }
   },
-  "postCreateCommand": "go mod download"
+  "postCreateCommand": {
+    "modules": "go mod download"
+  },
+  "remoteUser": "root",
+  "containerUser": "root",
+  "containerEnv": {
+    "MOLLIE_API_TOKEN": "${localEnv:MOLLIE_API_TOKEN}",
+    "MOLLIE_ORG_TOKEN": "${localEnv:MOLLIE_ORG_TOKEN}"
+  }
 }

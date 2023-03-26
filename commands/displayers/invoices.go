@@ -10,8 +10,10 @@ type MollieInvoice struct {
 // KV is a displayable group of key value.
 func (mi *MollieInvoice) KV() []map[string]interface{} {
 	var out []map[string]interface{}
+
 	x := buildXInvoice(mi.Invoice)
 	out = append(out, x)
+
 	return out
 }
 

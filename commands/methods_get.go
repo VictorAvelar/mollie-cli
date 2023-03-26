@@ -34,7 +34,7 @@ Profiles API, or via your Mollie Dashboard.`,
 	AddCurrencyCodeFlag(gm)
 }
 
-type getMethodPropmter struct {
+type getMethodPrompter struct {
 	Locale  string
 	Include string
 }
@@ -45,11 +45,15 @@ func getPaymentMethodAction(cmd *cobra.Command, args []string) {
 	var opts mollie.PaymentMethodOptions
 	{
 		if ParsePromptBool(cmd) {
-			v, err := prompter.Struct(&getMethodPropmter{})
+			v, err := prompter.Struct(&getMethodPrompter{})
 			if err != nil {
 				app.Logger.Fatal(err)
 			}
-			val := v.(*getMethodPropmter)
+
+			val, ok := v.(*getMethodPrompter)
+			if !ok {
+				display.Text("x", "error asserting method prompter")
+			}
 
 			opts.Locale = mollie.Locale(val.Locale)
 			opts.Include = val.Include
@@ -57,7 +61,6 @@ func getPaymentMethodAction(cmd *cobra.Command, args []string) {
 			opts.Locale = mollie.Locale(ParseStringFromFlags(cmd, LocaleArg))
 			opts.Currency = ParseStringFromFlags(cmd, CurrencyArg)
 			opts.Include = ParseStringFromFlags(cmd, IncludeArg)
-
 		}
 	}
 

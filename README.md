@@ -1,6 +1,6 @@
 # mollie-cli
 
-### :warning: This is a work in progress
+## :warning: This is a work in progress
 
 mollie-cli provides a developer friendly way to interact with [Mollie's REST API](https://docs.mollie.com/reference/v2).
 
@@ -48,7 +48,7 @@ You can also run:
 wget https://raw.githubusercontent.com/VictorAvelar/mollie-cli/master/.mollie.yaml
 ```
 
-### Example config
+## Example config
 
 ```yaml
 mollie:
@@ -81,7 +81,7 @@ mollie:
   # ... field map definition
 ```
 
-# Roadmap
+## Roadmap
 
 ## Authentication
 

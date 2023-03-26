@@ -1,6 +1,7 @@
 package commands
 
 import (
+	"log"
 	"net/http"
 
 	"github.com/spf13/cobra"
@@ -9,7 +10,11 @@ import (
 
 func printJsonAction(cmd *cobra.Command, args []string) {
 	if json {
-		ns := app.Store["ns"].(string)
+		ns, ok := app.Store["ns"].(string)
+		if !ok {
+			log.Fatal("error when matching type")
+		}
+
 		data := app.Store[ns]
 
 		printJSONP(data)
@@ -18,7 +23,10 @@ func printJsonAction(cmd *cobra.Command, args []string) {
 
 func printCurl(cmd *cobra.Command, args []string) {
 	if curl {
-		req := app.Store["request"].(*http.Request)
+		req, ok := app.Store["request"].(*http.Request)
+		if !ok {
+			log.Fatal("error when matching type")
+		}
 
 		curl, err := http2curl.GetCurlCommand(req)
 		if err != nil {

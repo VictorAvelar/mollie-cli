@@ -14,6 +14,7 @@ func parseFieldsFromFlag(cmd *cobra.Command, r string) string {
 		if verbose {
 			PrintNonemptyFlagValue(FieldsArg, fields)
 		}
+
 		return fields
 	}
 
@@ -36,5 +37,4 @@ func parseFieldsFromFlag(cmd *cobra.Command, r string) string {
 	}
 
 	return ""
-
 }
