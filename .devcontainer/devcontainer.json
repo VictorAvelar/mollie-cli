@@ -1,41 +1,71 @@
 {
-  "name": "Mollie CLI devcontainer",
+  "name": "base devcontainer",
   "build": {
     "dockerfile": "Dockerfile"
   },
-  "features": {
-    "ghcr.io/devcontainers-contrib/features/act-asdf:2": {},
-    "ghcr.io/devcontainers/features/docker-in-docker:2": {
-      "dockerDashComposeVersion": "v2"
-    }
-  },
-  "runArgs": [
-    "--cap-add=SYS_PTRACE",
-    "--security-opt",
+  "capAdd": [
+    "SYS_PTRACE"
+  ],
+  "securityOpt": [
     "seccomp=unconfined"
   ],
+  "mounts": [
+    {
+      "source": "${localEnv:HOME}/.zshrc",
+      "target": "/root/.zshrc",
+      "type": "bind"
+    },
+    {
+      "source": "${localEnv:HOME}/.config/starship.toml",
+      "target": "/root/.config/starship.toml",
+      "type": "bind"
+    },
+    {
+      "source": "${localEnv:HOME}/.config/bat/config",
+      "target": "/root/.config/bat/config",
+      "type": "bind"
+    }
+  ],
+  "features": {
+    "ghcr.io/devcontainers/features/common-utils:2": {
+      "configureZshAsDefaultShell": true,
+      "username": "root"
+    }
+  },
   "customizations": {
     "vscode": {
       "extensions": [
-        "golang.Go",
+        // Editor extensions
         "GitHub.vscode-pull-request-github",
-        "aaron-bond.better-comments",
         "pnp.polacode",
         "eamodio.gitlens",
         "jasonlhy.hungry-delete",
         "formulahendry.auto-rename-tag",
         "DavidAnson.vscode-markdownlint",
+        "aaron-bond.better-comments",
         "streetsidesoftware.code-spell-checker",
         "PKief.material-icon-theme",
-        "ms-azuretools.vscode-docker"
+        "ms-azuretools.vscode-docker",
+        "Gruntfuggly.todo-tree",
+        "shardulm94.trailing-spaces",
+        "ms-vscode.makefile-tools",
+        "redhat.vscode-yaml",
+        "bungcip.better-toml",
+        // Go
+        "golang.Go"
       ],
       "settings": {
+        "files.eol": "\n",
+        "remote.extensionKind": {
+          "ms-azuretools.vscode-docker": "workspace"
+        },
         "go.toolsManagement.checkForUpdates": "local",
         "go.toolsManagement.autoUpdate": true,
         "go.gopath": "/go",
         "go.goroot": "/usr/local/go",
         "go.useLanguageServer": true,
         "[go]": {
+          "editor.defaultFormatter": "golang.go",
           "editor.codeActionsOnSave": {
             "source.organizeImports": true
           }
@@ -57,7 +87,6 @@
         },
         "go.lintTool": "golangci-lint",
         "go.lintOnSave": "package",
-        "go.toolsEnvVars": {},
         "go.testFlags": [
           "-v",
           "-race"
@@ -69,8 +98,7 @@
         "editor.formatOnSave": true,
         "editor.formatOnPaste": true,
         "editor.bracketPairColorization.enabled": true,
-        "editor.guides.bracketPairs": "active",
-        "files.insertFinalNewline": true
+        "editor.guides.bracketPairs": "active"
       }
     }
   },
@@ -81,12 +109,12 @@
     }
   },
   "postCreateCommand": {
-    "modules": "go mod download"
+    "modules": "go mod download",
+    "install-zsh-plugins": "git clone https://github.com/zsh-users/zsh-syntax-highlighting.git ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-syntax-highlighting && git clone https://github.com/zsh-users/zsh-autosuggestions ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-autosuggestions"
   },
-  "remoteUser": "root",
   "containerUser": "root",
+  "remoteUser": "root",
   "containerEnv": {
-    "MOLLIE_API_TOKEN": "${localEnv:MOLLIE_API_TOKEN}",
-    "MOLLIE_ORG_TOKEN": "${localEnv:MOLLIE_ORG_TOKEN}"
+    "MOLLIE_API_TOKEN": "${localEnv:MOLLIE_API_TOKE}"
   }
 }
