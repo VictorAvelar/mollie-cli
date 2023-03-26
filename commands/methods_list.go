@@ -55,7 +55,6 @@ func listPaymentMethodsAction(cmd *cobra.Command, args []string) {
 			opts.BillingCountry = ParseStringFromFlags(cmd, BillingCountryArg)
 			opts.Include = ParseStringFromFlags(cmd, IncludeArg)
 		}
-
 	}
 
 	res, ms, err := app.API.PaymentMethods.List(context.Background(), &opts)

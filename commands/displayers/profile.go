@@ -84,16 +84,16 @@ func (mp *MollieProfile) Filterable() bool {
 
 func buildXProfile(p *mollie.Profile) map[string]interface{} {
 	return map[string]interface{}{
-		"RESOURCE":      p.Resource,
-		"ID":            p.ID,
-		"MODE":          fallbackSafeMode(p.Mode),
-		"NAME":          p.Name,
-		"WEBSITE":       p.Website,
-		"EMAIL":         p.Email,
-		"PHONE":         p.Phone,
-		"CATEGORY_CODE": p.CategoryCode,
-		"STATUS":        p.Status,
-		"REVIEW":        p.Review.Status,
-		"CREATED_AT":    fallbackSafeDate(p.CreatedAt),
+		"RESOURCE":          p.Resource,
+		"ID":                p.ID,
+		"MODE":              fallbackSafeMode(p.Mode),
+		"NAME":              p.Name,
+		"WEBSITE":           p.Website,
+		"EMAIL":             p.Email,
+		"PHONE":             p.Phone,
+		"BUSINESS_CATEGORY": p.BusinessCategory,
+		"STATUS":            p.Status,
+		"REVIEW":            p.Review.Status,
+		"CREATED_AT":        fallbackSafeDate(p.CreatedAt),
 	}
 }

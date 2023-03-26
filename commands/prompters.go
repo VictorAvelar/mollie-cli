@@ -59,7 +59,6 @@ func promptSequenceType() mollie.SequenceType {
 		string(mollie.FirstSequence),
 		string(mollie.RecurringSequence),
 	})
-
 	if err != nil {
 		app.Logger.Fatal(err)
 	}

@@ -14,13 +14,13 @@ Generated automatically using cobra. [Read the command docs](docs/mollie.md)
 
 You can install this cli using the go toolchain.
 
-```
+```bash
 go install github.com/VictorAvelar/mollie-cli/cmd/mollie@latest
 ```
 
 ### Building from source
 
-```
+```bash
 git clone git@github.com:VictorAvelar/mollie-cli.git
 ```
 
@@ -28,13 +28,13 @@ The compile the library yourself, there are a couple of make commands to support
 
 If you want to compile your current branch:
 
-```
+```bash
 make compile-current
 ```
 
 If you want to compile master:
 
-```
+```bash
 make compile-master
 ```
 
