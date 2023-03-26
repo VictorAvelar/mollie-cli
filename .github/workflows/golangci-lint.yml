@@ -1,0 +1,31 @@
+name: Linting with golangci-lint
+on:
+  push:
+    paths:
+      - "commands/**.go"
+      - "internal/**/*.go"
+      - "pkg/**/*.go"
+      - "cmd/*/*.go"
+      - "go.*"
+  pull_request:
+    paths:
+      - "commands/**.go"
+      - "internal/**/*.go"
+      - "pkg/**/*.go"
+      - "cmd/*/*.go"
+      - "go.*"
+jobs:
+  golangci:
+    name: linter
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      pull-requests: read
+    steps:
+      - uses: actions/checkout@8f4b7f84864484a7bf31766abe9204da3cbe65b3
+      - uses: actions/setup-go@4d34df0c2316fe8122ab82dc22947d607c0c91f9
+        with:
+          go-version: 1.20.X
+      - uses: golangci/golangci-lint-action@08e2f20817b15149a52b5b3ebe7de50aff2ba8c5
+        with:
+          version: latest
