@@ -10,7 +10,7 @@ func customers() *commander.Command {
 		commander.Config{
 			Namespace:          "customers",
 			ShortDesc:          "Operations with customers API.",
-			Aliases:            []string{"cust", "cstm"},
+			Aliases:            []string{"cust"},
 			PostHook:           printJsonAction,
 			PersistentPostHook: printCurl,
 		},

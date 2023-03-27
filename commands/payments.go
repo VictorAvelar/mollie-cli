@@ -60,6 +60,7 @@ func attachPaymentMethodSpecificValues(p *mollie.Payment) {
 	case mollie.PayPal:
 		p.ShippingAddress = promptPaymentDetailsAddress()
 		p.SessionID = promptStringClean("session id", "")
+
 		if err := prompter.Confirm("is a digital good", nil); err == nil {
 			p.DigitalGoods = true
 		}

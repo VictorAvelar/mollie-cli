@@ -146,13 +146,10 @@ func createPaymentAction(cmd *cobra.Command, args []string) {
 
 	disp := displayers.MolliePayment{Payment: payment}
 
-	err = app.Printer.Display(
-		&disp,
-		display.FilterColumns(
-			parseFieldsFromFlag(cmd, Payments),
-			getPaymentCols(),
-		),
-	)
+	err = app.Printer.Display(&disp, display.FilterColumns(
+		parseFieldsFromFlag(cmd, Payments),
+		getPaymentCols(),
+	))
 	if err != nil {
 		app.Logger.Fatal(err)
 	}

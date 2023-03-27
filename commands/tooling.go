@@ -26,7 +26,6 @@ func docs() *commander.Command {
 						app.Logger.Fatal(err)
 					}
 				}
-
 			},
 			Hidden:  true,
 			Example: "mollie docs",

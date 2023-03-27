@@ -17,7 +17,7 @@ func getInvoicesCmd(p *commander.Command) *commander.Command {
 			Execute:   getInvoicesAction,
 			Example:   "mollie invoices get --id inv_test",
 			LongDesc: `Retrieve details of an invoice, using the invoice’s identifier.
-If you want to retrieve the details of an invoice by its invoice number, 
+If you want to retrieve the details of an invoice by its invoice number,
 use the list endpoint with the reference parameter.`,
 			PostHook: printJsonAction,
 		},

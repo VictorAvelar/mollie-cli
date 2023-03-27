@@ -13,8 +13,8 @@ func cancelRefundCmd(p *commander.Command) *commander.Command {
 		p,
 		commander.Config{
 			Namespace: "cancel",
-			Aliases:   []string{"delete", "remove", "cncl"},
-			ShortDesc: "for certain payment methods where cancelation is possible.",
+			Aliases:   []string{"delete", "remove"},
+			ShortDesc: "for certain payment methods where cancellation is possible.",
 			LongDesc: `For certain payment methods, like iDEAL, the underlying banking system will delay refunds
 until the next day. Until that time, refunds may be canceled manually in the Mollie Dashboard, 
 or programmatically by using this endpoint.

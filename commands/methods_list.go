@@ -43,8 +43,10 @@ func listPaymentMethodsAction(cmd *cobra.Command, args []string) {
 				logger.Fatal(err)
 			}
 
-			optsi := oi.(*mollie.PaymentMethodsListOptions)
-			opts = *optsi
+			optsi, ok := oi.(*mollie.PaymentMethodsListOptions)
+			if ok {
+				opts = *optsi
+			}
 		} else {
 			opts.SequenceType = mollie.SequenceType(ParseStringFromFlags(cmd, SequenceTypeArg))
 			opts.AmountCurrency = ParseStringFromFlags(cmd, AmountCurrencyArg)

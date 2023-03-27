@@ -16,6 +16,7 @@ output:
 linters:
   disable:
     - tagliatelle
+    - gochecknoinits
   presets:
     - bugs
     - comment
@@ -35,6 +36,9 @@ issues:
   exclude-rules:
     - linters:
         - lll
-      source: "BusinessCategory"
+      source: "payments create"
+    - linters:
+        - funlen
+      source: "addPersistentFlags"
   fix: true
   new: true

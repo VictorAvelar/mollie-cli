@@ -16,8 +16,8 @@ func listCapturesCmd(p *commander.Command) *commander.Command {
 			Namespace: "list",
 			ShortDesc: "Retrieve all captures for a certain payment.",
 			LongDesc: `Retrieve all captures for a certain payment.
-Captures are used for payments that have the authorize-then-capture flow. 
-The only payment methods at the moment that have this flow are Klarna Pay 
+Captures are used for payments that have the authorize-then-capture flow.
+The only payment methods at the moment that have this flow are Klarna Pay
 later and Klarna Slice it.`,
 			Execute:  listCapturesActions,
 			Example:  "mollie captures list --payment tr_example",

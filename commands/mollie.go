@@ -14,7 +14,7 @@ import (
 const (
 	version string = "v0.13.0"
 
-	// Store namespaces
+	// Store namespaces.
 	Payments    = "payments"
 	Captures    = "captures"
 	Methods     = "methods"
@@ -135,6 +135,7 @@ func initClient() *mollie.Client {
 	}
 
 	config := mollie.NewConfig(tst, token)
+
 	m, err := mollie.NewClient(nil, config)
 	if err != nil {
 		app.Logger.Fatal(err)
@@ -154,15 +155,10 @@ func addPersistentFlags() {
 		Shorthand:  "c",
 		Usage:      "specifies a custom config file to be used",
 		Persistent: true,
-		Binding: commander.FlagBindOptions{
-			Bound:      true,
-			BindString: &cfgFile,
-		},
+		Binding:    commander.FlagBindOptions{Bound: true, BindString: &cfgFile},
 	})
-	_ = viper.BindPFlag(
-		"mollie.core.custom_path",
-		app.App.PersistentFlags().Lookup("config"),
-	)
+
+	_ = viper.BindPFlag("mollie.core.custom_path", app.App.PersistentFlags().Lookup("config"))
 
 	commander.AddFlag(app.App, commander.FlagConfig{
 		Name:       "token",
@@ -170,10 +166,7 @@ func addPersistentFlags() {
 		Usage:      "the type of token to use for auth",
 		Default:    mollie.APITokenEnv,
 		Persistent: true,
-		Binding: commander.FlagBindOptions{
-			Bound:      true,
-			BindString: &token,
-		},
+		Binding:    commander.FlagBindOptions{Bound: true, BindString: &token},
 	})
 
 	commander.AddFlag(app.App, commander.FlagConfig{
@@ -182,15 +175,10 @@ func addPersistentFlags() {
 		Usage:      "indicates the api target from test/live",
 		Default:    string(mollie.TestMode),
 		Persistent: true,
-		Binding: commander.FlagBindOptions{
-			Bound:      true,
-			BindString: &mode,
-		},
+		Binding:    commander.FlagBindOptions{Bound: true, BindString: &mode},
 	})
-	_ = viper.BindPFlag(
-		"mollie.core.mode",
-		app.App.PersistentFlags().Lookup("mode"),
-	)
+
+	_ = viper.BindPFlag("mollie.core.mode", app.App.PersistentFlags().Lookup("mode"))
 
 	commander.AddFlag(app.App, commander.FlagConfig{
 		FlagType:   commander.BoolFlag,
@@ -199,31 +187,21 @@ func addPersistentFlags() {
 		Usage:      "print verbose logging messages (defaults to false)",
 		Default:    false,
 		Persistent: true,
-		Binding: commander.FlagBindOptions{
-			Bound:    true,
-			BindBool: &verbose,
-		},
+		Binding:    commander.FlagBindOptions{Bound: true, BindBool: &verbose},
 	})
-	_ = viper.BindPFlag(
-		"mollie.core.verbose",
-		app.App.PersistentFlags().Lookup("verbose"),
-	)
+
+	_ = viper.BindPFlag("mollie.core.verbose", app.App.PersistentFlags().Lookup("verbose"))
 
 	commander.AddFlag(app.App, commander.FlagConfig{
 		FlagType:   commander.BoolFlag,
 		Name:       "json",
-		Usage:      "dumpts the json response instead of the column based output",
+		Usage:      "dumps the json response instead of the column based output",
 		Default:    false,
 		Persistent: true,
-		Binding: commander.FlagBindOptions{
-			Bound:    true,
-			BindBool: &json,
-		},
+		Binding:    commander.FlagBindOptions{Bound: true, BindBool: &json},
 	})
-	_ = viper.BindPFlag(
-		"mollie.core.json",
-		app.App.PersistentFlags().Lookup("json"),
-	)
+
+	_ = viper.BindPFlag("mollie.core.json", app.App.PersistentFlags().Lookup("json"))
 
 	commander.AddFlag(app.App, commander.FlagConfig{
 		FlagType:   commander.BoolFlag,
@@ -231,14 +209,10 @@ func addPersistentFlags() {
 		Usage:      "print the curl representation of a request",
 		Default:    false,
 		Persistent: true,
-		Binding: commander.FlagBindOptions{
-			Bound:    true,
-			BindBool: &curl,
-		},
+		Binding:    commander.FlagBindOptions{Bound: true, BindBool: &curl},
 	})
-	_ = viper.BindPFlag("mollie.core.curl",
-		app.App.PersistentFlags().Lookup("curl"),
-	)
+
+	_ = viper.BindPFlag("mollie.core.curl", app.App.PersistentFlags().Lookup("curl"))
 
 	commander.AddFlag(app.App, commander.FlagConfig{
 		FlagType:   commander.BoolFlag,
@@ -247,11 +221,9 @@ func addPersistentFlags() {
 		Usage:      "enables debug logging information",
 		Default:    false,
 		Persistent: true,
-		Binding: commander.FlagBindOptions{
-			Bound:    true,
-			BindBool: &debug,
-		},
+		Binding:    commander.FlagBindOptions{Bound: true, BindBool: &debug},
 	})
+
 	_ = viper.BindPFlag("mollie.core.debug", app.App.PersistentFlags().Lookup("debug"))
 }
 

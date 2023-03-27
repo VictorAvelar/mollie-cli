@@ -16,7 +16,7 @@ func listChargebacksCmd(p *commander.Command) *commander.Command {
 		commander.Config{
 			Namespace: "list",
 			ShortDesc: "Retrieve all received chargebacks",
-			LongDesc: `Retrieve all received chargebacks. If the payment-specific endpoint is used, only chargebacks 
+			LongDesc: `Retrieve all received chargebacks. If the payment-specific endpoint is used, only chargebacks
 for that specific payment are returned.`,
 			Execute:  listChargebackAction,
 			Example:  "mollie chargebacks list --embed=payments",

@@ -25,12 +25,12 @@ func listInvoicesCmd(p *commander.Command) *commander.Command {
 
 	commander.AddFlag(li, commander.FlagConfig{
 		Name:  ReferenceArg,
-		Usage: "ilter for an invoice with a specific invoice number / reference",
+		Usage: "filter for an invoice with a specific invoice number / reference",
 	})
 
 	commander.AddFlag(li, commander.FlagConfig{
 		Name:  YearArg,
-		Usage: "ilter for invoices from a specific year (e.g. 2020)",
+		Usage: "filter for invoices from a specific year (e.g. 2020)",
 	})
 
 	AddFromFlag(li)
