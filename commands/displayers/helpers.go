@@ -56,6 +56,7 @@ func fallbackSafeAmount(a *mollie.Amount) string {
 	clean := strings.Replace(a.Value, ".", "", -1)
 
 	val, _ := strconv.ParseInt(clean, 10, 64)
+
 	return money.New(val, a.Currency).Display()
 }
 

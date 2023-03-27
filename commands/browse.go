@@ -55,7 +55,7 @@ func preBrowseHook(cmd *cobra.Command, args []string) {
 func browseAction(cmd *cobra.Command, args []string) {
 	resources := getURLMap()
 
-	if len(args) != 2 {
+	if len(args) != len("ok") {
 		display.Text("X", "invalid number of arguments provided")
 		os.Exit(1)
 	}
@@ -64,33 +64,6 @@ func browseAction(cmd *cobra.Command, args []string) {
 
 	utils.Browse(resources[cat][open])
 }
-
-// func validateBrowseArgs(cmd *cobra.Command, args []string) error {
-// 	in, err := cmd.Flags().GetBool("info")
-// 	if err != nil {
-// 		logger.Fatal(err)
-// 	}
-
-// 	if len(args) == 0 && in {
-// 		return nil
-// 	}
-
-// 	var cat, page string
-// 	{
-// 		cat = args[0]
-// 		page = args[1]
-// 	}
-
-// 	if _, ok := urlMap[cat]; !ok {
-// 		return fmt.Errorf("invalid category name %s", cat)
-// 	}
-
-// 	if _, ok := urlMap[cat][page]; !ok {
-// 		return fmt.Errorf("invalid page name %s", page)
-// 	}
-
-// 	return nil
-// }
 
 func getURLMap() map[string]map[string]string {
 	return map[string]map[string]string{

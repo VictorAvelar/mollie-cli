@@ -55,11 +55,12 @@ func attachPaymentMethodSpecificValues(p *mollie.Payment) {
 		p.Issuer = promptStringClean("ideal issuer", "")
 	case mollie.KBC:
 		p.Issuer = promptKbcIssuer()
-	case mollie.KlarnaPayLater, mollie.KlarnaLiceit:
+	case mollie.KlarnaPayLater, mollie.KlarnaSliceIt:
 		app.Logger.Fatal("for the selected payment method you need to use the orders api")
 	case mollie.PayPal:
 		p.ShippingAddress = promptPaymentDetailsAddress()
 		p.SessionID = promptStringClean("session id", "")
+
 		if err := prompter.Confirm("is a digital good", nil); err == nil {
 			p.DigitalGoods = true
 		}

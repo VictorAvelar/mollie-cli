@@ -67,5 +67,4 @@ func promptUpdatePaymentAction(cmd *cobra.Command, args []string) {
 	if err != nil {
 		app.Logger.Fatal(err)
 	}
-
 }

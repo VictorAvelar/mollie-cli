@@ -60,8 +60,10 @@ type MolliePermission struct {
 // KV is a displayable group of key value.
 func (p *MolliePermission) KV() []map[string]interface{} {
 	var out []map[string]interface{}
+
 	x := buildXPermission(p.Permission)
 	out = append(out, x)
+
 	return out
 }
 

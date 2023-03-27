@@ -44,6 +44,7 @@ func getRefundList(opts *mollie.ListRefundOptions, payment string) (*mollie.Refu
 		_, rl, err := app.API.Refunds.ListRefundPayment(
 			context.Background(), payment, opts,
 		)
+
 		return rl, err
 	}
 

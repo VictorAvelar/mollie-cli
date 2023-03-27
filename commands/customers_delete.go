@@ -15,10 +15,11 @@ func deleteCustomerCmd(p *commander.Command) *commander.Command {
 			Namespace: "delete",
 			Aliases:   []string{"remove", "del"},
 			ShortDesc: "Deletes a customer by its ID.",
-			LongDesc:  "Deletes a customer. WARNING! All mandates and subscriptions created for this customer will be canceled as well.",
-			Example:   "mollie customers delete --id cs_test",
-			Execute:   deleteCustomerAction,
-			PostHook:  printJsonAction,
+			LongDesc: `Deletes a customer.
+WARNING! All mandates and subscriptions created for this customer will be canceled as well.`,
+			Example:  "mollie customers delete --id cs_test",
+			Execute:  deleteCustomerAction,
+			PostHook: printJsonAction,
 		},
 		customersCols(),
 	)

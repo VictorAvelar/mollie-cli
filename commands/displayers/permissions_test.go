@@ -53,5 +53,4 @@ func TestMolliePermissionList_KV(t *testing.T) {
 
 	assert.Len(t, permList.KV(), 2)
 	assert.Equal(t, out, permList.KV())
-
 }

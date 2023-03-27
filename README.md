@@ -1,6 +1,6 @@
 # mollie-cli
 
-### :warning: This is a work in progress
+## :warning: This is a work in progress
 
 mollie-cli provides a developer friendly way to interact with [Mollie's REST API](https://docs.mollie.com/reference/v2).
 
@@ -14,13 +14,13 @@ Generated automatically using cobra. [Read the command docs](docs/mollie.md)
 
 You can install this cli using the go toolchain.
 
-```
+```bash
 go install github.com/VictorAvelar/mollie-cli/cmd/mollie@latest
 ```
 
 ### Building from source
 
-```
+```bash
 git clone git@github.com:VictorAvelar/mollie-cli.git
 ```
 
@@ -28,13 +28,13 @@ The compile the library yourself, there are a couple of make commands to support
 
 If you want to compile your current branch:
 
-```
+```bash
 make compile-current
 ```
 
 If you want to compile master:
 
-```
+```bash
 make compile-master
 ```
 
@@ -48,7 +48,7 @@ You can also run:
 wget https://raw.githubusercontent.com/VictorAvelar/mollie-cli/master/.mollie.yaml
 ```
 
-### Example config
+## Example config
 
 ```yaml
 mollie:
@@ -81,7 +81,7 @@ mollie:
   # ... field map definition
 ```
 
-# Roadmap
+## Roadmap
 
 ## Authentication
 

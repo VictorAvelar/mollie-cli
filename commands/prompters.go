@@ -26,7 +26,10 @@ func promptPaymentMethod() mollie.PaymentMethod {
 		app.Logger.Fatal(err)
 	}
 
-	val := v.(string)
+	val, ok := v.(string)
+	if !ok {
+		app.Logger.Fatal("error parsing value")
+	}
 
 	return mollie.PaymentMethod(val)
 }
@@ -37,7 +40,10 @@ func promptAddress() *mollie.Address {
 		app.Logger.Fatal(err)
 	}
 
-	val := v.(*mollie.Address)
+	val, ok := v.(*mollie.Address)
+	if !ok {
+		app.Logger.Fatal("error parsing value")
+	}
 
 	return val
 }
@@ -48,7 +54,10 @@ func promptAmount() *mollie.Amount {
 		app.Logger.Fatal(err)
 	}
 
-	val := v.(*mollie.Amount)
+	val, ok := v.(*mollie.Amount)
+	if !ok {
+		app.Logger.Fatal("error parsing value")
+	}
 
 	return val
 }
@@ -59,12 +68,14 @@ func promptSequenceType() mollie.SequenceType {
 		string(mollie.FirstSequence),
 		string(mollie.RecurringSequence),
 	})
-
 	if err != nil {
 		app.Logger.Fatal(err)
 	}
 
-	val := v.(string)
+	val, ok := v.(string)
+	if !ok {
+		app.Logger.Fatal("error parsing value")
+	}
 
 	return mollie.SequenceType(val)
 }
@@ -88,7 +99,10 @@ func promptPaymentDetailsAddress() *mollie.PaymentDetailsAddress {
 		app.Logger.Fatal(err)
 	}
 
-	val := v.(*mollie.PaymentDetailsAddress)
+	val, ok := v.(*mollie.PaymentDetailsAddress)
+	if !ok {
+		app.Logger.Fatal("error parsing value")
+	}
 
 	return val
 }
@@ -125,7 +139,10 @@ func promptGiftCardIssuer() string {
 		app.Logger.Fatal(err)
 	}
 
-	val := v.(string)
+	val, ok := v.(string)
+	if !ok {
+		app.Logger.Fatal("error parsing value")
+	}
 
 	return val
 }
@@ -136,7 +153,10 @@ func promptLocale() mollie.Locale {
 		app.Logger.Fatal(err)
 	}
 
-	val := v.(string)
+	val, ok := v.(string)
+	if !ok {
+		app.Logger.Fatal("error parsing value")
+	}
 
 	return mollie.Locale(val)
 }
@@ -150,7 +170,10 @@ func promptKbcIssuer() string {
 		app.Logger.Fatal(err)
 	}
 
-	val := v.(string)
+	val, ok := v.(string)
+	if !ok {
+		app.Logger.Fatal("error parsing value")
+	}
 
 	return val
 }

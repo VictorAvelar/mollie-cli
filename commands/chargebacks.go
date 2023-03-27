@@ -10,7 +10,7 @@ func chargebacks() *commander.Command {
 		commander.Config{
 			Namespace:          "chargebacks",
 			ShortDesc:          "Operations with the Chargebacks API",
-			Aliases:            []string{"cb", "cback"},
+			Aliases:            []string{"cb"},
 			PersistentPostHook: printCurl,
 		},
 		getChargebacksCols(),

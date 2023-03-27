@@ -89,13 +89,19 @@ func AddFromFlag(cmd *commander.Command) {
 	})
 }
 
+const (
+	// DefaultPaginationLimit indicates the max number of items that
+	// can be retrieved on list endpoints.
+	DefaultPaginationLimit = 250
+)
+
 // AddLimitFlag attaches the --limit flag to the given command.
 func AddLimitFlag(cmd *commander.Command) {
 	commander.AddFlag(cmd, commander.FlagConfig{
 		FlagType: commander.IntFlag,
 		Name:     LimitArg,
 		Usage:    "limits the number of rows to retrieve",
-		Default:  250,
+		Default:  DefaultPaginationLimit,
 	})
 }
 

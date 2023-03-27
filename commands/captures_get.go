@@ -16,8 +16,8 @@ func getCapturesCmd(p *commander.Command) *commander.Command {
 			Namespace: "get",
 			ShortDesc: "Retrieve a single capture by its ID.",
 			LongDesc: `Retrieve a single capture by its ID. Note the original payment’s ID is needed as well.
-Captures are used for payments that have the authorize-then-capture flow. 
-The only payment methods at the moment that have this flow are Klarna Pay 
+Captures are used for payments that have the authorize-then-capture flow.
+The only payment methods at the moment that have this flow are Klarna Pay
 later and Klarna Slice it.`,
 			Execute:  getCapturesAction,
 			Example:  "mollie captures get --id ct_example --payment tr_example",

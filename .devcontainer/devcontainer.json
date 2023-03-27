@@ -1,21 +1,71 @@
 {
-  "name": "Mollie CLI devcontainer",
+  "name": "base devcontainer",
   "build": {
-    "dockerfile": "Dockerfile",
-    "args": {
-      "GO_VERSION": "1.18-bullseye"
+    "dockerfile": "Dockerfile"
+  },
+  "capAdd": [
+    "SYS_PTRACE"
+  ],
+  "securityOpt": [
+    "seccomp=unconfined"
+  ],
+  "mounts": [
+    {
+      "source": "${localEnv:HOME}/.zshrc",
+      "target": "/root/.zshrc",
+      "type": "bind"
+    },
+    {
+      "source": "${localEnv:HOME}/.config/starship.toml",
+      "target": "/root/.config/starship.toml",
+      "type": "bind"
+    },
+    {
+      "source": "${localEnv:HOME}/.config/bat/config",
+      "target": "/root/.config/bat/config",
+      "type": "bind"
+    }
+  ],
+  "features": {
+    "ghcr.io/devcontainers/features/common-utils:2": {
+      "configureZshAsDefaultShell": true,
+      "username": "root"
     }
   },
-  "runArgs": ["--cap-add=SYS_PTRACE", "--security-opt", "seccomp=unconfined"],
   "customizations": {
     "vscode": {
-      "extensions": ["golang.Go", "GitHub.vscode-pull-request-github"],
+      "extensions": [
+        // Editor extensions
+        "GitHub.vscode-pull-request-github",
+        "pnp.polacode",
+        "eamodio.gitlens",
+        "jasonlhy.hungry-delete",
+        "formulahendry.auto-rename-tag",
+        "DavidAnson.vscode-markdownlint",
+        "aaron-bond.better-comments",
+        "streetsidesoftware.code-spell-checker",
+        "PKief.material-icon-theme",
+        "ms-azuretools.vscode-docker",
+        "Gruntfuggly.todo-tree",
+        "shardulm94.trailing-spaces",
+        "ms-vscode.makefile-tools",
+        "redhat.vscode-yaml",
+        "bungcip.better-toml",
+        // Go
+        "golang.Go"
+      ],
       "settings": {
+        "files.eol": "\n",
+        "remote.extensionKind": {
+          "ms-azuretools.vscode-docker": "workspace"
+        },
         "go.toolsManagement.checkForUpdates": "local",
+        "go.toolsManagement.autoUpdate": true,
         "go.gopath": "/go",
         "go.goroot": "/usr/local/go",
         "go.useLanguageServer": true,
         "[go]": {
+          "editor.defaultFormatter": "golang.go",
           "editor.codeActionsOnSave": {
             "source.organizeImports": true
           }
@@ -26,26 +76,29 @@
           }
         },
         "gopls": {
-          "build.buildFlags": ["-tags", ""],
+          "build.buildFlags": [
+            "-tags",
+            ""
+          ],
+          "formatting.gofumpt": true,
           "ui.completion.usePlaceholders": false,
-          "ui.diagnostic.staticcheck": true
+          "ui.diagnostic.staticcheck": true,
+          "ui.semanticTokens": true
         },
         "go.lintTool": "golangci-lint",
-        "go.lintFlags": ["--fast"],
         "go.lintOnSave": "package",
-        "editor.formatOnSave": true,
-        "editor.formatOnPaste": true,
-        "go.toolsEnvVars": {
-          "CGO_ENABLED": 1
-        },
-        "go.testEnvVars": {
-          "": ""
-        },
-        "go.testFlags": ["-v", "-race"],
+        "go.testFlags": [
+          "-v",
+          "-race"
+        ],
         "go.testTimeout": "30s",
         "go.coverOnSingleTest": true,
         "go.coverOnSingleTestFile": true,
-        "go.coverOnTestPackage": true
+        "go.coverOnTestPackage": true,
+        "editor.formatOnSave": true,
+        "editor.formatOnPaste": true,
+        "editor.bracketPairColorization.enabled": true,
+        "editor.guides.bracketPairs": "active"
       }
     }
   },
@@ -55,5 +108,13 @@
       "onAutoForward": "notify"
     }
   },
-  "postCreateCommand": "go mod download"
+  "postCreateCommand": {
+    "modules": "go mod download",
+    "install-zsh-plugins": "git clone https://github.com/zsh-users/zsh-syntax-highlighting.git ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-syntax-highlighting && git clone https://github.com/zsh-users/zsh-autosuggestions ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-autosuggestions"
+  },
+  "containerUser": "root",
+  "remoteUser": "root",
+  "containerEnv": {
+    "MOLLIE_API_TOKEN": "${localEnv:MOLLIE_API_TOKE}"
+  }
 }
