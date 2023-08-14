@@ -40,8 +40,8 @@ github.com/BurntSushi/toml v0.3.1/go.mod h1:xHWCNGjB5oqiDr8zfno3MHue2Ht5sIBksp03
 github.com/BurntSushi/xgb v0.0.0-20160522181843-27f122750802/go.mod h1:IVnqGOEym/WlBOVXweHU+Q+/VP0lqqI8lqeDx9IjBqo=
 github.com/Rhymond/go-money v1.0.9 h1:Yr7wSat9cJcf9BGnQl2QY2yyUMvR/exol57uNL/5p8c=
 github.com/Rhymond/go-money v1.0.9/go.mod h1:iHvCuIvitxu2JIlAlhF0g9jHqjRSr+rpdOs7Omqlupg=
-github.com/VictorAvelar/mollie-api-go/v3 v3.9.1 h1:BVc5TmuQWUcMpVl64XdGYBMG31Omxk8RBUQD1Rv696o=
-github.com/VictorAvelar/mollie-api-go/v3 v3.9.1/go.mod h1:mU7w5NIGt6JDkpxeGp7iQdfX0SKXmlC14Ig/Ulh/8m8=
+github.com/VictorAvelar/mollie-api-go/v3 v3.12.0 h1:vMO66rLgyZt45Ic6kNCmT3Hk9WTgu4rGeZn8pM2JUJ4=
+github.com/VictorAvelar/mollie-api-go/v3 v3.12.0/go.mod h1:/w2sB/o/iV9jHQjTdg7svLkfK8K9Xe+w8s5ApnZUz3Q=
 github.com/avocatl/admiral v0.7.0 h1:MfEbD+ulP4txYEUK/xCmMch5v+kIavw54W8KluiL+es=
 github.com/avocatl/admiral v0.7.0/go.mod h1:tKCprZI7Rv1eJMcl+Cpjy4ERPTJ3yImuQ2hoEkpM25c=
 github.com/census-instrumentation/opencensus-proto v0.2.1/go.mod h1:f6KPmirojxKA12rnyqOA5BBL4O983OfeGPqjHWSTneU=
@@ -206,8 +206,8 @@ github.com/stretchr/testify v1.7.0/go.mod h1:6Fq8oRcR53rry900zMqJjRRixrwX3KX962/
 github.com/stretchr/testify v1.7.1/go.mod h1:6Fq8oRcR53rry900zMqJjRRixrwX3KX962/h/Wwjteg=
 github.com/stretchr/testify v1.8.0/go.mod h1:yNjHg4UonilssWZ8iaSj1OCr/vHnekPRkoO+kdMU+MU=
 github.com/stretchr/testify v1.8.1/go.mod h1:w2LPCIKwWwSfY2zedu0+kehJoqGctiVI29o6fzry7u4=
-github.com/stretchr/testify v1.8.2 h1:+h33VjcLVPDHtOdpUCuF+7gSuG3yGIftsP1YvFihtJ8=
-github.com/stretchr/testify v1.8.2/go.mod h1:w2LPCIKwWwSfY2zedu0+kehJoqGctiVI29o6fzry7u4=
+github.com/stretchr/testify v1.8.4 h1:CcVxjf3Q8PM0mHUKJCdn+eZZtm5yQwehR5yeSVQQcUk=
+github.com/stretchr/testify v1.8.4/go.mod h1:sz/lmYIOXD/1dqDmKjjqLyZ2RngseejIcXlSw2iwfAo=
 github.com/subosito/gotenv v1.4.2 h1:X1TuBLAMDFbaTAChgCBLu3DU3UPyELpnF2jjJ2cz/S8=
 github.com/subosito/gotenv v1.4.2/go.mod h1:ayKnFf/c6rvx/2iiLrJUk1e6plDbT3edrFNGqEflhK0=
 github.com/yuin/goldmark v1.1.25/go.mod h1:3hX8gzYuyVAZsxl0MRgGTJEmQBFcNTphYh9decYSb74=
