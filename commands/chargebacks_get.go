@@ -20,7 +20,7 @@ func getChargebacksCmd(p *commander.Command) *commander.Command {
 A debit to a depositor's account for an item that has been previously credited, as for a returned bad check.`,
 			Execute:  getChargebackAction,
 			Example:  "mollie chargebacks get --id=cb_token --embed=payments",
-			PostHook: printJsonAction,
+			PostHook: printJSONAction,
 		},
 		getChargebacksCols(),
 	)

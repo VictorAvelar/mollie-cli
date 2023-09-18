@@ -21,7 +21,7 @@ func updatePaymentCmd(p *commander.Command) *commander.Command {
 and complete update workflow check the prompt subcommand.`,
 			Execute:  updatePaymentAction,
 			Example:  "mollie payments update --id=test_token --description=updated",
-			PostHook: printJsonAction,
+			PostHook: printJSONAction,
 		},
 		getPaymentCols(),
 	)

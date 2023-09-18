@@ -20,7 +20,7 @@ func listPaymentsCmd(p *commander.Command) *commander.Command {
 ordered from newest to oldest. The results are paginated.`,
 			Execute:  listPaymentsAction,
 			Example:  "mollie payments list --limit=3",
-			PostHook: printJsonAction,
+			PostHook: printJSONAction,
 		},
 		getPaymentCols(),
 	)

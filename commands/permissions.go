@@ -10,7 +10,7 @@ func permissions() *commander.Command {
 		commander.Config{
 			Namespace:          "permissions",
 			Aliases:            []string{"perm", "scopes"},
-			PostHook:           printJsonAction,
+			PostHook:           printJSONAction,
 			PersistentPostHook: printCurl,
 		},
 		getPermissionsCols(),

@@ -9,7 +9,7 @@ func methods() *commander.Command {
 		Namespace:          "methods",
 		Aliases:            []string{"vendors", "meths"},
 		ShortDesc:          "All payment methods that Mollie offers and can be activated",
-		PostHook:           printJsonAction,
+		PostHook:           printJSONAction,
 		PersistentPostHook: printCurl,
 	}, getMethodsCols())
 

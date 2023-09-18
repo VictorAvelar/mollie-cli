@@ -17,7 +17,7 @@ func cancelPaymentCmd(p *commander.Command) *commander.Command {
 			ShortDesc: "Cancel a payment by its payment token.",
 			Execute:   cancelPaymentAction,
 			Example:   "mollie payments cancel --id=tr_token",
-			PostHook:  printJsonAction,
+			PostHook:  printJSONAction,
 		},
 		getPaymentCols(),
 	)

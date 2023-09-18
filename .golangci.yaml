@@ -7,7 +7,7 @@ run:
   tests: false
   skip-dirs-use-default: true
   modules-download-mode: readonly
-  go: "1.18"
+  go: "1.21"
 
 output:
   format: tab
@@ -42,3 +42,24 @@ issues:
       source: "addPersistentFlags"
   fix: true
   new: true
+
+linters-settings:
+  depguard:
+    rules:
+      main:
+        files:
+          - "$all"
+        allow:
+          - "$gostd"
+          - "github.com/VictorAvelar"
+          - "github.com/spf13"
+          - "github.com/avocatl"
+          - "github.com/sirupsen/logrus"
+          - "moul.io/http2curl"
+          - "github.com/Rhymond/go-money"
+          - "github.com/mitchellh/go-homedir"
+      tests:
+        files:
+          - "$tests"
+        allow:
+          - "github.com/stretchr/testify"

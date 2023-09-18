@@ -19,7 +19,7 @@ func createCustomerCmd(p *commander.Command) *commander.Command {
 			ShortDesc: "Creates a simple minimal representation of a customer.",
 			Example:   "mollie customers create --name 'test customer' --email test@example.com",
 			Execute:   createCustomerAction,
-			PostHook:  printJsonAction,
+			PostHook:  printJSONAction,
 		},
 		customersCols(),
 	)

@@ -11,7 +11,7 @@ func invoices() *commander.Command {
 			Namespace:          "invoices",
 			Example:            "mollie invoices",
 			ShortDesc:          "Operations over Mollie's Invoices API.",
-			PostHook:           printJsonAction,
+			PostHook:           printJSONAction,
 			PersistentPostHook: printCurl,
 		},
 		invoicesCols(),

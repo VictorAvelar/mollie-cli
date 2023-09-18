@@ -22,7 +22,7 @@ func listPaymentMethodsCmd(p *commander.Command) {
 To check the payment method embedded resources use the get payment methods command.`,
 			Example:  "mollie methods list --locale=de_DE --sequence-type=recurring",
 			Execute:  listPaymentMethodsAction,
-			PostHook: printJsonAction,
+			PostHook: printJSONAction,
 		},
 		getMethodsCols(),
 	)

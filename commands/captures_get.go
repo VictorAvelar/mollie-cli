@@ -21,7 +21,7 @@ The only payment methods at the moment that have this flow are Klarna Pay
 later and Klarna Slice it.`,
 			Execute:  getCapturesAction,
 			Example:  "mollie captures get --id ct_example --payment tr_example",
-			PostHook: printJsonAction,
+			PostHook: printJSONAction,
 		},
 		getCapturesCols(),
 	)

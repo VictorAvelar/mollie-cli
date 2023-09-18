@@ -20,7 +20,7 @@ func createRefundCmd(p *commander.Command) *commander.Command {
 			LongDesc:  "Creates a Refund on the Payment. The refunded amount is credited to your customer.",
 			Example:   "mollie refunds create --payment=tr_test",
 			Execute:   createRefundAction,
-			PostHook:  printJsonAction,
+			PostHook:  printJSONAction,
 		},
 		refundsCols(),
 	)

@@ -18,7 +18,7 @@ func listInvoicesCmd(p *commander.Command) *commander.Command {
 			Example:   "mollie invoices list",
 			ShortDesc: "Retrieve all invoices on the account. Optionally filter on year or invoice number.",
 			Execute:   listInvoicesAction,
-			PostHook:  printJsonAction,
+			PostHook:  printJSONAction,
 		},
 		invoicesCols(),
 	)

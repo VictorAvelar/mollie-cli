@@ -23,7 +23,7 @@ endpoint in the Profiles API.
 To check the payment method embedded resources use the get payment methods command.`,
 			Execute:  getAllMethodsAction,
 			Example:  "mollie methods all --locale=nl_NL",
-			PostHook: printJsonAction,
+			PostHook: printJSONAction,
 		},
 		getMethodsCols(),
 	)

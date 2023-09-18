@@ -21,7 +21,7 @@ Description, value, currency and redirect-url are required values.`,
 			Execute:  createPaymentAction,
 			Aliases:  []string{"new", "start"},
 			Example:  "mollie payments create --amount-value=200.00 --amount-currency=USD --redirect-to=https://victoravelar.com --description='custom example payment'",
-			PostHook: printJsonAction,
+			PostHook: printJSONAction,
 		},
 		getPaymentCols(),
 	)
