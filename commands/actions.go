@@ -8,7 +8,7 @@ import (
 	"moul.io/http2curl"
 )
 
-func printJsonAction(cmd *cobra.Command, args []string) {
+func printJSONAction(cmd *cobra.Command, args []string) {
 	if json {
 		ns, ok := app.Store["ns"].(string)
 		if !ok {

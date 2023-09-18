@@ -11,7 +11,7 @@ func customers() *commander.Command {
 			Namespace:          "customers",
 			ShortDesc:          "Operations with customers API.",
 			Aliases:            []string{"cust"},
-			PostHook:           printJsonAction,
+			PostHook:           printJSONAction,
 			PersistentPostHook: printCurl,
 		},
 		customersCols(),

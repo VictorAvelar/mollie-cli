@@ -13,7 +13,7 @@ func payments() *commander.Command {
 			Namespace:          "payments",
 			ShortDesc:          "All operations to handle payments",
 			Aliases:            []string{"pay", "p"},
-			PostHook:           printJsonAction,
+			PostHook:           printJSONAction,
 			PersistentPostHook: printCurl,
 		},
 		getPaymentCols(),

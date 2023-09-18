@@ -24,7 +24,7 @@ is returned. You can enable payments methods via the Enable payment method endpo
 Profiles API, or via your Mollie Dashboard.`,
 			Execute:  getPaymentMethodAction,
 			Example:  "mollie methods get --id=creditcard --locale=pt_PT",
-			PostHook: printJsonAction,
+			PostHook: printJSONAction,
 		},
 		getMethodsCols(),
 	)

@@ -14,7 +14,7 @@ func refunds() *commander.Command {
 			Namespace:          "refunds",
 			Aliases:            []string{"refs", "rf"},
 			ShortDesc:          "All operations to handle refunds",
-			PostHook:           printJsonAction,
+			PostHook:           printJSONAction,
 			PersistentPostHook: printCurl,
 		},
 		refundsCols(),

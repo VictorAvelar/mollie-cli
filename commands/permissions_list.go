@@ -17,7 +17,7 @@ func listPermissionsCmd(p *commander.Command) *commander.Command {
 			ShortDesc: "List all permissions available with the current app access token.",
 			Example:   "mollie permissions list",
 			Execute:   listPermissionsAction,
-			PostHook:  printJsonAction,
+			PostHook:  printJSONAction,
 		},
 		getPermissionsCols(),
 	)

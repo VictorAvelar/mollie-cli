@@ -11,10 +11,9 @@ import (
 	"github.com/spf13/viper"
 )
 
+// Package constants and namespaces.
 const (
-	version string = "v0.13.0"
-
-	// Store namespaces.
+	version     = "v0.13.0"
 	Payments    = "payments"
 	Captures    = "captures"
 	Methods     = "methods"

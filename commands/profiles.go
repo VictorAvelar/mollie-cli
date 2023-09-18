@@ -10,7 +10,7 @@ func profile() *commander.Command {
 		commander.Config{
 			Namespace:          "profiles",
 			ShortDesc:          "In order to process payments, you need to create a website profile",
-			PostHook:           printJsonAction,
+			PostHook:           printJSONAction,
 			PersistentPostHook: printCurl,
 		},
 		getProfileCols(),

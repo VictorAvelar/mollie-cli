@@ -20,7 +20,7 @@ func listChargebacksCmd(p *commander.Command) *commander.Command {
 for that specific payment are returned.`,
 			Execute:  listChargebackAction,
 			Example:  "mollie chargebacks list --embed=payments",
-			PostHook: printJsonAction,
+			PostHook: printJSONAction,
 		},
 		getChargebacksCols(),
 	)

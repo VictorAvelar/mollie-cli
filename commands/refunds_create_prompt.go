@@ -18,7 +18,7 @@ func promptCreateRefundCmd(p *commander.Command) *commander.Command {
 			ShortDesc: "prompts the user the information necessary to create a refund.",
 			Example:   "mollie refunds create prompt",
 			Execute:   promptCreateRefundAction,
-			PostHook:  printJsonAction,
+			PostHook:  printJSONAction,
 		},
 		refundsCols(),
 	)

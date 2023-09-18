@@ -17,7 +17,7 @@ func updatePaymentPromptCmd(p *commander.Command) *commander.Command {
 			Namespace: "prompt",
 			ShortDesc: "Updates a payment by prompting the user for information",
 			Execute:   promptUpdatePaymentAction,
-			PostHook:  printJsonAction,
+			PostHook:  printJSONAction,
 		},
 		getPaymentCols(),
 	)
