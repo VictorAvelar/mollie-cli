@@ -42,3 +42,23 @@ issues:
       source: "addPersistentFlags"
   fix: true
   new: true
+
+linters-settings:
+  depguard:
+    rules:
+      main:
+        files:
+          - "$all"
+        allow:
+          - "$gostd"
+          - "github.com/VictorAvelar"
+          - "github.com/spf13"
+          - "github.com/avocatl"
+          - "github.com/sirupsen/logrus"
+          - "moul.io/http2curl"
+          - "github.com/Rhymond/go-money"
+      tests:
+        files:
+          - "$tests"
+        allow:
+          - "github.com/stretchr/testify"
