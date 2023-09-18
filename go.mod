@@ -4,14 +4,14 @@ go 1.20
 
 require (
 	github.com/Rhymond/go-money v1.0.9
-	github.com/VictorAvelar/mollie-api-go/v3 v3.9.1
+	github.com/VictorAvelar/mollie-api-go/v3 v3.13.0
 	github.com/avocatl/admiral v0.7.0
 	github.com/mitchellh/go-homedir v1.1.0
 	github.com/sirupsen/logrus v1.9.0
 	github.com/spf13/cobra v1.7.0
 	github.com/spf13/pflag v1.0.5
 	github.com/spf13/viper v1.15.0
-	github.com/stretchr/testify v1.8.2
+	github.com/stretchr/testify v1.8.4
 	moul.io/http2curl v1.0.0
 )
 
@@ -22,7 +22,7 @@ require (
 	github.com/fsnotify/fsnotify v1.6.0 // indirect
 	github.com/golang/mock v1.6.0 // indirect
 	github.com/google/go-querystring v1.1.0 // indirect
-	github.com/google/uuid v1.3.0 // indirect
+	github.com/google/uuid v1.3.1 // indirect
 	github.com/hashicorp/hcl v1.0.0 // indirect
 	github.com/inconshreveable/mousetrap v1.1.0 // indirect
 	github.com/magiconair/properties v1.8.7 // indirect
