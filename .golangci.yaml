@@ -57,6 +57,7 @@ linters-settings:
           - "github.com/sirupsen/logrus"
           - "moul.io/http2curl"
           - "github.com/Rhymond/go-money"
+          - "github.com/mitchellh/go-homedir"
       tests:
         files:
           - "$tests"
