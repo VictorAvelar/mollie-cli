@@ -40,8 +40,8 @@ github.com/BurntSushi/toml v0.3.1/go.mod h1:xHWCNGjB5oqiDr8zfno3MHue2Ht5sIBksp03
 github.com/BurntSushi/xgb v0.0.0-20160522181843-27f122750802/go.mod h1:IVnqGOEym/WlBOVXweHU+Q+/VP0lqqI8lqeDx9IjBqo=
 github.com/Rhymond/go-money v1.0.10 h1:jaySwEIcS6cQELv1XiJSGqcicI93ln9RhHHa14zWpZc=
 github.com/Rhymond/go-money v1.0.10/go.mod h1:iHvCuIvitxu2JIlAlhF0g9jHqjRSr+rpdOs7Omqlupg=
-github.com/VictorAvelar/mollie-api-go/v3 v3.13.0 h1:sWMLw6SjrDu8R4FFe9kUKyjY1bOfOCP4imbwrHlwzek=
-github.com/VictorAvelar/mollie-api-go/v3 v3.13.0/go.mod h1:h8MG4DwtvFi2npYpO0F3vwubzRMTvF895Y4l8Qimh/I=
+github.com/VictorAvelar/mollie-api-go/v3 v3.14.0 h1:LmuAkJBIyqpgFqh4/lZu+Ivi3ATs/+l7c6spmJ1d+pI=
+github.com/VictorAvelar/mollie-api-go/v3 v3.14.0/go.mod h1:nhf1434bondwKGmxlmz/Xfx0sI+a2EmH2ElwZOCLkeM=
 github.com/avocatl/admiral v0.7.0 h1:MfEbD+ulP4txYEUK/xCmMch5v+kIavw54W8KluiL+es=
 github.com/avocatl/admiral v0.7.0/go.mod h1:tKCprZI7Rv1eJMcl+Cpjy4ERPTJ3yImuQ2hoEkpM25c=
 github.com/census-instrumentation/opencensus-proto v0.2.1/go.mod h1:f6KPmirojxKA12rnyqOA5BBL4O983OfeGPqjHWSTneU=
