@@ -27,18 +27,24 @@
     }
   ],
   "features": {
+    "ghcr.io/devcontainers-contrib/features/act-asdf:2": {},
+    "ghcr.io/devcontainers/features/docker-in-docker:2": {
+      "dockerDashComposeVersion": "v2"
+    },
     "ghcr.io/devcontainers/features/common-utils:2": {
       "configureZshAsDefaultShell": true,
       "username": "root"
+    },
+    "ghcr.io/devcontainers-contrib/features/starship:1": {},
+    "ghcr.io/rocker-org/devcontainer-features/apt-packages:1": {
+      "packages": "exa,bat,curl",
+      "upgradePackages": true
     }
   },
   "customizations": {
     "vscode": {
       "extensions": [
-        // Editor extensions
         "GitHub.vscode-pull-request-github",
-        "pnp.polacode",
-        "eamodio.gitlens",
         "jasonlhy.hungry-delete",
         "formulahendry.auto-rename-tag",
         "DavidAnson.vscode-markdownlint",
@@ -46,13 +52,14 @@
         "streetsidesoftware.code-spell-checker",
         "PKief.material-icon-theme",
         "ms-azuretools.vscode-docker",
-        "Gruntfuggly.todo-tree",
         "shardulm94.trailing-spaces",
-        "ms-vscode.makefile-tools",
-        "redhat.vscode-yaml",
-        "bungcip.better-toml",
-        // Go
-        "golang.Go"
+        "tamasfe.even-better-toml",
+        "GitHub.copilot",
+        "GitHub.vscode-github-actions",
+        "GitHub.copilot-chat",
+        "golang.Go",
+        "usernamehw.errorlens",
+        "redhat.vscode-yaml"
       ],
       "settings": {
         "files.eol": "\n",
@@ -98,7 +105,12 @@
         "editor.formatOnSave": true,
         "editor.formatOnPaste": true,
         "editor.bracketPairColorization.enabled": true,
-        "editor.guides.bracketPairs": "active"
+        "editor.guides.bracketPairs": "active",
+        "workbench.iconTheme": "material-icon-theme",
+        "editor.fontFamily": "'Fira Code', Menlo, Monaco, 'Courier New', monospace",
+        "editor.fontLigatures": true,
+        "files.insertFinalNewline": true,
+        "files.trimFinalNewlines": true
       }
     }
   },
@@ -109,12 +121,15 @@
     }
   },
   "postCreateCommand": {
+    "install-zsh-plugins": "git clone https://github.com/zsh-users/zsh-syntax-highlighting.git ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-syntax-highlighting && git clone https://github.com/zsh-users/zsh-autosuggestions ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-autosuggestions",
     "modules": "go mod download",
-    "install-zsh-plugins": "git clone https://github.com/zsh-users/zsh-syntax-highlighting.git ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-syntax-highlighting && git clone https://github.com/zsh-users/zsh-autosuggestions ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-autosuggestions"
+    "taskfile": "go install github.com/go-task/task/v3/cmd/task@latest",
+    "gomarkdoc": "go install github.com/princjef/gomarkdoc/cmd/gomarkdoc@latest"
   },
-  "containerUser": "root",
   "remoteUser": "root",
+  "containerUser": "root",
   "containerEnv": {
-    "MOLLIE_API_TOKEN": "${localEnv:MOLLIE_API_TOKE}"
+    "MOLLIE_API_TOKEN": "${localEnv:MOLLIE_API_TOKEN}",
+    "MOLLIE_ORG_TOKEN": "${localEnv:MOLLIE_ORG_TOKEN}"
   }
 }
