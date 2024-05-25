@@ -2,21 +2,19 @@
 
 run:
   concurrency: 4
-  timeout: 90s
+  timeout: 20s
   issues-exit-code: 2
   tests: false
   modules-download-mode: readonly
-  go: "1.21"
+  go: "1.17"
 
 output:
   formats:
-    - format: tab
-      path: stdout
+    - format: github-actions
 
 linters:
   disable:
     - tagliatelle
-    - gochecknoinits
   presets:
     - bugs
     - comment
@@ -36,10 +34,7 @@ issues:
   exclude-rules:
     - linters:
         - lll
-      source: "payments create"
-    - linters:
-        - funlen
-      source: "addPersistentFlags"
+      source: "BusinessCategory"
   fix: true
   new: true
 
@@ -51,15 +46,13 @@ linters-settings:
           - "$all"
         allow:
           - "$gostd"
-          - "github.com/VictorAvelar"
-          - "github.com/spf13"
-          - "github.com/avocatl"
-          - "github.com/sirupsen/logrus"
-          - "moul.io/http2curl"
-          - "github.com/Rhymond/go-money"
-          - "github.com/mitchellh/go-homedir"
+          - github.com/google
+          - github.com/spf13
+          - github.com/avocatl
+          - golang.org/x/oauth2
+          - github.com/VictorAvelar
       tests:
         files:
-          - "$tests"
+          - "$test"
         allow:
           - "github.com/stretchr/testify"
