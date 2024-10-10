@@ -1,0 +1,47 @@
+version: 3
+
+tasks:
+  build:
+    cmds:
+      - docker build -t mollie-cli:latest -f Dockerfile .
+  run:
+    cmds:
+      - docker run --rm mollie-cli:latest
+  ci-lint:
+    cmds:
+      - golangci-lint run --out-format=tab --issues-exit-code=0 --sort-results --skip-dirs-use-default --tests=false --presets=bugs,complexity,format,performance,style,unused
+  pr-lint:
+    cmds:
+      - golangci-lint run --issues-exit-code=0 --out-format=github-actions --new=true --sort-results --skip-dirs-use-default --tests=false --presets=bugs,complexity,format,performance,style,unused
+  ci-all-presets:
+    cmds:
+      - golangci-lint run --out-format=tab --issues-exit-code=0 --sort-results --skip-dirs-use-default --tests=false --presets=bugs,comment,complexity,error,format,import,metalinter,module,performance,sql,style,test,unused
+  lint:
+    cmds:
+      - go version
+      - echo "Running go lint"
+      - golint ./...
+      - echo "Running go vet"
+      - go vet ./...
+  test:
+    cmds:
+      - run
+  test-local:
+    cmds:
+      - go test -v -failfast ./... -coverprofile cover.out
+  coverage:
+    cmds:
+      - go test ./... -coverprofile cover.out
+      - go tool cover -func=cover.out
+  clean:
+    cmds:
+      - go mod verify
+      - go mod tidy
+  compile-master:
+    cmds:
+      - git checkout master
+      - go build -o mollie-master ./cmd/mollie/main.go
+      - git checkout -
+  compile-current:
+    cmds:
+      - go build -o mollie ./cmd/mollie/main.go

@@ -11,7 +11,7 @@ jobs:
     steps:
       - uses: actions/setup-go@93397bea11091df50f3d7e59dc26a7711a8bcfbe
         with:
-          go-version: 1.20.x
+          go-version: 1.23.x
       - uses: actions/checkout@a5ac7e51b41094c92402da3b24376905380afc29
         with:
           fetch-depth: 0
