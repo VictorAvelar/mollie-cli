@@ -1,89 +1,47 @@
-version: "3"
+version: 3
 
 tasks:
   build:
-    desc: "Build the project using the Dockerfile go installation"
     cmds:
-      - docker build -t mollie-go:latest -f Dockerfile .
-    silent: true
-
+      - docker build -t mollie-cli:latest -f Dockerfile .
   run:
-    desc: "Run the tests using the Dockerfile go installation"
     cmds:
-      - docker run --rm mollie-go:latest
-    silent: true
-
+      - docker run --rm mollie-cli:latest
   ci-lint:
-    desc: "Run all linters used in the CI pipeline"
     cmds:
       - golangci-lint run --out-format=tab --issues-exit-code=0 --sort-results --skip-dirs-use-default --tests=false --presets=bugs,complexity,format,performance,style,unused
-    silent: true
-
   pr-lint:
-    desc: "Run all linters used in the PR pipeline"
     cmds:
       - golangci-lint run --issues-exit-code=0 --out-format=github-actions --new=true --sort-results --skip-dirs-use-default --tests=false --presets=bugs,complexity,format,performance,style,unused
-    silent: true
-
   ci-all-presets:
-    desc: "Run all linters' presets available in golangci-lint"
     cmds:
       - golangci-lint run --out-format=tab --issues-exit-code=0 --sort-results --skip-dirs-use-default --tests=false --presets=bugs,comment,complexity,error,format,import,metalinter,module,performance,sql,style,test,unused
-    silent: true
-
   lint:
-    desc: "Run the go linters"
     cmds:
       - go version
       - echo "Running go lint"
       - golint ./...
       - echo "Running go vet"
       - go vet ./...
-    silent: false
-
   test:
-    desc: "Run tests using the Dockerfile go installation"
     cmds:
-      - task: run
-    silent: false
-
+      - run
   test-local:
-    desc: "Run tests using a local go installation"
     cmds:
-      - go test -failfast ./... -coverprofile cover.out
-    silent: false
-
+      - go test -v -failfast ./... -coverprofile cover.out
   coverage:
-    desc: "Run tests and generate a default coverage report"
     cmds:
+      - go test ./... -coverprofile cover.out
       - go tool cover -func=cover.out
-    silent: false
-
-  cover-report:
-    desc: "Run tests and generate coverage report in HTML format"
-    cmds:
-      - go tool cover -html=cover.out
-    silent: false
-
   clean:
-    desc: "Verify and tidy go modules"
     cmds:
       - go mod verify
       - go mod tidy
-    silent: false
-
-  update-docs:
-    desc: "Update the generated docs for the mollie package"
+  compile-master:
     cmds:
-      - gomarkdoc --output docs/README.md ./mollie
-      - git add --all
-      - "git commit --message 'chore(docs): update generated docs'"
-    silent: false
-
-  sub-pkg-docs:
-    desc: "Update the generated docs for the sub-packages"
+      - git checkout master
+      - go build -o mollie-master ./cmd/mollie/main.go
+      - git checkout -
+  compile-current:
     cmds:
-      - gomarkdoc ./pkg/connect > docs/pkg/connect/README.md
-      - gomarkdoc ./pkg/idempotency > docs/pkg/idempotency/README.md
-      - gomarkdoc ./pkg/pagination > docs/pkg/pagination/README.md
-    silent: false
+      - go build -o mollie ./cmd/mollie/main.go
