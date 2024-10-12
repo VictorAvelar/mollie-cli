@@ -22,7 +22,7 @@ jobs:
         go: [1.22.x, 1.23.x]
     name: Go ${{ matrix.go }} check
     steps:
-      - uses: actions/setup-go@93397bea11091df50f3d7e59dc26a7711a8bcfbe
+      - uses: actions/setup-go@0a12ed9d6a96ab950c8f026ed9f722fe0da7ef32
         with:
           go-version: ${{ matrix.go }}
       - uses: actions/checkout@eef61447b9ff4aafe5dcd4e0bbf5d482be7e7871
